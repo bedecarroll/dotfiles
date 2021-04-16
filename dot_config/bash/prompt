@@ -1,0 +1,9 @@
+# shellcheck shell=bash
+
+# Know who is owning your shell (great when you're in vim)
+if ps --no-headers -o comm $PPID | grep -qE 'tmux|etterminal|mosh'; then
+  shellparent=''
+else
+  shellparent="[$(ps --no-headers -o comm $PPID)]"
+fi
+export PROMPT_COMMAND='PS1="[\$?][\j]$shellparent \u@$(hostname)\$ "'
