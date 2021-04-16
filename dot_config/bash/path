@@ -4,4 +4,15 @@
 if ! [[ "$PATH" =~ "$HOME/.local/bin" ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
+
+### Go ###
+if [[ ! "$PATH" =~ "$HOME/.golang/bin" ]]; then
+  PATH="$HOME/.golang/bin:$PATH"
+fi
+
+### Rust ###
+if [[ ! "$PATH" =~ "$HOME/.cargo/bin" ]]; then
+  PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 export PATH
