@@ -1,0 +1,174 @@
+" This is important, first thing
+set nocompatible
+filetype plugin indent on
+
+" Move everything to XDG
+set undodir=$XDG_DATA_HOME/vim/undo
+set directory=$XDG_DATA_HOME/vim/swap
+set backupdir=$XDG_DATA_HOME/vim/backup
+set viminfo=%,'1000,n$XDG_DATA_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+
+" Enable colors
+set t_Co=256
+set termguicolors
+if &term =~# '^screen'
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+" KiTTY has issues with background color erase
+" https://sw.kovidgoyal.net/kitty/faq.html#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
+let &t_ut=''
+
+" Syntax highlighting
+syntax enable
+
+" Number side bar
+set number relativenumber
+
+" Status bar
+set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+
+" Spellchecker
+set spelllang=en
+autocmd FileType markdown setlocal spell
+autocmd FileType gitcommit setlocal spell
+autocmd FileType hgcommit setlocal spell
+
+" Start searching as you type
+set incsearch
+" Highlight search results
+set hlsearch
+" Ignore case in searches
+set ignorecase
+" Switch to case sensitive search if capitals are used
+set smartcase
+" Disable search highlight by hitting enter
+nnoremap <silent> <CR> :nohlsearch<CR><CR>
+
+" Disable arrow keys
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Show a column where the cursor is (great for making sure things are at the
+" same level)
+set cursorcolumn
+
+" Reread when underlying file changes
+set autoread
+
+" Autosave when switching buffers
+set autowriteall
+
+" Line wrap
+set display+=lastline
+
+" Eliminating tabs (\t char)
+syn match tab display "\t"
+hi link tab Error
+
+" Splits open on the right
+set splitright
+
+" Enable undofiles
+set undofile
+
+" Enable balloons (things that pop up)
+set balloonevalterm
+
+" Delete comment character when joining commented lines
+set formatoptions+=j
+
+" Close quickfix after selecting item
+" https://stackoverflow.com/questions/21321357/how-can-i-cause-the-quickfix-window-to-close-after-i-select-an-item-in-it
+autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+
+" Use terminal bracketed paste mode to automatically set/unset Vim's paste mode when you paste
+" https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
+function! WrapForTmux(s)
+  if !exists('$TMUX')
+    return a:s
+  endif
+
+  let tmux_start = "\<Esc>Ptmux;"
+  let tmux_end = "\<Esc>\\"
+
+  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+
+let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+" Add in all our includes
+runtime! includes/**/*
+
+" Add in templates
+if has("autocmd")
+  augroup templates
+    autocmd BufNewFile *.sh 0r $XDG_CONFIG_HOME/vim/templates/skeleton.sh
+  augroup END
+endif
+
+" https://github.com/junegunn/vim-plug
+
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
+
+" Make sure you use single quotes
+" Install with PlugInstall
+" Uninstall with PlugClean
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'dense-analysis/ale'
+Plug 'Lokaltog/vim-monotone'
+Plug 'mbbill/undotree'
+Plug 'tmhedberg/SimpylFold' " Python folding
+Plug 'solarnz/thrift.vim'
+
+" Initialize plugin system
+call plug#end()
+
+" Set a monocrome color scheme from vim-monotone
+set background=dark
+colorscheme monotone
+
+" Undotree mapped to \u
+nnoremap <leader>u :UndotreeToggle<CR>
+
+" FZF
+let g:fzf_buffers_jump = 1
+let g:fzf_layout = { 'down': '~40%' }
+nnoremap <silent> <Leader><Enter> :Buffers<CR>
+
+" ALE
+let g:ale_enabled = 1
+let g:ale_set_balloons = 1
+let g:ale_completion_enabled = 1
+
+let g:ale_fix_on_save = 1
+let g:ale_linters_explicit = 1
+let g:ale_lint_on_enter = 1
+
+let g:ale_echo_msg_format = '[%linter%]% [code]% %s'
+
+nnoremap <silent> K :ALEHover<CR>
+nnoremap <silent> gd :ALEGoToDefinition<CR>
+nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>j <Plug>(ale_next_wrap)
+
+" SimpylFold
+let g:SimpylFold_fold_docstring = 0
+let g:SimpylFold_fold_import = 0

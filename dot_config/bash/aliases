@@ -1,0 +1,5 @@
+# shellcheck shell=bash
+
+alias ll='ls -lh'
+alias tbuf="tmux load-buffer -"
+alias pyign='PYTHONWARNINGS="ignore"'

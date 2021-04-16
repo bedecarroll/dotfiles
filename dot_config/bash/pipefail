@@ -1,0 +1,5 @@
+# shellcheck shell=bash
+
+# Set return code of pipe
+# https://unix.stackexchange.com/questions/14270/get-exit-status-of-process-thats-piped-to-another/73180#73180
+set -o pipefail

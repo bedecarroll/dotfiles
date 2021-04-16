@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Write command to bash prompt without making it run
+# https://github.com/junegunn/fzf/wiki/examples#with-write-to-terminal-capabilities
+perl -e 'ioctl STDOUT, 0x5412, $_ for split //, do{ chomp($_ = <>); $_ }' ;

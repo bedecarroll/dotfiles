@@ -1,0 +1,28 @@
+# shellcheck shell=bash
+
+# Setup XDG
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
+
+# Source standard configs
+for x in "$XDG_CONFIG_HOME"/bash/*; do
+  # Ignore directories
+  if [ -f "$x" ]; then
+    source "$x"
+  fi
+done
+
+# Source system/work specific files
+if [ -d "$XDG_CONFIG_HOME/bash/$(hostname)" ] ; then
+   for x in "$XDG_CONFIG_HOME"/bash/$(hostname)/* ; do
+      source "$x"
+   done
+fi
+
+# Load remote bash if via SSH 
+#if [ -z "$SSH_CONNECTION" ]; then
+#    source "$XDG_CONFIG_HOME"/bash/local.bashrc 
+#else 
+#    source "$XDG_CONFIG_HOME"/bash/remote.bashrc 
+#fi

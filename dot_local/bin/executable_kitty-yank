@@ -1,0 +1,33 @@
+#!/bin/bash
+# https://www.freecodecamp.org/news/tmux-in-practice-integration-with-system-clipboard-bcd72c62ff7b/
+set -eu
+
+# get data either form stdin or from file
+buf=$(cat "$@")
+
+# Maximum number of lines before chunking
+maxlen=7000
+
+# Resolve target terminal to send escape sequence
+# if we are on remote machine, send directly to SSH_TTY to transport escape sequence
+# to terminal on local machine, so data lands in clipboard on our local machine
+pane_active_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
+target_tty="${SSH_TTY:-$pane_active_tty}"
+
+# Print control codes wrapped in TMUX control codes to allow passthrough
+# https://unix.stackexchange.com/questions/409068/tmux-and-control-sequence-character-issue
+tmux_print () {
+  #esc="\ePtmux;\e${1}\e\\" 
+  printf "$1"
+}
+
+# Send invalid sequence so KiTTY stops appending
+# https://sw.kovidgoyal.net/kitty/protocol-extensions.html
+tmux_print "\e]52;c;!\a"
+
+# KiTTY supports append mode when buffer is longer than the max length.
+# Other terminals will just get the last segment.
+while IFS= read -r -d '' -n $maxlen YANK; do
+  tmux_print "\e]52;c;$( printf %s "${YANK}" | base64 | tr -d '\r\n' )\a"
+done <<< "$buf"
+

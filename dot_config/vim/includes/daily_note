@@ -1,0 +1,2 @@
+" Create or open a note with today's name
+command Today e `=$HOME . '/notes/' . strftime('%F') . '.md'`

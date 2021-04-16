@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# https://stackoverflow.com/questions/49737975/create-bins-with-awk-histogram-like
+
+awk -v 
+  '{ b=int($1/size); a[b]++; bmax=b>bmax?b:bmax; bmin=b<bmin?b:bmin }
+   END { for(i=bmin;i<=bmax;++i) print i*size,(i+1)*size,a[i] }' 

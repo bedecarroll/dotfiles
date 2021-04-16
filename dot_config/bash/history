@@ -1,0 +1,19 @@
+# shellcheck shell=bash
+
+# https://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
+# Option 3 for bash history
+# When merging multiple histories together use "history -r <filename>"
+HISTFILE="$XDG_DATA_HOME"/bash/history_$(hostname)  # per devserver
+export HISTFILE
+export HISTCONTROL="ignoreboth:erasedups"         # no duplicate entries
+export HISTSIZE=                                  # big big history
+export HISTFILESIZE=                              # unlimited history
+shopt -s histappend                               # append to history, don't overwrite it
+
+# Save and reload the history after each command finishes
+# https://cdaddr.com/programming/keeping-bash-history-in-sync-on-disk-and-between-multiple-terminals/
+export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+#export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+
+alias cleanhistdups='nl $HISTFILE | sort -k 2  -k 1,1nr | uniq -f 1 | sort -n | cut -f 2 > $HISTFILE && history -r'
+

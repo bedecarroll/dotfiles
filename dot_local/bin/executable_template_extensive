@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+read -r -d '' doc <<"EOF"
+CHANGE_ME
+
+Arguments:
+    -d = debug mode
+    -h = this help string
+Usage:
+    template_extensive example
+EOF
+
+if [[ $# -eq 0 ]]; then
+    echo "$doc"
+    exit 1
+fi
+
+# First arg needs to be the end server, grab that and push to rest of args
+if [[ ${1} == -* ]]; then
+    echo "ERROR: CHANGE_ME needs to be the first argument"
+    echo "$doc"
+    exit 1
+else
+    _CHANGE_ME="$1"
+    shift
+fi
+
+while :; do
+    case $1 in
+        -CHANGE_ME|--CHANGE_ME)
+            if [[ ${2} ]]; then
+                # Set variables here
+                shift
+            else
+                echo "ERROR: '-CHANGE_ME/--CHANGE_ME' requires a non-empty argument"
+                exit 1
+            fi
+        ;;
+        -CHANGE_ME|--CHANGE_ME)
+            # Example filename
+            # Match '-' so another argument isn't interpreted as a filename
+            if [[ ${2} ]] && [[ ${2} == "-*" ]]; then
+                _cmd_suffix="> $2"
+                shift
+            else
+                _cmd_suffix="> $(mktemp CHANGE_ME)"
+            fi
+        ;;
+        -d|--debug)
+            _debug_mode=1
+        ;;
+        -h|--help)
+            echo "$doc"
+            exit 0
+        ;;
+        -?*)
+            echo "ERROR: Unknown argument"
+            echo "$doc"
+            exit 1
+        ;;
+        *)
+            break
+    esac
+    shift
+done
+
+# CHANGE_ME
