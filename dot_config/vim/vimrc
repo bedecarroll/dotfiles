@@ -130,7 +130,7 @@ call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
 " Make sure you use single quotes
 " Install with PlugInstall
 " Uninstall with PlugClean
-Plug '~/.fzf'
+Plug '~/.local/bin/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
 Plug 'Lokaltog/vim-monotone'
