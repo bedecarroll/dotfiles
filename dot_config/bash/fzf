@@ -1,17 +1,6 @@
 # shellcheck shell=bash
 
-# FZF setup from ~/.fzf.bash
-# Setup fzf
-# ---------
-if [[ ! "$PATH" == */home/$USER/.fzf/bin* ]]; then
-  PATH="$PATH:/home/$USER/.fzf/bin"
+# This is what install adds if you use --update-rc
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
-
-# Auto-completion
-# ---------------
-#[[ $- == *i* ]] && source "/home/$USER/.fzf/shell/completion.bash" 2> /dev/null
-
-# Key bindings
-# ------------
-source "/home/$USER/.fzf/shell/key-bindings.bash"
-
