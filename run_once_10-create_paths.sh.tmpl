@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.os "linux" -}}
+
+# Make host specific directories
+mkdir -p $XDG_CONFIG_HOME/bash/$(hostname)
+mkdir -p $XDG_CONFIG_HOME/tmux/$(hostname)
+
+# Bash history location
+mkdir -p $XDG_DATA_HOME/share/bash
+
+# Vim temp and history files
+mkdir -p $XDG_DATA_HOME/vim/undo
+mkdir -p $XDG_DATA_HOME/vim/swap
+mkdir -p $XDG_DATA_HOME/vim/backup
+
+{{ end -}}
