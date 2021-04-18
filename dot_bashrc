@@ -15,9 +15,10 @@ done
 
 # Source system/work specific files
 if [ -d "$XDG_CONFIG_HOME/bash/$(hostname)" ] ; then
-   for x in "$XDG_CONFIG_HOME"/bash/$(hostname)/* ; do
-      source "$x"
-   done
+  for x in "$XDG_CONFIG_HOME"/bash/$(hostname)/*; do
+    [ -f "$x" ] || continue
+    source "$x"
+  done
 fi
 
 # Load remote bash if via SSH 
