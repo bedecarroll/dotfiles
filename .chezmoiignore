@@ -1,1 +1,6 @@
 README.md
+
+# Only add GitHub keys on personal devices
+{{- if not .personal }}
+.ssh/authorized_keys
+{{- end }}

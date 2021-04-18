@@ -1,0 +1,5 @@
+{{ $email := promptString "Git email address" -}}
+{{ $personal := promptBool "Is this a home PC" -}}
+[data]
+  github_email = "{{ $email }}"
+  personal = {{ $personal }}
