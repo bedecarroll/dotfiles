@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+_size=${1:-80}
+# There is an extra space being put at the beginning
+_trunc="$((_size - 1))"
+awk "{printf \"%${_size}.${_size}s\", \$1}"
