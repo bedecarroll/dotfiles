@@ -1,26 +1,29 @@
 # Bede's dotfiles and scripts
 
-These are all my personal dotfiles and various scripts I've found useful. Ideally this README is to help me remeber all the features I have.
+These are all my personal dotfiles and various scripts I've found useful. Ideally this README is to help me remember all the features I have.
 
 ## Setup
 
+### Standard setup
 ```
-# Make host specific directories
-mkdir -p $XDG_CONFIG_HOME/bash/$(hostname)
-mkdir -p $XDG_CONFIG_HOME/tmux/$(hostname)
-# Bash history location
-mkdir -p $XDG_DATA_HOME/share/bash
-# Vim temp and history files
-mkdir -p $XDG_DATA_HOME/vim/undo
-mkdir -p $XDG_DATA_HOME/vim/swap
-mkdir -p $XDG_DATA_HOME/vim/backup
+sh -c "$(curl -fsLS git.io/JO2iE)"
+```
 
-# Download FZF
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/bin/fzf
-~/.local/bin/fzf/install --all --xdg --key-bindings --completion --update-rc --no-zsh --no-fish
+### Podman test environment
+Make sure that there are enough ids available for podman to work before starting. Refer to https://www.redhat.com/sysadmin/rootless-podman for more information.
+```
+$ find /etc/sub[ug]id | xargs -i sh -c 'echo {} && cat {}'
+/etc/subgid
+<username>:100000:65536
+/etc/subuid
+<username>:100000:65536
+```
 
-# Install plugged for vim
-curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+Run a podman container with `podman run --rm -it fedora`.
+
+Now run the following command to get environment setup.
+```
+cd && dnf install git hostname vim procps -y && sh -c "$(curl -fsLS git.io/JO2iE)"
 ```
 
 ## Configs
