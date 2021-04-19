@@ -1,4 +1,5 @@
 README.md
+install.sh
 
 # Only add GitHub keys on personal devices
 {{- if not .personal }}
