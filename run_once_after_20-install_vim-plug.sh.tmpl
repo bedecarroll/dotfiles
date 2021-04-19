@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Curl will take care of creating the autoload folder
+sh -c 'curl -fLo "${XDG_CONFIG_HOME:-$HOME/.config}"/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
