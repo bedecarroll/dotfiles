@@ -2,6 +2,10 @@
 
 {{ if eq .chezmoi.os "linux" -}}
 
+# Set XDG because it probably isn't on first run
+XDG_CONFIG_HOME="$HOME/.config"
+XDG_DATA_HOME="$HOME/.local/share"
+
 # Make host specific directories
 mkdir -p $XDG_CONFIG_HOME/bash/{{ .chezmoi.hostname }}
 mkdir -p $XDG_CONFIG_HOME/tmux/{{ .chezmoi.hostname }}
