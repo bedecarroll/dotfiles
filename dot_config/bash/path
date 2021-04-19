@@ -5,6 +5,11 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin" ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
 
+### FZF ###
+if [[ ! "$PATH" =~ "$HOME/.local/bin/fzf/bin" ]]; then
+  PATH="$HOME/.local/bin/fzf/bin:$PATH"
+fi
+
 ### Go ###
 if [[ ! "$PATH" =~ "$HOME/.golang/bin" ]]; then
   PATH="$HOME/.golang/bin:$PATH"
