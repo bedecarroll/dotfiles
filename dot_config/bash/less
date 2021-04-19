@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
-# Make less display raw characters by default
+# Make less display raw characters, good for piping to PYGMENTIZE
 export LESS="-r"
-
+# Syntax coloring for less
+# export LESSOPEN="|lessfilter %s"
