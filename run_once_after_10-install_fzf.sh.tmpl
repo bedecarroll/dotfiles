@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/bin/fzf
+
+# No need to update bashrc as it's already there
+~/.local/bin/fzf/install --all --xdg --key-bindings --completion --no-update-rc --no-zsh --no-fish
