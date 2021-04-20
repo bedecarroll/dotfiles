@@ -6,16 +6,24 @@
 XDG_CONFIG_HOME="$HOME/.config"
 XDG_DATA_HOME="$HOME/.local/share"
 
+# Fallback when hostname command doesn't exist
+if ! command -v hostname &> /dev/null; then
+  # Don't use this by default because I don't like the hostname format
+  CHEZMOI_TMP_HOSTNAME="{{ .chezmoi.hostname }}"
+else
+  CHEZMOI_TMP_HOSTNAME=$(hostname)
+fi
+
 # Make host specific directories
-mkdir -p $XDG_CONFIG_HOME/bash/{{ .chezmoi.hostname }}
-mkdir -p $XDG_CONFIG_HOME/tmux/{{ .chezmoi.hostname }}
+mkdir -p "${XDG_CONFIG_HOME}/bash/${CHEZMOI_TMP_HOSTNAME}"
+mkdir -p "${XDG_CONFIG_HOME}/tmux/${CHEZMOI_TMP_HOSTNAME}"
 
 # Bash history location
-mkdir -p $XDG_DATA_HOME/bash
+mkdir -p "${XDG_DATA_HOME}/bash"
 
 # Vim temp and history files
-mkdir -p $XDG_DATA_HOME/vim/undo
-mkdir -p $XDG_DATA_HOME/vim/swap
-mkdir -p $XDG_DATA_HOME/vim/backup
+mkdir -p "${XDG_DATA_HOME}/vim/undo"
+mkdir -p "${XDG_DATA_HOME}/vim/swap"
+mkdir -p "${XDG_DATA_HOME}/vim/backup"
 
 {{ end -}}
