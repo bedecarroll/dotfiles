@@ -1,0 +1,6 @@
+# shellcheck shell=bash
+
+# File laid down by a run script
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/chezmoi/chezmoi-completion.bash ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/chezmoi/chezmoi-completion.bash
+fi
