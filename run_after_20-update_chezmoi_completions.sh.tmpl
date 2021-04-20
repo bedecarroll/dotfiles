@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+echo "Updating Chezmoi bash completions"
+
+# Create dir just in case
+mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi
+
+# Keep this file up to date
+chezmoi completion bash > ${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/chezmoi-completion.bash
