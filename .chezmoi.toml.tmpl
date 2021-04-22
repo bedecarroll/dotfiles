@@ -1,5 +1,7 @@
 {{ $email := promptString "Git email address" -}}
 {{ $personal := promptBool "Is this a home PC" -}}
+{{ $workstation := promptBool "Is terminal setup required (kitty, fonts etc)" -}}
 [data]
   github_email = "{{ $email }}"
-  personal = {{ $personal }}
+  is_personal = {{ $personal }}
+  needs_terminal = {{ $workstation }}

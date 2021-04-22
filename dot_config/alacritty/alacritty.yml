@@ -1,0 +1,25 @@
+# vim:fileencoding=utf-8:ft=conf:foldmethod=marker
+
+# Window {{{
+
+window:
+  startup_mode: Maximized
+
+# }}}
+# Fonts {{{
+
+font:
+  normal:
+    family: fira code
+    style: Regular
+  bold:
+    family: fira code
+    style: Bold
+  italic:
+    family: fira code
+    style: Italic
+  bold_italic:
+    family: fira code
+    style: Bold Italic
+
+# }}}

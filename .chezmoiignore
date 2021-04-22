@@ -1,10 +1,16 @@
 README.md
 install.sh
 
-{{- if not .personal }}
+{{- if not .is_personal }}
 # Only add GitHub keys on personal devices
 .ssh/authorized_keys
 # Probably need to have proxy configs so do these files manually
 .curlrc
 .gitconfig
+{{- end }}
+
+{{- if not .needs_terminal }}
+# Terminal emulator configs
+.config/kitty/kitty.conf
+.config/alacritty/alacritty.conf
 {{- end }}
