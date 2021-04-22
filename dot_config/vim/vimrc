@@ -28,7 +28,8 @@ syntax enable
 set number relativenumber
 
 " Status bar
-set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+set laststatus=2
+set statusline=%F%=[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y\ %c,%l/%L\ %P
 
 " Spellchecker
 set spelllang=en
@@ -82,6 +83,20 @@ set balloonevalterm
 " Delete comment character when joining commented lines
 set formatoptions+=j
 
+" Set default indent
+" https://vi.stackexchange.com/questions/13080/setting-tab-to-2-spaces
+" On pressing tab, insert 2 spaces
+set expandtab
+" show existing tab with 2 spaces width
+set tabstop=2
+set softtabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+
+" Disable folding by default
+" https://stackoverflow.com/a/37542976
+set nofoldenable
+
 " Close quickfix after selecting item
 " https://stackoverflow.com/questions/21321357/how-can-i-cause-the-quickfix-window-to-close-after-i-select-an-item-in-it
 autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
@@ -116,6 +131,7 @@ runtime! includes/**/*
 " Add in templates
 if has("autocmd")
   augroup templates
+    autocmd BufNewFile *.conf 0r $XDG_CONFIG_HOME/vim/templates/skeleton.conf
     autocmd BufNewFile *.sh 0r $XDG_CONFIG_HOME/vim/templates/skeleton.sh
   augroup END
 endif
