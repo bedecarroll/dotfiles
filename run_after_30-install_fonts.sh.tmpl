@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+{{- if .needs_terminal }}
+echo "Installing Jet Brains Mono"
+
+# https://github.com/JetBrains/JetBrainsMono/blob/master/README.md
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
+
+
+echo "Installing FiraCode"
+
+# https://github.com/tonsky/FiraCode/blob/master/distr/README.txt
+fonts_dir="${HOME}/.local/share/fonts"
+if [ ! -d "${fonts_dir}" ]; then
+    echo "mkdir -p $fonts_dir"
+    mkdir -p "${fonts_dir}"
+else
+    echo "Found fonts dir $fonts_dir"
+fi
+
+for type in Bold Light Medium Regular Retina; do
+    file_path="${HOME}/.local/share/fonts/FiraCode-${type}.ttf"
+    file_url="https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true"
+    if [ ! -e "${file_path}" ]; then
+      # echo "wget -O $file_path $file_url"
+      # wget -O "${file_path}" "${file_url}"
+      # Switch to curl like all other commands
+      echo "Downloading to $file_path"
+      curl --progress-bar -fSL "${file_url}" -o "${file_path}"
+    else
+  echo "Found existing file $file_path"
+    fi;
+done
+
+echo "fc-cache -f"
+fc-cache -f
+
+echo "FiraCode is installed"
+
+{{- end }}
