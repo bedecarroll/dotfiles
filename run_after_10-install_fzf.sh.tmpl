@@ -2,7 +2,22 @@
 
 echo "Installing FZF"
 
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/bin/fzf
+INSTALL_DIR="${HOME}/.local/bin/fzf"
+
+if [ -d "${INSTALL_DIR}" ]; then
+  # If the repo isn't up to date nuke it and clone again
+  if [ `git -C ${INSTALL_DIR} rev-parse HEAD` = `git -C ${INSTALL_DIR} ls-remote origin -h refs/heads/master | cut -f1` ]; then
+    echo "FZF repo already up to date"
+  else
+    echo "Deleting ${INSTALL_DIR}"
+    rm -fr "${INSTALL_DIR}"
+    echo "Git cloning FZF"
+    git clone --depth 1 https://github.com/junegunn/fzf.git "${INSTALL_DIR}"
+  fi
+else
+  echo "Git cloning FZF"
+  git clone --depth 1 https://github.com/junegunn/fzf.git "${INSTALL_DIR}"
+fi
 
 # No need to update bashrc as it's already there
-~/.local/bin/fzf/install --all --xdg --key-bindings --completion --no-update-rc --no-zsh --no-fish
+"${INSTALL_DIR}/install" --all --xdg --key-bindings --completion --no-update-rc --no-zsh --no-fish
