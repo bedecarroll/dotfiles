@@ -12,5 +12,5 @@ install.sh
 {{- if not .needs_terminal }}
 # Terminal emulator configs
 .config/kitty/kitty.conf
-.config/alacritty/alacritty.conf
+.config/alacritty/alacritty.yml
 {{- end }}
