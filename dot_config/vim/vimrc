@@ -103,6 +103,13 @@ set nofoldenable
 " https://stackoverflow.com/questions/21321357/how-can-i-cause-the-quickfix-window-to-close-after-i-select-an-item-in-it
 autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
+" Match tmux/not tmux cursor shape of 6 (line bar)
+" Don't set normal mode to block because command bar won't change
+" https://github.com/tmux/tmux/issues/1557#issuecomment-442842446
+" https://ttssh2.osdn.jp/manual/4/en/usage/tips/vim.html
+let &t_EI = "\e[6 q" " normal mode
+let &t_SI = "\e[6 q" " insert mode
+
 " Use terminal bracketed paste mode to automatically set/unset Vim's paste mode when you paste
 " https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
 function! WrapForTmux(s)
@@ -116,8 +123,10 @@ function! WrapForTmux(s)
   return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
 
-let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+if exists('$TMUX')
+  let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+  let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+endif
 
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
