@@ -3,3 +3,10 @@
 alias ll='ls -lh'
 alias tbuf="tmux load-buffer -"
 alias pyign='PYTHONWARNINGS="ignore"'
+
+# Remote device probaby doesn't have xterm-kitty or alacritty terminfo
+# Using xterm-256color as it should be installed everywhere and the
+# emulators usually are a superset with only minor differences
+alias ssh='TERM=xterm-256color ssh'
+# Same for EternalTerminal
+alias et='TERM=xterm-256color et'
