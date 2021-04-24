@@ -16,7 +16,8 @@ set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " Enable colors
-set t_Co=256
+" https://vim.fandom.com/wiki/256_colors_in_vim
+" set t_Co=256 " Disable as this should come from terminfo
 set termguicolors
 
 " KiTTY has issues with background color erase
