@@ -4,17 +4,9 @@
 # PS4='+$BASH_SOURCE> ' BASH_XTRACEFD=7 bash -xl 7>&2
 # https://unix.stackexchange.com/a/154971
 
-# Go
-if [[ ! "$PATH" =~ "$HOME/.golang/bin" ]]; then
-  PATH="$HOME/.golang/bin:$PATH"
-fi
-
-# Rust
-if [[ ! "$PATH" =~ "$HOME/.cargo/bin" ]]; then
-  PATH="$HOME/.cargo/bin:$PATH"
-fi
-
 # First match wins so our scripts should be first
+# This may appear twice if .profile doesn't check
+# before adding
 if ! [[ "$PATH" =~ "$HOME/.local/bin:" ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
