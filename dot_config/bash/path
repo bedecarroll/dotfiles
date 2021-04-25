@@ -4,11 +4,6 @@
 # PS4='+$BASH_SOURCE> ' BASH_XTRACEFD=7 bash -xl 7>&2
 # https://unix.stackexchange.com/a/154971
 
-# FZF
-if [[ ! "$PATH" =~ "$HOME/.local/bin/fzf/bin" ]]; then
-  PATH="$HOME/.local/bin/fzf/bin:$PATH"
-fi
-
 # Go
 if [[ ! "$PATH" =~ "$HOME/.golang/bin" ]]; then
   PATH="$HOME/.golang/bin:$PATH"
