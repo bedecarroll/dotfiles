@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Send stdin into the tmux buffer
+tmux load-buffer -
