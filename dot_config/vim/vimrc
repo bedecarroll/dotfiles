@@ -153,7 +153,7 @@ endif
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('$XDG_CONFIG_HOME/vim/plugged')
+call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Make sure you use single quotes
 " Install with PlugInstall
