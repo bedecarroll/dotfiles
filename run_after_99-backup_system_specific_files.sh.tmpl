@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+{{ if eq .chezmoi.os "linux" -}}
+# Set XDG just in case
+XDG_CONFIG_HOME="$HOME/.config"
+XDG_DATA_HOME="$HOME/.local/share"
+
+# Create backup location
+BACKUP_FILENAME="$(date --iso-8601=seconds).tar.gz"
+BACKUP_DIR="${HOME}/backup"
+mkdir -p "${BACKUP_DIR}"
+
+# Match the create paths script
+if ! command -v hostname &> /dev/null; then
+  # Don't use this by default because I don't like the hostname format
+  CHEZMOI_TMP_HOSTNAME="liberty"
+else
+  CHEZMOI_TMP_HOSTNAME=$(hostname)
+fi
+
+# Backup locations
+BACKUP_LOCS=(
+  # chezmoi
+  "${XDG_CONFIG_HOME}/chezmoi/chezmoi.toml"
+  # bash
+  "${XDG_CONFIG_HOME}/bash/${CHEZMOI_TMP_HOSTNAME}"
+  "${XDG_DATA_HOME}/bash"
+  # tmux
+  "${XDG_CONFIG_HOME}/tmux/${CHEZMOI_TMP_HOSTNAME}"
+  # vim
+  # all of vim config for custom ftdetect, includes etc
+  "${XDG_CONFIG_HOME}/vim"
+  # undo/backup locations (in case there is some important stuff)
+  "${XDG_DATA_HOME}/vim/undo"
+  "${XDG_DATA_HOME}/vim/backup"
+  # plugged in case local changes have been made
+  "${XDG_DATA_HOME}/vim/plugged"
+  # kitty
+  "${XDG_CONFIG_HOME}/kitty/${CHEZMOI_TMP_HOSTNAME}"
+  # ssh
+  "${HOME}/.ssh/config"
+  # git
+  "${HOME}/.gitconfig"
+  # curl
+  "${HOME}/.curlrc"
+)
+
+echo "Backing up local customizations"
+tar --ignore-failed-read --exclude-vcs --create --gzip --file="${BACKUP_DIR}/${BACKUP_FILENAME}" "${BACKUP_LOCS[@]}"
+
+# Remove any more than 5 backups (oldest removed first)
+# https://stackoverflow.com/a/34862475
+(cd ~/backup && ls -tp | grep -v '/$' | tail -n +6 | xargs -I {} sh -c 'echo "Removing {}" && rm -- {}')
+{{ end -}}
