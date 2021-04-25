@@ -1,12 +1,35 @@
 # shellcheck shell=bash
 
-# Debug what is setting PATH with
+# How to debug PATH
+#
+# The load order is generally:
+#
+#   * /etc/profile
+#   * ~/.bash_profile
+#   * ~/.bash_login
+#   * ~/.profile
+#   * ~/.bashrc
+#   * Any scripts sourced in ~/.bashrc
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+#
+# With this in mind you can see what is in PATH with:
+# 
+# echo $PATH | tr ':' '\n'
+#
+# If there are duplicates it is probably one of the files
+# in the list not checking before adding to PATH. You can
+# debug what is setting PATH with:
+#
 # PS4='+$BASH_SOURCE> ' BASH_XTRACEFD=7 bash -xl 7>&2
 # https://unix.stackexchange.com/a/154971
+#
+# This will show all changes made by various scripts
+# during bash start.
+# 
+# NOTE: Always check before adding to PATH to prevent
+# duplicates.
 
 # First match wins so our scripts should be first
-# This may appear twice if .profile doesn't check
-# before adding
 if ! [[ "$PATH" =~ "$HOME/.local/bin:" ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
