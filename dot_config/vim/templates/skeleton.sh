@@ -1,4 +1,6 @@
-#!/usr/bin/env bash                                                                                                                                                                                                                    
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
 read -r -d '' doc <<"EOF"
 INSERT DOCO HERE
 
@@ -34,4 +36,6 @@ while :; do
   esac
   shift
 done
+
+# Start here
 
