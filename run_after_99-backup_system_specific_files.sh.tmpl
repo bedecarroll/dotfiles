@@ -45,10 +45,28 @@ BACKUP_LOCS=(
   "${HOME}/.curlrc"
 )
 
+# Add .local/bin scripts
+# Ignore chezmoi binary and folders like FZF
+for x in $(find "${HOME}/.local/bin/" -maxdepth 1 -type f ! -name chezmoi); do
+  BACKUP_LOCS+=("${x}")
+done
+
+# Remove files/directories that can't be read
+index=0
+for x in "${BACKUP_LOCS[@]}"; do
+  if [ ! -r "${x}" ]; then
+    unset BACKUP_LOCS[$index]
+  fi
+  let index++
+done
+
+# Use #/ to replace leading / for tar with parameter expansion
 echo "Backing up local customizations"
-tar --ignore-failed-read --exclude-vcs --create --gzip --file="${BACKUP_DIR}/${BACKUP_FILENAME}" "${BACKUP_LOCS[@]}"
+tar -C / --ignore-failed-read --exclude-vcs --create --gzip --file="${BACKUP_DIR}/${BACKUP_FILENAME}" "${BACKUP_LOCS[@]#/}"
+
+echo "Backup created at ${BACKUP_DIR}/${BACKUP_FILENAME}"
 
 # Remove any more than 5 backups (oldest removed first)
 # https://stackoverflow.com/a/34862475
-(cd ~/backup && ls -tp | grep -v '/$' | tail -n +6 | xargs -I {} sh -c 'echo "Removing {}" && rm -- {}')
+(cd "${HOME}/backup" && ls -tp | grep -v '/$' | tail -n +6 | xargs -I {} sh -c 'echo "Removing {}" && rm -- {}')
 {{ end -}}
