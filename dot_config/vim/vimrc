@@ -166,6 +166,7 @@ Plug 'mbbill/undotree'
 Plug 'tmhedberg/SimpylFold' " Python folding
 Plug 'solarnz/thrift.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-peekaboo'
 
 " Initialize plugin system
 call plug#end()
