@@ -177,6 +177,9 @@ silent! colorscheme monotone
 
 " Undotree mapped to \u
 nnoremap <leader>u :UndotreeToggle<CR>
+" Undotree changes based on windows so skipping
+" over to get to Undotree can be hard
+let g:undotree_SetFocusWhenToggle = 1
 
 " FZF
 let g:fzf_buffers_jump = 1
