@@ -1,0 +1,4 @@
+# shellcheck shell=bash
+
+# KiTTY bash completion
+source <(kitty + complete setup bash)

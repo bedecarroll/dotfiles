@@ -13,4 +13,5 @@ install.sh
 # Terminal emulator configs
 .config/kitty/
 .config/alacritty/
+.config/bash/kitty
 {{- end }}
