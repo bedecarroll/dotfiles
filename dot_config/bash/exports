@@ -1,3 +1,7 @@
 # shellcheck shell=bash
 # https://unix.stackexchange.com/questions/107851/using-export-in-bashrc
 
+export EDITOR="vim"
+export VISUAL="vim"
+export ATOM_BACKUP_EDITOR="vim"
+export WEECHAT_HOME="${XDG_CONFIG_HOME}/weechat"

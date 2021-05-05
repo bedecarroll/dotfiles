@@ -1,5 +1,0 @@
-# shellcheck shell=bash
-
-export EDITOR="vim"
-export VISUAL="vim"
-export ATOM_BACKUP_EDITOR="vim"
