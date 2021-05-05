@@ -1,23 +1,22 @@
 README.md
 install.sh
 
-{{- if not .is_personal }}
+{{ if not .is_personal }}
 # Only add GitHub keys on personal devices
 .ssh/authorized_keys
 # Probably need to have proxy configs so do these files manually
 .curlrc
 .gitconfig
-{{ if (eq .chezmoi.os "linux") }}
-{{ if (contains "microsoft-WSL2" .chezmoi.kernel.osrelease) }}
-# Podman wsl2 config
-.config/containers/
 {{ end }}
-{{ end }}
-{{- end }}
 
-{{- if not .needs_terminal }}
+{{ if not .needs_terminal }}
 # Terminal emulator configs
 .config/kitty/
 .config/alacritty/
 .config/bash/kitty
-{{- end }}
+{{ end }}
+
+{{ if not (contains "microsoft-WSL2" .chezmoi.kernel.osrelease) }}
+# Only configure podman on WSL2
+.config/containers/
+{{ end }}
