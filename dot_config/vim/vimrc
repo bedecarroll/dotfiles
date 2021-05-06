@@ -108,34 +108,27 @@ autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 " Don't set normal mode to block because command bar won't change
 " https://github.com/tmux/tmux/issues/1557#issuecomment-442842446
 " https://ttssh2.osdn.jp/manual/4/en/usage/tips/vim.html
-let &t_EI = "\e[6 q" " normal mode
-let &t_SI = "\e[6 q" " insert mode
+let &t_EI .= "\e[6 q" " normal mode
+let &t_SI .= "\e[6 q" " insert mode
 
 " Use terminal bracketed paste mode to automatically set/unset Vim's paste mode when you paste
-" https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
-function! WrapForTmux(s)
-  if !exists('$TMUX')
-    return a:s
-  endif
+" https://github.com/ConradIrwin/vim-bracketed-paste/blob/master/plugin/bracketed-paste.vim
+let &t_ti .= "\<Esc>[?2004h"
+let &t_te = "\e[?2004l" . &t_te
 
-  let tmux_start = "\<Esc>Ptmux;"
-  let tmux_end = "\<Esc>\\"
-
-  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
-endfunction
-
-if exists('$TMUX')
-  let &t_SI .= WrapForTmux("\<Esc>[?2004h")
-  let &t_EI .= WrapForTmux("\<Esc>[?2004l")
-endif
-
-function! XTermPasteBegin()
-  set pastetoggle=<Esc>[201~
+function! XTermPasteBegin(ret)
+  set pastetoggle=<f29>
   set paste
-  return ""
+  return a:ret
 endfunction
 
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+execute "set <f28>=\<Esc>[200~"
+execute "set <f29>=\<Esc>[201~"
+map <expr> <f28> XTermPasteBegin("i")
+imap <expr> <f28> XTermPasteBegin("")
+vmap <expr> <f28> XTermPasteBegin("c")
+cmap <f28> <nop>
+cmap <f29> <nop>
 
 " Add in all our includes
 runtime! includes/**/*
