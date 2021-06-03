@@ -1,5 +1,11 @@
 # vim:fileencoding=utf-8:ft=conf:foldmethod=marker
 
+# Imports {{{
+
+import:
+  - local_hints.yml
+
+# }}}
 # Window {{{
 
 window:
