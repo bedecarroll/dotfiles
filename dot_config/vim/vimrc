@@ -104,6 +104,11 @@ set nofoldenable
 " https://stackoverflow.com/questions/21321357/how-can-i-cause-the-quickfix-window-to-close-after-i-select-an-item-in-it
 autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
+" Insert newline without going into insert mode
+" https://stackoverflow.com/a/16136133
+nmap oo o<Esc>k
+nmap OO O<Esc>j
+
 " Match tmux/not tmux cursor shape of 6 (line bar)
 " Don't set normal mode to block because command bar won't change
 " https://github.com/tmux/tmux/issues/1557#issuecomment-442842446
