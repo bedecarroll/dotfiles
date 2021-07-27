@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Use it like " | sort_header sort -u | "
+IFS= read -r header
+printf '%s\n' "$header"
+"$@"
