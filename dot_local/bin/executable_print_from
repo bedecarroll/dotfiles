@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# From line till EOF, inclusive of match line
+# cat text_file | print_from '### blah'
+awk "/^${@}/,EOF { print \$0 }"

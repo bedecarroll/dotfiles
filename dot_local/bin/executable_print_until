@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Print start of file till the matching line, exclusive of match line
+# cat text_file | print_until '### blah'
+sed -e "/${@}/q" | sed '$d'
