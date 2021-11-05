@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+echo "Updating vim-plug plugins"
+
+# Needs to be a login shell so environment variables are there
+bash --login -c 'vim +PlugUpdate +qall +visual >/dev/null 2>&1'
