@@ -1,2 +1,8 @@
-for dir in $(find . -mindepth 2 -type f); do mv "$dir" .; done
-rm -fr */
+#!/usr/bin/env bash
+
+# Find all files in lower folders and move them to the top
+# Prompts for overwrite and cleans empty folders
+for dir in $(find . -mindepth 2 -type f); do mv -i "$dir" .; done
+if [ -z "$(find . -mindepth 2 -type f | head -n 1)" ]; then
+  rm -fr */
+fi
