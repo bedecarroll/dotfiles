@@ -1,0 +1,2 @@
+for dir in $(find . -mindepth 2 -type f); do mv "$dir" .; done
+rm -fr */
