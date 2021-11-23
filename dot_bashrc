@@ -20,10 +20,3 @@ if [ -d "$XDG_CONFIG_HOME/bash/$(hostname)" ] ; then
     source "$x"
   done
 fi
-
-# Load remote bash if via SSH 
-#if [ -z "$SSH_CONNECTION" ]; then
-#    source "$XDG_CONFIG_HOME"/bash/local.bashrc 
-#else 
-#    source "$XDG_CONFIG_HOME"/bash/remote.bashrc 
-#fi
