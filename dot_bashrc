@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+# Make HOSTNAME var expicit for TMUX
+# https://superuser.com/questions/1498056/why-on-printenv-i-cannot-see-the-hostname-enviromental-variable
+export HOSTNAME="${HOSTNAME}"
+
 # Setup XDG
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
