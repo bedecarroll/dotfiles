@@ -6,7 +6,7 @@ install.sh
 .ssh/authorized_keys
 # Probably need to have proxy configs so do these files manually
 .curlrc
-.gitconfig
+.config/git/local_config
 {{ end }}
 
 {{ if not .needs_terminal }}
