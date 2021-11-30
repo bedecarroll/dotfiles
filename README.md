@@ -35,3 +35,23 @@ cd && dnf install git hostname vim procps -y && sh -c "$(curl -fsLS git.io/JO2iE
 ### Vim
 
 ## Scripts
+
+## Building windows-fido-bridge for WSL
+Needed for 20.04 due to newer g++ and openssh-client needs to be above 8.2
+https://www.debian.org/doc/manuals/apt-howto/ch-apt-get.en.html
+https://medium.com/@george.shuklin/how-to-install-packages-from-a-newer-distribution-without-installing-unwanted-6584fa93208f
+```
+sudo sh -c 'printf "deb http://archive.ubuntu.com/ubuntu/ hirsute main restricted universe\ndeb http://archive.ubuntu.com/ubuntu/ hirsute-updates main restricted universe\ndeb http://security.ubuntu.com/ubuntu/ hirsute-security main restricted universe\n" >> /etc/apt/sources.list'
+sudo sh -c 'printf "APT::Default-Release "focal";" >> /etc/apt/apt.conf'
+sudo apt-get update
+sudo apt-get install openssh-client/hirsute
+
+cd
+git clone https://github.com/mgbowen/windows-fido-bridge.git
+sudo apt install build-essential cmake g++-mingw-w64-x86-64/hirsute
+cd windows-fido-bridge
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j $(nproc)
+```
