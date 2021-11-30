@@ -37,7 +37,7 @@ cd && dnf install git hostname vim procps -y && sh -c "$(curl -fsLS git.io/JO2iE
 ## Scripts
 
 ## Building windows-fido-bridge for WSL
-Needed for 20.04 due to newer g++ and openssh-client needs to be above 8.2
+Needed for 20.04 due to newer g++ required for span and openssh-client needs to be above 8.2 due to message format for windows side
 https://www.debian.org/doc/manuals/apt-howto/ch-apt-get.en.html
 https://medium.com/@george.shuklin/how-to-install-packages-from-a-newer-distribution-without-installing-unwanted-6584fa93208f
 ```
