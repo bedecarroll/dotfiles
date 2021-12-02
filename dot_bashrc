@@ -18,8 +18,8 @@ for x in "$XDG_CONFIG_HOME"/bash/*; do
 done
 
 # Source system/work specific files
-if [ -d "$XDG_CONFIG_HOME/bash/$(hostname)" ] ; then
-  for x in "$XDG_CONFIG_HOME"/bash/$(hostname)/*; do
+if [ -d "$XDG_CONFIG_HOME/bash/local" ] ; then
+  for x in "$XDG_CONFIG_HOME"/bash/local/*; do
     [ -f "$x" ] || continue
     source "$x"
   done
