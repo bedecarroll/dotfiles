@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Use this script when you want to move folders around because you've
+# changed your mind on the folder names. This will be run before the
+# new files are laid down.
+
+echo "Updating config include directories"
+
+# Fallback when hostname command doesn't exist
+if ! command -v hostname &> /dev/null; then
+  # Don't use this by default because I don't like the hostname format
+  CHEZMOI_TMP_HOSTNAME="{{ .chezmoi.hostname }}"
+else
+  CHEZMOI_TMP_HOSTNAME=$(hostname)
+fi
+
+# Change hostname to local but don't keep trying to do it
+if [ -d "${XDG_CONFIG_HOME}/bash/${CHEZMOI_TMP_HOSTNAME}" ]; then
+  mv "${XDG_CONFIG_HOME}/bash/${CHEZMOI_TMP_HOSTNAME}" "${XDG_CONFIG_HOME}/bash/local"
+fi
+
+if [ -d "${XDG_CONFIG_HOME}/tmux/${CHEZMOI_TMP_HOSTNAME}" ]; then
+  mv "${XDG_CONFIG_HOME}/tmux/${CHEZMOI_TMP_HOSTNAME}" "${XDG_CONFIG_HOME}/tmux/local"
+fi
+
+if [ -d "${XDG_CONFIG_HOME}/kitty/${CHEZMOI_TMP_HOSTNAME}" ]; then
+  mv "${XDG_CONFIG_HOME}/kitty/${CHEZMOI_TMP_HOSTNAME}" "${XDG_CONFIG_HOME}/kitty/local"
+fi
