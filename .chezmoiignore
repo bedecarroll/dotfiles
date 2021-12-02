@@ -7,6 +7,8 @@ install.sh
 # Probably need to have proxy configs so do these files manually
 .curlrc
 .config/git/local_config
+.config/tmux/local/
+.config/bash/local/
 {{ end }}
 
 {{ if not .needs_terminal }}
