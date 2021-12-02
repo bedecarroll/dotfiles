@@ -1,2 +1,6 @@
 [user]
   email = 4151340+bedecarroll@users.noreply.github.com
+  signingkey = 3BFA0B5BD83996D7
+
+[commit]
+  gpgsign = true

@@ -2,4 +2,4 @@
   name = Bede Carroll
 
 [include]
-  path = local_config
+  path = local/config
