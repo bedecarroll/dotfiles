@@ -1,0 +1,6 @@
+Include local/config
+
+Host *
+  IdentityFile ~/.ssh/id_ed25519_sk
+  SecurityKeyProvider /usr/lib/libwindowsfidobridge.so
+  AddKeysToAgent yes

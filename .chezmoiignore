@@ -6,9 +6,13 @@ install.sh
 .ssh/authorized_keys
 # Probably need to have proxy configs so do these files manually
 .curlrc
+# If there is a local config it is for a personal device
 .config/bash/local/
 .config/tmux/local/
 .config/git/local/
+# SSH config is personal only
+.ssh/config
+.ssh/id_ed25519_sk.pub
 {{ end }}
 
 {{ if not .needs_terminal }}
