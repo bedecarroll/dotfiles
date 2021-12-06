@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+read -r -d '' doc <<"EOF"
+Capture packets via multihop SSH.
+
+Arguments:
+    -f = BPF filter (default is "not tcp port 22")
+    -h = this help string
+    -i = remote interface to capture on
+    -w = write to file (defaults to launching Wireshark)
+Usage:
+    remote_pcap root@server1
+    remote_pcap root@server2 -f "not tcp port 53" -w -i eth0
+EOF
+
+if [[ $# -eq 0 ]] || [[ ${1} == "-h" ]]; then
+    echo "$doc"
+    exit 1
+fi
+
+# First arg needs to be the end server, grab that and push to rest of args
+if [[ ${1} == -* ]]; then
+    echo "ERROR: remote server is the first argument"
+    echo "$doc"
+    exit 1
+else
+    _server="$1"
+    shift
+fi
+
+# For literal v6 need rev to remove only file path and need tr to remove square brackets for nc.
+_remote_server=$(echo "$_server" | cut -d '@' -f 2 | rev | cut -d ':' -f 2- | rev | tr -d [])
+
+while :; do
+    case $1 in
+        -f|--filter)
+            if [[ ${2} ]]; then
+                _bpf=$2
+                shift
+            else
+                echo "ERROR: '-f/--filter' requires a non-empty argument"
+                exit 1
+            fi
+        ;;
+        -h|--help)
+            echo "$doc"
+            exit 0
+        ;;
+        -i|--interface)
+            if [[ ${2} ]]; then
+                _rint=$2
+                shift
+            else
+                echo "ERROR: '-i/--interface' requires a non-empty argument"
+                exit 1
+            fi
+        ;;
+        -w|--file)
+            _write_file=1
+            # Match - so another argument isn't interpreted as a filename
+            if [[ ${2} ]] && [[ ${2} != -* ]]; then
+              _cmd_suffix="> $2"
+              shift
+            else
+              _cmd_suffix="> $(mktemp "$_remote_server"'_XXXX.pcap')"
+            fi
+        ;;
+        -d|--debug)
+            _debug_mode=1
+        ;;
+        -?*)
+            echo "ERROR: Unknown argument"
+            echo "$doc"
+            exit 1
+        ;;
+        *)
+            break
+    esac
+    shift
+done
+
+if [[ -z ${_write_file} ]] && ! command -v wireshark &> /dev/null; then
+  echo "Wireshark is not installed, write to a file instead"
+  exit 1
+fi
+
+[[ -z ${_bpf} ]] && _bpf="not tcp port 22"
+echo "Capture $_remote_server via $DEVSERVER using filter: $_bpf"
+[[ -z ${_cmd_suffix} ]] && _cmd_suffix="| wireshark -k -i -" || echo "Writing to file $(echo "$_cmd_suffix" | cut -c 3-)"
+[[ -z ${_rint} ]] && _rint="any"
+
+_ssh_cmd="ssh -J $DEVSERVER $_server \"tcpdump -s0 -U -w - -i $_rint '$_bpf'\" $_cmd_suffix"
+
+if [[ -z ${_debug_mode} ]]; then
+    eval "$_ssh_cmd"
+else
+    echo "\$DEVSERVER: $DEVSERVER"
+    echo "\$_server: $_server"
+    echo "\$_remote_server: $_remote_server"
+    echo "\$_bpf: $_bpf"
+    echo "\$_rint: $_rint"
+    echo "\$_cmd_suffix: $_cmd_suffix"
+    echo "\$_ssh_cmd: $_ssh_cmd"
+    echo "\$_debug_mode: $_debug_mode"
+fi
