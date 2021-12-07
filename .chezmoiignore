@@ -24,7 +24,7 @@ install.sh
 .config/bash/kitty
 {{ end }}
 
-{{ if not (contains "-WSL2" .chezmoi.kernel.osrelease) }}
+{{ if not .is_wsl }}
 # Only configure podman on WSL2
 .config/containers/
 {{ end }}
