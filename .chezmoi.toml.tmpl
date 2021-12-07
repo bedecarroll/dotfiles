@@ -1,10 +1,19 @@
-{{ $email := promptString "Git email address" -}}
-{{ $personal := promptBool "Is this a home PC" -}}
-{{ $workstation := promptBool "Is terminal setup required (kitty, fonts etc)" -}}
+{{- $is_wsl := or (env "WSL_DISTRO_NAME") (env "IS_WSL") | not | not -}}
+{{- $is_devcontainer := or (env "REMOTE_CONTAINERS") (env "CODESPACES") (env "VSCODE_REMOTE_CONTAINERS_SESSION") | not | not -}}
+{{- $noninteractive := env "CHEZMOI_NON_INTERACTIVE" | not | not -}}
 [data]
-  github_email = "{{ $email }}"
-  is_personal = {{ $personal }}
-  needs_terminal = {{ $workstation }}
+  is_wsl = {{ $is_wsl }}
+  is_devcontainer = {{ $is_devcontainer }}
+{{- /* If is non-interactive setup provide answers */ -}}
+{{- if or $is_devcontainer $noninteractive }}
+  is_personal = false
+  github_email = "4151340+bedecarroll@users.noreply.github.com"
+  needs_terminal = false
+{{- else }}
+  is_personal = {{ promptBool "Is this a home PC" }}
+  github_email = {{ promptString "Git email address" "4151340+bedecarroll@users.noreply.github.com" | quote }}
+  needs_terminal = {{ promptBool "Is terminal setup required (kitty, fonts etc)" }}
+{{- end }}
 
 [diff]
   exclude = ["scripts"]
