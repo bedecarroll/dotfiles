@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+name=${1:-"main"}
+if ! tmux attach-session -t $name; then
+  tmux new-session -d -s $name
+
+  tmux send-keys 'weechat' ENTER
+  tmux rename-window -t $name:0 'IRC'
+  tmux new-window -t $name:1
+
+  tmux select-window -t $name:1
+  tmux attach-session -t $name
+fi

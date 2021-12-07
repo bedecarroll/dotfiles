@@ -13,6 +13,8 @@ install.sh
 .ssh/id_ed25519_sk.pub
 # Only add GitHub keys on personal devices
 .ssh/authorized_keys
+# Local scripts
+.local/bin/t
 {{ end }}
 
 {{ if not .needs_terminal }}
