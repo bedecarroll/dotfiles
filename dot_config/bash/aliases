@@ -5,4 +5,8 @@
 # here that don't need changing very often. Aliases
 # will also take precendece over functions and scripts.
 
+# Unset here as this is frequently set and we want the script version
+# Redirect to /dev/null to suppress warning that there is no ll alias
+unalias ll 2>/dev/null
+
 alias pyign='PYTHONWARNINGS="ignore"'
