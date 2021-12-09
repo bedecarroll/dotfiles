@@ -1,0 +1,16 @@
+[".config/vim/autoload/plug.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    refreshPeriod = "72h"
+{{ if .needs_terminal | not -}}
+[".local/share/fonts/FiraCode"]
+    type = "archive"
+    url = "https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip"
+    exact = true
+    stripComponents = 1
+[".local/share/fonts/JetBrainsMono"]
+    type = "archive"
+    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.242/JetBrainsMono-2.242.zip"
+    exact = true
+    stripComponents = 1
+{{- end }}
