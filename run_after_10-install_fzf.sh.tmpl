@@ -4,6 +4,7 @@ echo "Installing FZF"
 
 INSTALL_DIR="${HOME}/.local/bin/fzf"
 
+
 if [ -d "${INSTALL_DIR}" ]; then
   # If the repo isn't up to date nuke it and clone again
   if [ `git -C ${INSTALL_DIR} rev-parse HEAD` = `git -C ${INSTALL_DIR} ls-remote origin -h refs/heads/master | cut -f1` ]; then
