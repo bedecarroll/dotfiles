@@ -1,6 +1,5 @@
 " This is important, first thing
 set nocompatible
-filetype plugin indent on
 
 " Move everything to XDG
 set undodir=$XDG_DATA_HOME/vim/undo
@@ -23,9 +22,6 @@ set termguicolors
 " KiTTY has issues with background color erase
 " https://sw.kovidgoyal.net/kitty/faq.html#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
 let &t_ut=''
-
-" Syntax highlighting
-syntax enable
 
 " Number side bar
 set number relativenumber
@@ -156,6 +152,7 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 " Make sure you use single quotes
 " Install with PlugInstall
 " Uninstall with PlugClean
+Plug 'alker0/chezmoi.vim'
 Plug '~/.local/bin/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
@@ -169,6 +166,10 @@ Plug 'dhruvasagar/vim-table-mode'
 
 " Initialize plugin system
 call plug#end()
+
+" Set after alker0/chezmoi.vim
+filetype plugin indent on
+syntax enable
 
 " Set a monocrome color scheme from vim-monotone
 set background=dark
