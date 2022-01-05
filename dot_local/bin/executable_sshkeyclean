@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Clean out the SSH fingerprints
+ssh-keygen -R "$@"
+
+addresses=$(dig -r +search +short aaaa "$@" a "$@" 2>/dev/null)
+[[ -z "$addresses" ]] && { exit 0; }
+
+while IFS= read -r line; do
+  ssh-keygen -R "$line"
+done <<< "$addresses"
