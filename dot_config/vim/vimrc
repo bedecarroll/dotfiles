@@ -8,12 +8,16 @@ set backupdir=$XDG_DATA_HOME/vim/backup
 set viminfo=%,'1000,n$XDG_DATA_HOME/vim/viminfo
 set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
 
+" Auto change dir to current file
+set autochdir
+
 " Set control color characters
 " https://wiki.archlinux.org/index.php/St#Vim
 " https://stackoverflow.com/a/62703167
 " https://stackoverflow.com/a/53329217
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
 " Enable colors
 " https://vim.fandom.com/wiki/256_colors_in_vim
 " set t_Co=256 " Disable as this should come from terminfo
