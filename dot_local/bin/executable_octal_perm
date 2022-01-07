@@ -2,4 +2,4 @@
 
 # Because I always forget
 # https://askubuntu.com/questions/152001/how-can-i-get-octal-file-permissions-from-command-line
-stat -c "%a %n" "$@"
+stat -c "%A %a %n" "$@"
