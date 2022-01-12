@@ -1,3 +1,7 @@
 if ! [[ "$PATH" =~ "$HOME/.go/bin" ]]; then
   PATH=$PATH:$HOME/.go/bin
 fi
+
+if ! [[ "$PATH" =~ "$HOME/go/bin" ]]; then
+  PATH=$PATH:$HOME/go/bin
+fi
