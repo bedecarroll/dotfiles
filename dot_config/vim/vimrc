@@ -1,3 +1,8 @@
+" Keep nvim and vim configs separate
+if has('nvim')
+  finish
+endif
+
 " This is important, first thing
 set nocompatible
 
