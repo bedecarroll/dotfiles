@@ -6,10 +6,12 @@ if ! tmux attach-session -t $name; then
 
   tmux send-keys 'weechat' ENTER
   tmux rename-window -t $name:0 'IRC'
-  tmux new-window -t $name:1 -n 'Highly Respected'
+  tmux new-window -t $name:1 -n 'Email'
+  tmux send-keys 'neomutt' ENTER
+  tmux new-window -t $name:2 -n 'Highly Respected'
   tmux send-keys 'cd /mnt/c/Users/bc/Dropbox/highly_respected/' ENTER
-  tmux new-window -t $name:2
+  tmux new-window -t $name:3
 
-  tmux select-window -t $name:2
+  tmux select-window -t $name:1
   tmux attach-session -t $name
 fi
