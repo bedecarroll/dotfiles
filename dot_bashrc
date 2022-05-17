@@ -21,3 +21,6 @@ if [ -d "$XDG_CONFIG_HOME/bash/local" ] ; then
     source "$x"
   done
 fi
+
+# Use McFly for better history
+eval "$(mcfly init bash)"
