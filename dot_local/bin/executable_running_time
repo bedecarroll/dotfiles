@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Prints the date time nonstop. Good for screen recording
+while true; do printf '%s\r' "$(date -Ins)"; done
