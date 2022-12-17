@@ -1,0 +1,5 @@
+# shellcheck shell=bash
+
+if [ -e /home/bc/.nix-profile/etc/profile.d/nix.sh ]; then
+  . /home/bc/.nix-profile/etc/profile.d/nix.sh
+fi
