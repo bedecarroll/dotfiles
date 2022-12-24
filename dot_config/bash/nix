@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
 if [ -e /home/bc/.nix-profile/etc/profile.d/nix.sh ]; then
+  export NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
   . /home/bc/.nix-profile/etc/profile.d/nix.sh
 fi
