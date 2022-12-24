@@ -1,0 +1,2 @@
+Host *
+  SecurityKeyProvider /usr/lib/windows_compat/libwindowsfidobridge.so

@@ -27,6 +27,7 @@ install.sh
 {{ if not .is_wsl }}
 # Only configure podman on WSL2
 .config/containers/
+.ssh/wsl
 {{ end }}
 
 {{ if not (contains "Ubuntu" .chezmoi.osRelease.name) }}

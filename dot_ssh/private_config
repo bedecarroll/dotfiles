@@ -1,6 +1,7 @@
 Include local/config
+Include wsl
 
 Host *
   IdentityFile ~/.ssh/id_ed25519_sk
-  SecurityKeyProvider /usr/lib/windows_compat/libwindowsfidobridge.so
   AddKeysToAgent yes
+  ServerAliveInterval 60
