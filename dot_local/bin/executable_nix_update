@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Update NIX, home-manager and all the packages
+# https://nixos.org/manual/nix/stable/installation/upgrading.html
+# https://nix-community.github.io/home-manager/index.html#sec-updating
+nix-channel --update; nix-env -iA nixpkgs.nix; home-manager switch
