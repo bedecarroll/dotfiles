@@ -3,13 +3,11 @@
 {
   config = {
     home.packages = with pkgs; [
-      htop
-      bottom
-      ctop
-      hyperfine
-      sysstat
-      iotop
+      youtube-dl
+      neomutt
+      weechat
     ];
   };
 }
+
 

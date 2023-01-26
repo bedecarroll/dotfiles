@@ -13,6 +13,8 @@
       procs
       lnav
       grex
+      entr
+      bc
     ];
   };
 }

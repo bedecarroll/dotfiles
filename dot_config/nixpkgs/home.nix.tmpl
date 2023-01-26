@@ -31,10 +31,17 @@
     ./base.nix
     ./data.nix
     ./help.nix
+    {{- /* Packages destined for local boxes, e.g. laptops */ -}}
+    {{- if or .needs_terminal .is_personal }}
+    ./local.nix
+    {{- end }}
     ./network.nix
     ./perf.nix
     ./security.nix
     ./space.nix
+    {{- if .needs_terminal }}
+    ./terminal.nix
+    {{- end }}
     ./utils.nix
   ];
 }

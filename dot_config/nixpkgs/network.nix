@@ -6,6 +6,10 @@
       gping
       mtr
       bandwhich
+      netperf
+      sipcalc
+      wget
+      curl
     ];
   };
 }
