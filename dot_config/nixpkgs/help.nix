@@ -5,7 +5,7 @@
     home.packages = with pkgs; [
       man
       cheat
-      tldr
+      tealdeer
     ];
   };
 }

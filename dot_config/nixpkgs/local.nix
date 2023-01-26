@@ -6,6 +6,7 @@
       youtube-dl
       neomutt
       weechat
+      topgrade
     ];
   };
 }
