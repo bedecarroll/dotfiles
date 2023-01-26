@@ -14,37 +14,6 @@
     LANG = "en_US.UTF-8";
   };
 
-  # Packages to install
-  home.packages = [
-    pkgs.tmux
-    pkgs.bat
-    pkgs.ripgrep
-    pkgs.neovim
-    pkgs.htop
-    pkgs.coreutils
-    #pkgs.fzf
-    pkgs.btdu
-    pkgs.lsd
-    pkgs.du-dust
-    pkgs.duf
-    pkgs.broot
-    pkgs.fd
-    pkgs.jq
-    pkgs.cheat
-    pkgs.tldr
-    pkgs.hyperfine
-    pkgs.gping
-    pkgs.mtr
-    pkgs.procs
-    #pkgs.httpie
-    pkgs.lnav
-    pkgs.bandwhich
-    pkgs.grex
-    pkgs.sysstat
-    pkgs.iotop
-    pkgs.gron
-  ];
-
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -57,4 +26,15 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  imports = [
+    ./base.nix
+    ./data.nix
+    ./help.nix
+    ./network.nix
+    ./perf.nix
+    ./security.nix
+    ./space.nix
+    ./utils.nix
+  ];
 }

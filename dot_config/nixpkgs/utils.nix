@@ -1,0 +1,19 @@
+{ config, pkgs, ... }:
+
+{
+  config = {
+    home.packages = with pkgs; [
+      coreutils
+      moreutils
+      bat
+      ripgrep
+      lsd
+      fd
+      jq
+      procs
+      lnav
+      grex
+    ];
+  };
+}
+
