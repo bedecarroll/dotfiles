@@ -15,6 +15,7 @@
       grex
       entr
       bc
+      lshw
     ];
   };
 }
