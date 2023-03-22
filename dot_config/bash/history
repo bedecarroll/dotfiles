@@ -10,10 +10,14 @@ export HISTSIZE=                                  # big big history
 export HISTFILESIZE=                              # unlimited history
 shopt -s histappend                               # append to history, don't overwrite it
 
+# History commands https://ss64.com/bash/history.html
 # Save and reload the history after each command finishes
 # https://cdaddr.com/programming/keeping-bash-history-in-sync-on-disk-and-between-multiple-terminals/
-export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
+#export PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 #export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+# Stop interlacing between sessions so switching to this
+# Ref from HackerNews: https://web.archive.org/web/20090815205011/http://www.cuberick.com/2008/11/update-bash-history-in-realtime.html
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 alias cleanhistdups='nl $HISTFILE | sort -k 2  -k 1,1nr | uniq -f 1 | sort -n | cut -f 2 > $HISTFILE && history -r'
 
