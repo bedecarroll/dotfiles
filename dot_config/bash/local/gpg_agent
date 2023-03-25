@@ -1,9 +1,9 @@
 # Modified from https://jardazivny.medium.com/the-ultimate-guide-to-yubikey-on-wsl2-part-2-1d9546ef23a6
 # * Only need GPG agent
 # * Move pagent to Windows to bypass delay when accessing from WSL
-export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
-ss -a | grep -q $GPG_AGENT_SOCK
-if [ $? -ne 0 ]; then
-  rm -rf $GPG_AGENT_SOCK
-  setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"/usr/lib/windows_compat/wsl2-ssh-pageant.exe --gpg S.gpg-agent" &>/dev/null &
-fi
+#export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
+#ss -a | grep -q $GPG_AGENT_SOCK
+#if [ $? -ne 0 ]; then
+#  rm -rf $GPG_AGENT_SOCK
+#  setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"/usr/lib/windows_compat/wsl2-ssh-pageant.exe --gpg S.gpg-agent" &>/dev/null &
+#fi
