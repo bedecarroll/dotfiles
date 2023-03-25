@@ -1,0 +1,7 @@
+# Add this environment variable to allow programs that don't read ssh_config
+# to get the SK, e.g. git.
+# Get bridge from here as it is maintained https://github.com/socram8888/windows-fido-bridge 
+
+if [[ $(grep -i microsoft /proc/version) ]]; then
+  export SSH_SK_PROVIDER=/usr/lib/windows_compat/libwindowsfidobridge.so
+fi
