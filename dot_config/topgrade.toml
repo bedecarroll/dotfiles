@@ -1,0 +1,10 @@
+# Don't want to see this message any more:
+# If you don't want this message to appear any longer set display_preamble = false in the config file.
+# For more information about this issue see https://askubuntu.com/questions/110969/notify-send-ignores-timeout and https://github.com/topgrade-rs/topgrade/issues/288.
+display_preamble = false
+
+# Don't ask for confirmations
+assume_yes = true
+
+# Disable specific steps - same options as the command line flag
+disable = ["vagrant"]
