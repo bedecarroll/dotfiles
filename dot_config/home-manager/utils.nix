@@ -16,6 +16,8 @@
       entr
       bc
       lshw
+      # Provides lstopo for hw diagrams
+      hwloc
     ];
   };
 }
