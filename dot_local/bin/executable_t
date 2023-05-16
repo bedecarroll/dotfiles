@@ -9,9 +9,9 @@ if ! tmux attach-session -t $name; then
   tmux new-window -t $name:1 -n 'Email'
   sleep 0.5
   tmux send-keys 'neomutt' ENTER
-  tmux new-window -t $name:2 -n 'Highly Respected'
+  tmux new-window -t $name:2 -n 'Podcasts'
   sleep 0.5
-  tmux send-keys 'cd /mnt/c/Users/bc/Dropbox/highly_respected/' ENTER
+  tmux send-keys 'cd /mnt/c/Users/bc/Dropbox/podcasts/' ENTER
   tmux new-window -t $name:3 -n 'temp'
   sleep 0.5
   tmux send-keys 'cd /mnt/c/admin/temp/' ENTER
