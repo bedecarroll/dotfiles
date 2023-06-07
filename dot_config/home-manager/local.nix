@@ -4,10 +4,12 @@
   config = {
     home.packages = with pkgs; [
       yt-dlp
-      youtube-dl
       neomutt
       weechat
       topgrade
+      openai-whisper-cpp
+      ffmpeg
+      mpv
     ];
   };
 }
