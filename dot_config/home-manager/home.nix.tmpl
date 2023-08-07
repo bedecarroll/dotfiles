@@ -27,6 +27,12 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  {{- if or .needs_terminal .is_personal }}
+
+  # Golang
+  programs.go.enable = true;
+  {{- end }}
+
   imports = [
     ./base.nix
     ./data.nix
@@ -35,6 +41,10 @@
     {{- /* Packages destined for local boxes, e.g. laptops */ -}}
     {{- if or .needs_terminal .is_personal }}
     ./local.nix
+    ./iac.nix
+    ./python.nix
+    ./rust.nix
+    ./nodejs.nix
     {{- end }}
     ./network.nix
     ./nix.nix
