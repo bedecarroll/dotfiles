@@ -18,6 +18,9 @@
       lshw
       # Provides lstopo for hw diagrams
       hwloc
+      # PDF utils
+      poppler_utils
+      pdfgrep
     ];
   };
 }
