@@ -1,0 +1,7 @@
+# Source nix completions
+if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
+  for COMPLETION in "$HOME/.nix-profile/share/bash-completion/completions/"*; do
+      # shellcheck disable=1090
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+  done
+fi
