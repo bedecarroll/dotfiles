@@ -6,6 +6,7 @@
       tmux
       neovim
       atuin
+      bash-preexec
     ];
   };
 }
