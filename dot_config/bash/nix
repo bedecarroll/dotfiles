@@ -1,9 +1,13 @@
 # shellcheck shell=bash
 
-if [ -e /home/bc/.nix-profile/etc/profile.d/nix.sh ]; then
-  export NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
-  . /home/bc/.nix-profile/etc/profile.d/nix.sh
+# If we aren't on a nix system just return as atuin etc won't be there
+if [ ! -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  return 1
 fi
+
+# Import nix
+export NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
+source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 
 # Source nix completions
 if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
@@ -11,3 +15,43 @@ if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
       [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
   done
 fi
+
+# Atuin config, needs to be after nix
+ATUIN_SESSION=$(atuin uuid)
+export ATUIN_SESSION
+
+_atuin_preexec() {
+    local id
+    id=$(atuin history start -- "$1")
+    export ATUIN_HISTORY_ID="${id}"
+}
+
+_atuin_precmd() {
+    local EXIT="$?"
+
+    [[ -z "${ATUIN_HISTORY_ID}" ]] && return
+
+    (RUST_LOG=error atuin history end --exit "${EXIT}" -- "${ATUIN_HISTORY_ID}" &) >/dev/null 2>&1
+}
+
+__atuin_history() {
+    tput rmkx
+    # shellcheck disable=SC2048,SC2086
+    HISTORY="$(RUST_LOG=error atuin search $* -i -- "${READLINE_LINE}" 3>&1 1>&2 2>&3)"
+    tput smkx
+
+    READLINE_LINE=${HISTORY}
+    READLINE_POINT=${#READLINE_LINE}
+}
+
+if [[ -n "${BLE_VERSION-}" ]]; then
+    blehook PRECMD-+=_atuin_precmd
+    blehook PREEXEC-+=_atuin_preexec
+else
+    precmd_functions+=(_atuin_precmd)
+    preexec_functions+=(_atuin_preexec)
+fi
+
+bind -x '"\C-r": __atuin_history'
+#bind -x '"\e[A": __atuin_history --shell-up-key-binding'
+#bind -x '"\eOA": __atuin_history --shell-up-key-binding'
