@@ -4,3 +4,10 @@ if [ -e /home/bc/.nix-profile/etc/profile.d/nix.sh ]; then
   export NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
   . /home/bc/.nix-profile/etc/profile.d/nix.sh
 fi
+
+# Source nix completions
+if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
+  for COMPLETION in "$HOME/.nix-profile/share/bash-completion/completions/"*; do
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+  done
+fi
