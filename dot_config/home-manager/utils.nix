@@ -9,6 +9,8 @@
       ripgrep
       lsd
       fd
+      # JSON tools
+      jc
       jq
       procs
       lnav
