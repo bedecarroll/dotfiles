@@ -52,6 +52,9 @@ else
     preexec_functions+=(_atuin_preexec)
 fi
 
-bind -x '"\C-r": __atuin_history'
-#bind -x '"\e[A": __atuin_history --shell-up-key-binding'
-#bind -x '"\eOA": __atuin_history --shell-up-key-binding'
+# Wrap this in an interactive shell check so that when chezmoi runs it won't print a warning
+if [[ $- == *i* ]]; then
+  bind -x '"\C-r": __atuin_history'
+  #bind -x '"\e[A": __atuin_history --shell-up-key-binding'
+  #bind -x '"\eOA": __atuin_history --shell-up-key-binding'
+fi
