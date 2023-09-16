@@ -4,9 +4,9 @@
 PATH="$HOME/.local/bin:$PATH"
 
 # If we have a SSH key use SSH to clone from git
-CHEZMOI_INSTALL_ARGS="-b ~/.local/bin/ init --apply bedecarroll"
+CHEZMOI_INSTALL_ARGS="-b ~/.local/bin/ -- init --apply bedecarroll"
 if [[ -f .ssh/id_ed25519_sk.pub ]]; then
   CHEZMOI_INSTALL_ARGS+=" --ssh"
 fi
 
-mkdir -p ~/.local/bin/ && sh -c "$(curl -fsLS git.io/chezmoi)" -- "${CHEZMOI_INSTALL_ARGS}"
+mkdir -p ~/.local/bin/ && sh -c "$(curl -fsLS git.io/chezmoi) ${CHEZMOI_INSTALL_ARGS}"
