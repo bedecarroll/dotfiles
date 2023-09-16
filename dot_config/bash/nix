@@ -1,13 +1,16 @@
 # shellcheck shell=bash
 
-# If we aren't on a nix system just return as atuin etc won't be there
-if [ ! -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-  return 1
+# Import nix. If we aren't on a nix system just return as atuin etc won't be there
+NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  export NIX_PATH
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+elif [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" ]; then
+  export NIX_PATH
+  source "/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
+else
+  return 233
 fi
-
-# Import nix
-export NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
-source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 
 # Source nix completions
 if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
