@@ -46,6 +46,9 @@
     ./rust.nix
     ./nodejs.nix
     {{- end }}
+    {{- if .is_wsl }}
+    ./wsl.nix
+    {{- end }}
     ./network.nix
     ./nix.nix
     ./perf.nix
