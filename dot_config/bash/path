@@ -33,3 +33,6 @@
 if ! [[ "$PATH" =~ "$HOME/.local/bin:" ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
+if ! [[ "$PATH" =~ "$HOME/.bun/bin:" ]]; then
+  PATH="$HOME/.bun/bin:$PATH"
+fi
