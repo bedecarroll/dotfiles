@@ -39,7 +39,7 @@
     ./editor.nix
     ./help.nix
     {{- /* Packages destined for local boxes, e.g. laptops */ -}}
-    {{- if or .needs_terminal .is_personal }}
+    {{- if or .needs_terminal .is_personal .is_wsl }}
     ./local.nix
     ./iac.nix
     ./python.nix
