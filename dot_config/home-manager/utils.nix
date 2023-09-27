@@ -18,6 +18,9 @@
       entr
       bc
       lshw
+      unzip
+      tree
+      sqlite-utils
       # Provides lstopo for hw diagrams
       hwloc
       # PDF utils
