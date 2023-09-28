@@ -12,6 +12,7 @@
       wget
       curl
       tcpdump
+      ngrep
     ];
   };
 }
