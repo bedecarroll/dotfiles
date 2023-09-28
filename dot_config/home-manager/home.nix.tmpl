@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Home Manager needs a bit of information about you and the
@@ -38,25 +38,32 @@
     ./data.nix
     ./editor.nix
     ./help.nix
-    {{- /* Packages destined for local boxes, e.g. laptops */ -}}
-    {{- if or .needs_terminal .is_personal .is_wsl }}
-    ./local.nix
-    ./iac.nix
-    ./python.nix
-    ./rust.nix
-    ./nodejs.nix
-    {{- end }}
-    {{- if .is_wsl }}
-    ./wsl.nix
-    {{- end }}
     ./network.nix
     ./nix.nix
     ./perf.nix
     ./security.nix
     ./space.nix
+    {{- /* Packages only for my boxes */ -}}
+    {{- if .is_personal }}
+    ./personal.nix
+    {{- end }}
+    {{- /* Wouldn't go on a devserver as it is managed */ -}}
+    {{- if or .needs_terminal .is_personal .is_wsl }}
+    ./iac.nix
+    ./python.nix
+    ./rust.nix
+    ./nodejs.nix
+    {{- end }}
+    {{- /* For every WSL with nix */ -}}
+    {{- if .is_wsl }}
+    ./wsl.nix
+    {{- end }}
+    {{- /* Terminals wouldn't be on e.g. containers */ -}}
     {{- if .needs_terminal }}
     ./terminal.nix
     {{- end }}
     ./utils.nix
-  ];
+  ] ++
+  {{- /* Stuff only for local boxes */ -}}
+  lib.optional (builtins.pathExists ./local.nix) ./local.nix;
 }
