@@ -11,6 +11,7 @@
       sipcalc
       wget
       curl
+      tcpdump
     ];
   };
 }
