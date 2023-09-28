@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Python programs and frequently needed packages
     home.packages = with pkgs; [
       ruff  
       poetry

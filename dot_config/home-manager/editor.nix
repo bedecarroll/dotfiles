@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Text editors (expected everywhere)
     home.packages = with pkgs; [
       vim
       neovim

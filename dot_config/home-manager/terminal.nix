@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Terminals
     home.packages = with pkgs; [
       alacritty
       kitty

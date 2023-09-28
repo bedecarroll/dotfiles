@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Everything else
     home.packages = with pkgs; [
       coreutils
       moreutils

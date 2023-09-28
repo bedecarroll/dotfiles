@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Linux perf debugging tools
     home.packages = with pkgs; [
       htop
       bottom

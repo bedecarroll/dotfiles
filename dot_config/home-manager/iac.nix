@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Commonly needed IaC packages
     home.packages = with pkgs; [
       ansible
       ansible-lint

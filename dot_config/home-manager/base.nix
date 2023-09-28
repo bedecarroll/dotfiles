@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Minimum viable environment
     home.packages = with pkgs; [
       tmux
       neovim
