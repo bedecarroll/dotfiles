@@ -27,6 +27,7 @@
       # PDF utils
       poppler_utils
       pdfgrep
+      dotenv-linter
     ];
   };
 }
