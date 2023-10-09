@@ -1,0 +1,557 @@
+#!/usr/bin/env python3
+"""Create or "sync" the structure of a monorepo."""
+
+import os
+import sys
+import difflib
+
+VSCODE_EXTENSIONS = """{
+    "recommendations": [
+        // General
+        "vscode-icons-team.vscode-icons",
+        // Python
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        // Jupyter
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "ms-dotnettools.dotnet-interactive-vscode",
+        // Rust
+        "rust-lang.rust-analyzer",
+        // Golang
+        "golang.go",
+        // JS/TS
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        // Hashicorp
+        "HashiCorp.terraform",
+        "HashiCorp.HCL",
+        "HashiCorp.sentinel",
+        // Misc
+        "aaron-bond.better-comments", // Help create more human-friendly comments
+        "esbenp.prettier-vscode", // Opinionated code formatter (mostly web)
+        "ms-vscode-remote.remote-ssh",
+        "tamasfe.even-better-toml",
+        "redhat.vscode-yaml",
+        "redhat.ansible",
+        "rangav.vscode-thunder-client", // Postman replacement
+        "mechatroner.rainbow-csv",
+        "marp-team.marp-vscode", // Markdown presentations
+        "adpyke.codesnap", // Good looking code screenshots
+        "tomoki1207.pdf",
+        "mikestead.dotenv" // .env syntax highlighting
+        // VPN
+        // "tailscale.vscode-tailscale"
+    ]
+}
+"""
+
+VSCODE_SETTINGS = """{
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.tree.indent": 15,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.colorCustomizations": {
+        "tree.indentGuidesStroke": "#05ef3c"
+    },
+    "python.languageServer": "Default",
+    "python.analysis.typeCheckingMode": "off",
+    "[python]": {
+        "editor.defaultFormatter": null,
+        "editor.formatOnType": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true
+        }
+    },
+    "editor.formatOnSave": true,
+    "editor.linkedEditing": true,
+    "editor.rulers": [
+        88
+    ],
+    "editor.stickyScroll.enabled": true,
+    "editor.colorDecorators": true, // Default but to useful no to force on
+    "editor.bracketPairColorization.enabled": true, // Better bracket coloring
+    "files.readonlyFromPermissions": true,
+    "files.readonlyInclude": {
+        "**/.venv/**": true,
+        "**/node_modules/**": true
+    },
+    "explorer.excludeGitIgnore": true,
+    "git.mergeEditor": true,
+    "window.commandCenter": true,
+    "markdown.validate.enabled": true,
+    "explorer.autoRevealExclude": {
+        "**/.venv": true
+    }
+}
+"""
+
+ESLINTRC = """// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require("fs")
+
+module.exports = {
+  extends: [
+    "next",
+    "prettier",
+    "react-app",
+    "react-app/jest",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended",
+    "plugin:tailwindcss/recommended",
+  ],
+  parserOptions: {
+    babelOptions: {
+      presets: [require.resolve("next/babel")],
+    },
+  },
+  rules: {
+    "testing-library/prefer-screen-queries": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+      },
+    ],
+    "sort-imports": [
+      "error",
+      {
+        ignoreCase: true,
+        ignoreDeclarationSort: true,
+      },
+    ],
+    "tailwindcss/classnames-order": "off",
+    "import/order": [
+      1,
+      {
+        groups: ["external", "builtin", "internal", "sibling", "parent", "index"],
+        pathGroups: [
+          ...getDirectoriesToSort().map((singleDir) => ({
+            pattern: `${singleDir}/**`,
+            group: "internal",
+          })),
+          {
+            pattern: "env",
+            group: "internal",
+          },
+          {
+            pattern: "theme",
+            group: "internal",
+          },
+          {
+            pattern: "public/**",
+            group: "internal",
+            position: "after",
+          },
+        ],
+        pathGroupsExcludedImportTypes: ["internal"],
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
+      },
+    ],
+  },
+}
+
+function getDirectoriesToSort() {
+  const ignoredSortingDirectories = [".git", ".next", ".vscode", "node_modules"]
+  return getDirectories(process.cwd()).filter((f) => !ignoredSortingDirectories.includes(f))
+}
+
+function getDirectories(path) {
+  return fs.readdirSync(path).filter(function (file) {
+    return fs.statSync(path + "/" + file).isDirectory()
+  })
+}
+"""
+
+GITIGNORE = r"""# Make sure not to add any .env files
+.env
+
+####
+# From Github 2023-04-01
+# https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore
+####
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#poetry.lock
+
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+#pdm.lock
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+#   in version control.
+#   https://pdm.fming.dev/#use-with-ide
+.pdm.toml
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ruff
+.ruff_cache/
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+#.idea/
+
+####
+# From Github 2023-04-01
+# https://raw.githubusercontent.com/github/gitignore/main/Rust.gitignore
+####
+
+# Generated by Cargo
+# will have compiled files and executables
+debug/
+target/
+
+# Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
+# More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
+Cargo.lock
+
+# These are backup files generated by rustfmt
+**/*.rs.bk
+
+# MSVC Windows builds of rustc generate these, which store debugging information
+*.pdb
+
+####
+# From Github 2023-04-01
+# https://raw.githubusercontent.com/github/gitignore/main/Go.gitignore
+####
+
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+####
+# From Github 2023-08-10
+# https://raw.githubusercontent.com/github/gitignore/main/Terraform.gitignore
+####
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude all .tfvars files, which are likely to contain sensitive data, such as
+# password, private keys, and other secrets. These should not be part of version 
+# control as they are data points which are potentially sensitive and subject 
+# to change depending on the environment.
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+####
+# From bun create elysia 2023-09-07
+# Modified to add ** to / excludes as this is top level ignore
+####
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+**/node_modules
+**/.pnp
+.pnp.js
+
+# testing
+**/coverage
+
+# next.js
+**/.next/
+**/out/
+
+# production
+**/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+**/*.trace
+**/*.zip
+**/*.tar.gz
+**/*.tgz
+**/*.log
+package-lock.json
+**/*.bun
+"""
+
+PRETTIERRC = """{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+}
+"""
+
+RUFF = r"""select = ["ALL"]
+
+[pydocstyle]
+convention = "google"
+"""
+
+TOP_LEVEL_FOLDERS = [
+    ".vscode",
+    "apps",
+    "libs",
+    "iac",
+    "scripts",
+]
+
+FILE_MAPPING = {
+    ".vscode/extensions.json": VSCODE_EXTENSIONS,
+    ".vscode/settings.json": VSCODE_SETTINGS,
+    ".eslintrc.js": ESLINTRC,
+    ".gitignore": GITIGNORE,
+    ".prettierrc": PRETTIERRC,
+    "ruff.toml": RUFF,
+}
+
+
+def show_diff(filename, disk_content, expected_content):
+    tdiff = difflib.unified_diff(disk_content.split("\n"), expected_content.split("\n"))
+    if tdiff:
+        print(f"\nDifferences in {filename}:")
+        print("".join(tdiff))
+
+    # Prompt user to overwrite or not
+    choice = input("\nDo you want to overwrite this file? (yes/no): ").strip().lower()
+    if choice in ["yes", "y"]:
+        with open(filename, "w") as f:
+            f.write(expected_content)
+        print(f"{filename} has been overwritten")
+    else:
+        print(f"{filename} was not overwritten")
+
+
+def main(target_folder):
+    # Create folders
+    for folder in TOP_LEVEL_FOLDERS:
+        folder_path = os.path.join(target_folder, folder)
+        if not os.path.exists(folder_path):
+            print(f"Creating {folder_path}")
+            os.makedirs(folder_path)
+        else:
+            print(f"{folder} already exists")
+
+    # Check files
+    for filename, content in FILE_MAPPING.items():
+        file_path = os.path.join(target_folder, filename)
+        if not os.path.exists(file_path):
+            print(f"Creating {file_path}")
+            with open(file_path, "w") as f:
+                f.write(content)
+        else:
+            with open(file_path, "r") as f:
+                disk_content = f.read()
+            if disk_content != content:
+                show_diff(file_path, disk_content, content)
+            else:
+                print(f"{file_path} already matches standard")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: repo_sync <target_folder>")
+        sys.exit(1)
+    main(sys.argv[1])
