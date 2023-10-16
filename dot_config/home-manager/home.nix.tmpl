@@ -27,6 +27,9 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  # Allow unfree programs
+  nixpkgs.config.allowUnfreePredicate = _: true;
+
   {{- if or .needs_terminal .is_personal }}
 
   # Golang
