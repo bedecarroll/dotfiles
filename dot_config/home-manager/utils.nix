@@ -28,6 +28,8 @@
       poppler_utils
       pdfgrep
       dotenv-linter
+      # Git tools
+      pre-commit
     ];
   };
 }
