@@ -13,6 +13,8 @@
       curl
       tcpdump
       ngrep
+      # Developer reverse tunnel
+      ngrok
     ];
   };
 }
