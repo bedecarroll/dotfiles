@@ -4,8 +4,8 @@
   config = {
     # Minimum viable environment
     home.packages = with pkgs; [
+      git
       tmux
-      neovim
       atuin
       bash-preexec
     ];

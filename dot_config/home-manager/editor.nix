@@ -2,10 +2,8 @@
 
 {
   config = {
-    # Text editors (expected everywhere)
+    # Text editors
     home.packages = with pkgs; [
-      vim
-      neovim
       nano
     ];
   };
