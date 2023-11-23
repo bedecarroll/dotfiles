@@ -30,6 +30,7 @@
       dotenv-linter
       # Git tools
       pre-commit
+      lazygit
     ];
   };
 }
