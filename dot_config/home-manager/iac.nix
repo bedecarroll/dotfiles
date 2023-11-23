@@ -7,7 +7,7 @@
       ansible
       ansible-lint
       ansible-later
-      awscli2
+      #awscli2
       terraform
       terraformer
     ];
