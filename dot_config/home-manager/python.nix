@@ -20,7 +20,7 @@
           numpy
           scipy
           seaborn
-          polars
+          #polars
           requests
           netmiko
           paramiko
