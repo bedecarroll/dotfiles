@@ -7,6 +7,7 @@ echo "Creating XDG directories"
 # Set XDG because it probably isn't on first run
 XDG_CONFIG_HOME="$HOME/.config"
 XDG_DATA_HOME="$HOME/.local/share"
+XDG_STATE_HOME="$HOME/.local/state"
 
 # Make host specific directories
 mkdir -p "${XDG_CONFIG_HOME}/bash/local"
@@ -18,9 +19,10 @@ mkdir -p "${HOME}/.ssh/local"
 mkdir -p "${XDG_DATA_HOME}/bash"
 
 # Vim temp and history files
-mkdir -p "${XDG_DATA_HOME}/vim/undo"
-mkdir -p "${XDG_DATA_HOME}/vim/swap"
-mkdir -p "${XDG_DATA_HOME}/vim/backup"
+mkdir -p "${XDG_STATE_HOME}/vim/undo"
+mkdir -p "${XDG_STATE_HOME}/vim/swap"
+mkdir -p "${XDG_STATE_HOME}/vim/backup"
+mkdir -p "${XDG_STATE_HOME}/vim/view"
 
 {{ if .needs_terminal }}
 
