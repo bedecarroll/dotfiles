@@ -9,6 +9,7 @@
       weechat
       openai-whisper-cpp
       mpv
+      hugo
     ];
   };
 }

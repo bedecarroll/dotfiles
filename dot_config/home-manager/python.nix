@@ -4,10 +4,9 @@
   config = {
     # Python programs and frequently needed packages
     home.packages = with pkgs; [
-      ruff  
+      ruff
       poetry
-      jupyter
-      
+
       (python3.withPackages (ps:
         with ps; [
           pip
@@ -20,8 +19,8 @@
           numpy
           scipy
           seaborn
-          #polars
-          requests
+          polars
+          httpx
           netmiko
           paramiko
           scapy
