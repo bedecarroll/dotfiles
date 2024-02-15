@@ -3,20 +3,18 @@
 name=${1:-"main"}
 if ! tmux attach-session -t $name; then
   tmux new-session -d -s $name
-  sleep 0.5
-  tmux send-keys 'weechat' ENTER
   tmux rename-window -t $name:0 'IRC'
   tmux new-window -t $name:1 -n 'Email'
-  sleep 0.5
-  tmux send-keys 'neomutt' ENTER
   tmux new-window -t $name:2 -n 'Podcasts'
-  sleep 0.5
-  tmux send-keys 'cd /mnt/c/Users/bc/Dropbox/podcasts/' ENTER
   tmux new-window -t $name:3 -n 'temp'
-  sleep 0.5
-  tmux send-keys 'cd /mnt/c/admin/temp/' ENTER
   tmux new-window -t $name:4
 
+  sleep 4
+
+  tmux send-keys -t $name:0 "weechat" Enter
+  tmux send-keys -t $name:1 neomutt Enter
+  tmux send-keys -t $name:2 'cd /mnt/c/Users/bc/Dropbox/podcasts/' 'Enter'
+  tmux send-keys -t $name:3 'cd /mnt/c/admin/temp/' 'Enter'
   tmux select-window -t $name:3
   tmux attach-session -t $name
 fi
