@@ -10,9 +10,7 @@
   #programs.man.enable = false;
   #home.extraOutputsToInstall = [ "man" ];
   # https://github.com/nix-community/home-manager/issues/432#issuecomment-615841327
-  home.sessionVariables = {
-    LANG = "en_US.UTF-8";
-  };
+  home.sessionVariables = { LANG = "en_US.UTF-8"; };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -66,7 +64,5 @@
     ./terminal.nix
     {{- end }}
     ./utils.nix
-  ] ++
-  {{- /* Stuff only for local boxes */ -}}
-  lib.optional (builtins.pathExists ./local.nix) ./local.nix;
+  ] ++ lib.optional (builtins.pathExists ./local.nix) ./local.nix;
 }
