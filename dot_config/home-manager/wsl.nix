@@ -3,10 +3,7 @@
 {
   config = {
     # Packages that all WSL boxes need
-    home.packages = with pkgs; [
-      topgrade
-      ffmpeg
-    ];
+    home.packages = with pkgs; [ topgrade ffmpeg ];
   };
 }
 

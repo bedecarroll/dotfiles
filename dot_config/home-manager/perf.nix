@@ -3,14 +3,7 @@
 {
   config = {
     # Linux perf debugging tools
-    home.packages = with pkgs; [
-      htop
-      bottom
-      ctop
-      hyperfine
-      sysstat
-      iotop
-    ];
+    home.packages = with pkgs; [ htop bottom ctop hyperfine sysstat iotop ];
   };
 }
 

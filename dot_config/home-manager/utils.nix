@@ -23,7 +23,7 @@
       tree
       sqlite-utils
       # Provides lstopo for hw diagrams
-      hwloc
+      #hwloc  # Broken bash completions
       # PDF utils
       poppler_utils
       pdfgrep

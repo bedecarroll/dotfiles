@@ -3,9 +3,7 @@
 {
   config = {
     # Text editors
-    home.packages = with pkgs; [
-      nano
-    ];
+    home.packages = with pkgs; [ nano ];
   };
 }
 

@@ -3,9 +3,7 @@
 {
   config = {
     # Security packages
-    home.packages = with pkgs; [
-      cacert
-    ];
+    home.packages = with pkgs; [ cacert ];
   };
 }
 
