@@ -15,5 +15,5 @@ vim.keymap.set("n", "<Right>", "<Nop>", { noremap = true, silent = true })
 
 -- Insert newline without going into insert mode
 -- https://stackoverflow.com/a/16136133
-vim.keymap.set("n", "oo", "o<Esc>k", { noremap = true, silent = true })
-vim.keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
+--vim.keymap.set("n", "oo", "o<Esc>k", { noremap = true, silent = true })
+--vim.keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
