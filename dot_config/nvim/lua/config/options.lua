@@ -2,6 +2,10 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
+-- LSP Server to use for Python.
+vim.g.lazyvim_python_lsp = "basedpyright"
+vim.g.lazyvim_python_ruff = "ruff_lsp"
+
 -- Set leader back to default
 vim.g.mapleader = "\\"
 
@@ -44,6 +48,9 @@ vim.opt.undofile = true
 
 -- Delete comment character when joining commented lines
 vim.opt.formatoptions:append({ "j" })
+
+-- Stop continuing comments when using o/O
+vim.opt.formatoptions:remove({ "o" })
 
 -- Set default indent
 vim.opt.expandtab = true -- expand tabs into spaces

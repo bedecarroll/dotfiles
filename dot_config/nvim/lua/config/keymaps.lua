@@ -2,6 +2,9 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- Buffer selector
+vim.keymap.set("n", "<Enter><Enter>", "<cmd>Telescope buffers<cr>", { desc = "Buffers" })
+
 -- NOTE: A lot of this comes from old vim, may be duplicate
 
 -- Disable search highlight by hitting enter
