@@ -17,6 +17,7 @@
       lnav
       grex
       entr
+      watchexec
       bc
       lshw
       unzip

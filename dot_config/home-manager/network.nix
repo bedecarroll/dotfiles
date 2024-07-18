@@ -11,7 +11,9 @@
       sipcalc
       wget
       curl
+      httpie
       tcpdump
+      cidr # Different sipcalc
       ngrep
       # Developer reverse tunnel
       ngrok

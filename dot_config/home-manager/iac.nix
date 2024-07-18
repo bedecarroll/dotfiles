@@ -6,7 +6,7 @@
     home.packages = with pkgs; [
       ansible
       ansible-lint
-      ansible-later
+      #ansible-later
       #awscli2
       terraform
       terraformer
