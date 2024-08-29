@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # Aliases have lower overhead but can't be changed
 # without sourcing profile so only put things in
@@ -10,3 +10,4 @@
 unalias ll 2>/dev/null
 
 alias pyign='PYTHONWARNINGS="ignore"'
+alias printfuncs="declare -f | sed '/^_.* \(\)$/,/^}/d'"

@@ -1,6 +1,6 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # This is what install adds if you use --update-rc
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]]; then
-  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+if command -v fzf &>/dev/null; then
+  eval "$(fzf --bash)"
 fi

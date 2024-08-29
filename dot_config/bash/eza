@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if command -v eza &>/dev/null; then
+  ls() {
+    eza "$@"
+  }
+fi
