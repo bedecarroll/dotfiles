@@ -23,7 +23,8 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.coding.mini-comment" },
 		{ import = "lazyvim.plugins.extras.coding.mini-surround" },
 		{ import = "lazyvim.plugins.extras.coding.yanky" },
-		-- { import = "lazyvim.plugins.extras.editor.fzf" },
+		-- This breaks the venv selector plugin
+		{ import = "lazyvim.plugins.extras.editor.fzf" },
 		{ import = "lazyvim.plugins.extras.lang.ansible" },
 		{ import = "lazyvim.plugins.extras.lang.docker" },
 		{ import = "lazyvim.plugins.extras.lang.gleam" },
