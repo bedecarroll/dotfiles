@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
@@ -6,14 +6,13 @@
     home.packages = with pkgs; [
       gping
       mtr
-      bandwhich
+      # bandwhich # broken
       netperf
       sipcalc
       wget
       curl
       httpie
       tcpdump
-      cidr # Different sipcalc
       ngrep
       # Developer reverse tunnel
       ngrok

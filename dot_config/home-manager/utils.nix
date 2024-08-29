@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
@@ -6,13 +6,9 @@
     home.packages = with pkgs; [
       coreutils
       moreutils
-      bat
-      ripgrep
-      lsd
       fd
       # JSON tools
       jc
-      jq
       procs
       lnav
       grex
@@ -30,8 +26,8 @@
       pdfgrep
       dotenv-linter
       # Git tools
-      pre-commit
       lazygit
+      direnv # .envrc files to autoload
     ];
   };
 }

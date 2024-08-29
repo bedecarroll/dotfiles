@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
     # Terminals
-    home.packages = with pkgs; [ alacritty kitty ];
+    home.packages = with pkgs; [ wezterm alacritty kitty ];
   };
 }
 

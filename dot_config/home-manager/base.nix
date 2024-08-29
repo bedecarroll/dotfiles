@@ -1,9 +1,11 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
     # Minimum viable environment
     home.packages = with pkgs; [
+      bash
+      zsh
       git
       git-extras
       pre-commit
@@ -11,6 +13,12 @@
       atuin
       bash-preexec
       zoxide
+      eza
+      bat
+      ripgrep
+      jq
+      fzf
+      delta
     ];
   };
 }

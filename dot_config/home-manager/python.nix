@@ -1,9 +1,10 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
     # Python programs and frequently needed packages
     home.packages = with pkgs; [
+      uv
       ruff
       ruff-lsp
       poetry
