@@ -3,7 +3,7 @@
 -- Add any additional keymaps here
 
 -- Buffer selector
-vim.keymap.set("n", "<Enter><Enter>", "<cmd>Telescope buffers<cr>", { desc = "Buffers" })
+vim.keymap.set("n", "<Enter><Enter>", "<cmd>FzfLua buffers<cr>", { desc = "Buffers" })
 
 -- NOTE: A lot of this comes from old vim, may be duplicate
 
