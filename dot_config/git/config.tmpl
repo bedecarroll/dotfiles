@@ -1,6 +1,21 @@
 [user]
   name = "Bede Carroll"
   email = {{ .github_email | quote }}
-
+[core]
+  editor = vi
+{{- if lookPath "delta" }}
+  pager = delta
+{{ end -}}
+[init]
+  defaultBranch = master
+[difftool]
+    prompt = false
+[diff]
+    tool = nvimdiff
+    colorMoved = default
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[merge]
+    conflictstyle = diff3
 [include]
   path = local/config
