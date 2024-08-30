@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
+# Might need to restart shell after first run due to nix install
 if command -v bat &>/dev/null; then
+  export PAGER=bat
   cat() {
     bat "$@"
   }
