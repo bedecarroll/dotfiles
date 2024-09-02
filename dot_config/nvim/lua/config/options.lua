@@ -4,7 +4,7 @@
 
 -- LSP Server to use for Python.
 vim.g.lazyvim_python_lsp = "basedpyright"
-vim.g.lazyvim_python_ruff = "ruff_lsp"
+vim.g.lazyvim_python_ruff = "ruff"
 
 -- Set leader back to default
 vim.g.mapleader = "\\"
@@ -61,3 +61,6 @@ vim.opt.autoindent = true -- copy indent from current line when starting a new l
 
 -- Disable folding by default
 vim.opt.foldenable = false
+
+-- Disable mouse
+vim.opt.mouse = ""
