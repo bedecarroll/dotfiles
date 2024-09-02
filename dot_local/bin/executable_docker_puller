@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# https://dev.to/goffity/update-all-docker-images-already-pulled-o3l
+docker images --format "{{.Repository}}:{{.Tag}}" | xargs -L1 docker pull

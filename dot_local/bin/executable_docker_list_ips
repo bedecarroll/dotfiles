@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# https://stackoverflow.com/a/69493694
+docker inspect $(docker ps -q) --format='{{ printf "%-50s" .Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}'

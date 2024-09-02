@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+# https://docs.python.org/3/library/secrets.html#recipes-and-best-practices
+from pathlib import Path
+import secrets
+
+# Might need to install wamerican and then sudo select-default-wordlist wamerican
+word_file = Path('/usr/share/dict/words')
+
+if not word_file.exists:
+    raise FileNotFoundError
+
+with word_file.open() as f:
+    words = [word.strip() for word in f]
+    password = ' '.join(secrets.choice(words) for i in range(4))
+print(password)
