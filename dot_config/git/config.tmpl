@@ -5,17 +5,27 @@
   editor = vi
 {{- if lookPath "delta" }}
   pager = delta
+{{- else if lookPath "bat" }}
+  pager = bat
 {{ end -}}
 [init]
   defaultBranch = master
-[difftool]
-    prompt = false
 [diff]
-    tool = nvimdiff
-    colorMoved = default
+  tool = nvimdiff
+  colorMoved = default
+[difftool]
+  prompt = false
 [difftool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
-    conflictstyle = diff3
+  conflictstyle = diff3
+[alias]
+  last = "log -1 HEAD --stat"
+  ll = "log --oneline"
+  st = "status -sb"
+  edit = "!nvim -p $(git ls-files -o -m --exclude-standard && git show --relative --name-only --pretty="format:" ${commit} | grep -v '^$')"
+  sb = "!checkout_fzf() { git branch | fzf | xargs git checkout; }; checkout_fzf"
+[commit]
+  verbose = true
 [include]
   path = local/config
