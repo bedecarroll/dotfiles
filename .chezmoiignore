@@ -1,3 +1,4 @@
+{{- $osid := .chezmoi.os -}}
 README.md
 install.sh
 
@@ -30,7 +31,9 @@ install.sh
 .ssh/wsl
 {{ end }}
 
+{{- if hasKey .chezmoi.osRelease "id" -}}
 {{ if not (contains "Ubuntu" .chezmoi.osRelease.name) }}
 # Only need the Ubuntu update script on Ubuntu
 .local/bin/ubuntu_pkg_update
 {{ end }}
+{{- end -}}
