@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+eza_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+
+if command -v eza &>/dev/null; then
+  eza --tree --level 2 --all "${eza_params[@]}" "$@"
+else
+  /usr/bin/tree -L 2 -a
+fi
