@@ -11,3 +11,6 @@ unalias ll 2>/dev/null
 
 alias pyign='PYTHONWARNINGS="ignore"'
 alias printfuncs="declare -f | sed '/^_.* \(\)$/,/^}/d'"
+
+# type does aliases
+alias which='type'
