@@ -2,12 +2,12 @@
   name = "Bede Carroll"
   email = {{ .github_email | quote }}
 [core]
-  editor = vi
+  editor = nvim
 {{- if lookPath "delta" }}
   pager = delta
 {{- else if lookPath "bat" }}
   pager = bat
-{{ end -}}
+{{ end }}
 [init]
   defaultBranch = master
 [diff]
