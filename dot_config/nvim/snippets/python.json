@@ -1,0 +1,18 @@
+{
+  "uv script template": {
+    "prefix": "newuvscript",
+    "description": "UV PEP723 script: https://simonwillison.net/2024/Aug/21/dangers-of-ai-agents-unfurling/",
+    "body": [
+      "#!/usr/bin/env -S uv run",
+      "# /// script",
+      "# requires-python = \">=3.12\"",
+      "# dependencies = [",
+      "#     \"rich>=13\",",
+      "#     \"typer>=0.12\",",
+      "# ]",
+      "# ///",
+      "",
+      "$0"
+    ]
+  }
+}

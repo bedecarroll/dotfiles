@@ -1,9 +1,9 @@
 {
-  "Shell Scripting": {
-    "prefix": "newbash",
+  "Extensive bash script template": {
+    "prefix": "newextenbash",
+    "description": "Bash template with arg parsing and examples. See https://mywiki.wooledge.org/BashPitfalls#pf60 for why no -euo",
     "body": [
       "#!/usr/bin/env bash",
-      "# shellcheck shell=bash",
       "",
       "read -r -d '' doc <<\"EOF\"",
       "INSERT DOCO HERE",
@@ -44,6 +44,15 @@
       "# Start here",
       "$0",
       ""
+    ]
+  },
+  "Terse bash script template": {
+    "prefix": "newbash",
+    "description": "Basic bash template",
+    "body": [
+      "#!/usr/bin/env bash",
+      "",
+      "$0"
     ]
   }
 }
