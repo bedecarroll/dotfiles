@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # How to debug PATH
 #
@@ -13,7 +13,7 @@
 # https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
 #
 # With this in mind you can see what is in PATH with:
-# 
+#
 # echo $PATH | tr ':' '\n'
 #
 # If there are duplicates it is probably one of the files
@@ -25,14 +25,44 @@
 #
 # This will show all changes made by various scripts
 # during bash start.
-# 
+
 # NOTE: Always check before adding to PATH to prevent
 # duplicates.
 
-# First match wins so our scripts should be first
-if ! [[ ":$PATH:" =~ ":$HOME/.local/bin:" ]]; then
-  PATH="$HOME/.local/bin:$PATH"
+# Case method and the following line from .cargo/env
+# affix colons on either side of $PATH to simplify matching
+
+case ":${PATH}:" in
+*:"$HOME/.local/bin":*) ;;
+*)
+  export PATH="$HOME/.local/bin:$PATH"
+  ;;
+esac
+
+# We have bun installed
+if [[ -f "$HOME/.bun" ]]; then
+  case ":${PATH}:" in
+  *:"$HOME/.bun/bin":*) ;;
+  *)
+    export PATH="$HOME/.bun/bin:$PATH"
+    ;;
+  esac
+
+  case ":${PATH}:" in
+  *:"$HOME/.cache/.bun/bin":*) ;;
+  *)
+    export PATH="$HOME/.cache/.bun/bin:$PATH"
+    ;;
+  esac
 fi
-if ! [[ ":$PATH:" =~ ":$HOME/.bun/bin:" ]]; then
-  PATH="$HOME/.bun/bin:$PATH"
+
+# We have cargo/rust
+if [[ -f "$HOME/.cargo" ]]; then
+  case ":${PATH}:" in
+  *:"$HOME/.cargo/bin":*) ;;
+  *)
+    # Prepending path in case a system-installed binary needs to be overridden
+    export PATH="$HOME/.cargo/bin:$PATH"
+    ;;
+  esac
 fi
