@@ -4,7 +4,7 @@
   config = {
     # Python programs and frequently needed packages
     home.packages = with pkgs; [
-      uv
+      # uv # uv moves too fast
       ruff
       ruff-lsp
       poetry
