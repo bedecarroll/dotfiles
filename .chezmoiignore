@@ -2,6 +2,13 @@
 README.md
 install.sh
 
+# No need for nix stuff
+flake.nix
+flake.lock
+nixosModules
+homeManagerModules
+hosts
+
 {{ if not .is_personal }}
 # Probably need to have proxy configs so do these files manually
 .curlrc
