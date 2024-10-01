@@ -42,18 +42,17 @@
       kepler = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-           ./old_config.nix
+           ./hosts/kepler/configuration.nix
            disko.nixosModules.disko
-           ./disko-config.nix
+           ./hosts/kepler/disko-config.nix
            nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
-           inputs.stylix.nixosModules.stylix
+           #inputs.stylix.nixosModules.stylix
         ];
       };
     };
     homeConfigurations."bc" = home-manager.lib.homeManagerConfiguration {
        inherit pkgs;
        modules = [
-         ./home.nix
          ./homeManagerModules
        ];
     };
