@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-{{- if .needs_terminal }}
+{{ if .needs_terminal }}
 {{- if ne .chezmoi.os "darwin" -}}
 echo "Updating font cache"
 fc-cache -f

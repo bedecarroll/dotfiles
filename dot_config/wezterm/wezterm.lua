@@ -79,7 +79,7 @@ for i = 1, 8 do
 end
 
 config.keys = keys
-
-local local_config = require("local")
-local_config.apply_to_config(config)
+config.enable_wayland = false
+-- local local_config = require("local")
+-- local_config.apply_to_config(config)
 return config

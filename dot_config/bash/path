@@ -40,7 +40,7 @@ case ":${PATH}:" in
 esac
 
 # We have bun installed
-if [[ -f "$HOME/.bun" ]]; then
+if [[ -d "$HOME/.bun" ]]; then
   case ":${PATH}:" in
   *:"$HOME/.bun/bin":*) ;;
   *)
@@ -57,7 +57,7 @@ if [[ -f "$HOME/.bun" ]]; then
 fi
 
 # We have cargo/rust
-if [[ -f "$HOME/.cargo" ]]; then
+if [[ -d "$HOME/.cargo" ]]; then
   case ":${PATH}:" in
   *:"$HOME/.cargo/bin":*) ;;
   *)

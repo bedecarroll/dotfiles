@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # Import nix. If we aren't on a nix system just return as atuin etc won't be there
 NIX_PATH="${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels"
@@ -8,7 +8,7 @@ if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
 elif [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" ]; then
   export NIX_PATH
   source "/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
-else
+elif [ ! -d "/nix/" ]; then
   return 233
 fi
 

@@ -27,34 +27,49 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, nixos-hardware, disko, home-manager, ... } @ inputs:
-  let
-        system = "x86_64-linux";
-     pkgs = nixpkgs.legacyPackages.${system};
-  in
-  {
-    nixosConfigurations = {
-      kepler = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-           ./hosts/kepler/configuration.nix
-           disko.nixosModules.disko
-           ./hosts/kepler/disko-config.nix
-           nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
-           #inputs.stylix.nixosModules.stylix
-        ];
+  outputs =
+    {
+      nixpkgs,
+      nixos-hardware,
+      disko,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      nixosConfigurations = {
+        kepler = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            ./nix/systemConfigs/kepler/configuration.nix
+            disko.nixosModules.disko
+            ./nix/systemConfigs/kepler/disko-config.nix
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
+            #inputs.stylix.nixosModules.stylix
+          ];
+        };
+      };
+      homeConfigurations = {
+        "bc@kepler" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [ ./nix/systemConfigs/kepler/home.nix ];
+        };
       };
     };
-    homeConfigurations."bc" = home-manager.lib.homeManagerConfiguration {
-       inherit pkgs;
-       modules = [
-         ./homeManagerModules
-       ];
-    };
-  };
 }
