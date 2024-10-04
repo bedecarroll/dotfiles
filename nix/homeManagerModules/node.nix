@@ -6,20 +6,18 @@
 }:
 with lib;
 let
-  cfg = config.help;
+  cfg = config.node;
 in
 {
 
   options = {
-    help.enable = mkEnableOption "help docs and cheatsheets";
+    node.enable = mkEnableOption "node/js pkgs";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      man
-      cheat
-      tealdeer
-      navi
+      nodejs_22
+      bun
     ];
   };
 }

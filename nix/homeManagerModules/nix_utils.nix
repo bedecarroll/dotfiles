@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.nix_utils;
+in
 {
 
   options = {
-    nix_utils.enable = lib.mkEnableOption "useful nix stuff";
+    nix_utils.enable = mkEnableOption "useful nix stuff";
   };
 
-  config = lib.mkIf config.nix_utils.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       nh
       nvd

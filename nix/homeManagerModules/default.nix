@@ -1,37 +1,46 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
+with lib;
 {
   imports = [
+    ./ai.nix
     ./base.nix
+    ./browsers.nix
+    ./comms.nix
     ./data.nix
-    ./editors
+    ./editors.nix
+    ./gcc.nix
+    ./golang.nix
     ./help.nix
     ./iac.nix
     ./network.nix
     ./nix_utils.nix
+    ./node.nix
     ./perf.nix
-    ./personal.nix
     ./python.nix
     ./rust.nix
     ./security.nix
-    ./space.nix
+    ./storage.nix
     ./terminal.nix
     ./utils.nix
+    ./video.nix
     ./wsl.nix
   ];
 
-  base.enable = lib.mkDefault true;
-  data.enable = lib.mkDefault true;
-  help.enable = lib.mkDefault true;
-  iac.enable = lib.mkDefault true;
-  network.enable = lib.mkDefault true;
-  nix_utils.enable = lib.mkDefault true;
-  perf.enable = lib.mkDefault true;
-  personal.enable = lib.mkDefault false;
-  python.enable = lib.mkDefault true;
-  rust.enable = lib.mkDefault true;
-  security.enable = lib.mkDefault true;
-  space.enable = lib.mkDefault true;
-  terminal.enable = lib.mkDefault true;
-  utils.enable = lib.mkDefault true;
-  wsl.enable = lib.mkDefault false;
+  base.enable = mkDefault true;
+  data.enable = mkDefault true;
+  editors.enable = mkDefault true;
+  gcc.enable = mkDefault true;
+  golang.enable = mkDefault true;
+  help.enable = mkDefault true;
+  iac.enable = mkDefault true;
+  network.enable = mkDefault true;
+  nix_utils.enable = mkDefault true;
+  node.enable = mkDefault true;
+  perf.enable = mkDefault true;
+  python.enable = mkDefault true;
+  rust.enable = mkDefault true;
+  security.enable = mkDefault true;
+  storage.enable = mkDefault true;
+  terminal.enable = mkDefault true;
+  utils.enable = mkDefault true;
 }

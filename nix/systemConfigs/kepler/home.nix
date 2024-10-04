@@ -35,8 +35,13 @@
   # Allow unfree programs
   nixpkgs.config.allowUnfreePredicate = _: true;
 
-  # Golang
-  programs.go.enable = true;
-
   imports = [ ../../homeManagerModules ];
+  ai.enable = true;
+  browsers.enable = true;
+  comms.enable = true;
+  comms.discord.enable = true;
+  python.uv.enable = true;
+  security.onepw.enable = true;
+  storage.dropbox.enable = true;
+  video.enable = true;
 }

@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.data;
+in
 {
 
   options = {
-    data.enable = lib.mkEnableOption "data analysis pkgs";
+    data.enable = mkEnableOption "data analysis pkgs";
   };
 
-  config = lib.mkIf config.data.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       fx
       gron

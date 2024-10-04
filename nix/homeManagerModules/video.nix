@@ -6,20 +6,19 @@
 }:
 with lib;
 let
-  cfg = config.help;
+  cfg = config.video;
 in
 {
 
   options = {
-    help.enable = mkEnableOption "help docs and cheatsheets";
+    video.enable = mkEnableOption "video stuff";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      man
-      cheat
-      tealdeer
-      navi
+      mpv
+      yt-dlp
+      ffmpeg
     ];
   };
 }

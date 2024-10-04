@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.perf;
+in
 {
 
   options = {
-    perf.enable = lib.mkEnableOption "linux perf and debug tools";
+    perf.enable = mkEnableOption "linux perf and debug tools";
   };
 
-  config = lib.mkIf config.perf.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       htop
       bottom

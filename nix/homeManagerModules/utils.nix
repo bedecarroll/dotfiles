@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.utils;
+in
 {
 
   options = {
-    utils.enable = lib.mkEnableOption "the everything else list";
+    utils.enable = mkEnableOption "the everything else list";
   };
 
-  config = lib.mkIf config.utils.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       bc
       coreutils

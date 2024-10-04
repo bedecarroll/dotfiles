@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.base;
+in
 {
 
   options = {
-    base.enable = lib.mkEnableOption "base environment";
+    base.enable = mkEnableOption "base environment";
   };
 
-  config = lib.mkIf config.base.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       atuin
       bash

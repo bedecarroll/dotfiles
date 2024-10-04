@@ -4,44 +4,49 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.python;
+in
 {
 
   options = {
-    python.enable = lib.mkEnableOption "python pkgs and programs";
+    python.enable = mkEnableOption "python pkgs and programs";
+    python.uv.enable = mkEnableOption "install uv";
   };
 
-  config = lib.mkIf config.python.enable {
-    home.packages = with pkgs; [
-      # NOTE: some should probaby just use uv
-      # aider-chat # moves too fast, use uv
-      poetry
-      ruff
-      ruff-lsp
-      sqlfluff # Used for fmt of sql queries
-      # uv # uv moves too fast
+  config = mkMerge [
+    # This is an option because UV outside of nixpkgs is better
+    (mkIf cfg.uv.enable { home.packages = with pkgs; [ uv ]; })
+    (mkIf cfg.enable {
+      home.packages = with pkgs; [
+        poetry
+        ruff
+        sqlfluff # Used for fmt of sql queries
 
-      # always available py packages
-      (python3.withPackages (
-        ps: with ps; [
-          click
-          httpx
-          ipdb
-          neovim
-          netmiko
-          networkx
-          numpy
-          pandas
-          paramiko
-          pip
-          polars
-          pygments
-          scapy
-          scipy
-          seaborn
-          setuptools
-          textfsm
-        ]
-      ))
-    ];
-  };
+        # always available py packages
+        (python3.withPackages (
+          ps: with ps; [
+            click
+            httpx
+            ipdb
+            neovim
+            netmiko
+            networkx
+            numpy
+            pandas
+            paramiko
+            pip
+            polars
+            pygments
+            scapy
+            scipy
+            seaborn
+            setuptools
+            textfsm
+          ]
+        ))
+      ];
+    })
+  ];
 }

@@ -94,10 +94,6 @@
       "wheel"
       "networkmanager"
     ];
-    packages = with pkgs; [
-      firefox
-      uv
-    ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -106,9 +102,6 @@
     git
     wezterm
     chezmoi
-    _1password-gui
-    yubikey-personalization
-    yubikey-manager
     tailscale
   ];
 

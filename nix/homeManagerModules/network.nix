@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.network;
+in
 {
 
   options = {
-    network.enable = lib.mkEnableOption "network troubleshooting and monitoring";
+    network.enable = mkEnableOption "network troubleshooting and monitoring";
   };
 
-  config = lib.mkIf config.network.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       # bandwhich # broken
       curl

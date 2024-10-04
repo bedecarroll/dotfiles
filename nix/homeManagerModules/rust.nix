@@ -4,20 +4,21 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.rust;
+in
 {
 
   options = {
-    rust.enable = lib.mkEnableOption "standard rust toolchain";
+    rust.enable = mkEnableOption "standard rust toolchain";
   };
 
-  config = lib.mkIf config.rust.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       rustc
       cargo
       rust-analyzer
-      gcc14
-      nodejs_22
-      tree-sitter
     ];
   };
 }

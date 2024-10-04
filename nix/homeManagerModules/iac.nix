@@ -4,13 +4,17 @@
   config,
   ...
 }:
+with lib;
+let
+  cfg = config.iac;
+in
 {
 
   options = {
-    iac.enable = lib.mkEnableOption "common iac packages";
+    iac.enable = mkEnableOption "common iac packages";
   };
 
-  config = lib.mkIf config.iac.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       ansible
       #ansible-later

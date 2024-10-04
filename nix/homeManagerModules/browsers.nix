@@ -6,20 +6,18 @@
 }:
 with lib;
 let
-  cfg = config.help;
+  cfg = config.browsers;
 in
 {
 
   options = {
-    help.enable = mkEnableOption "help docs and cheatsheets";
+    browsers.enable = mkEnableOption "web browsers";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      man
-      cheat
-      tealdeer
-      navi
+      lynx
+      firefox
     ];
   };
 }
