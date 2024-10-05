@@ -6,18 +6,19 @@
 }:
 with lib;
 let
-  cfg = config.browsers;
+  cfg = config.editor-utils;
 in
 {
 
   options = {
-    browsers.enable = mkEnableOption "web browsers";
+    editor-utils.enable = mkEnableOption "editor things";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      lynx
-      firefox
+      ast-grep
+      glow
+      tree-sitter
     ];
   };
 }

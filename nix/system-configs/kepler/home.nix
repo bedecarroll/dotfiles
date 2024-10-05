@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-
+{ ... }:
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -35,8 +29,10 @@
   # Allow unfree programs
   nixpkgs.config.allowUnfreePredicate = _: true;
 
-  imports = [ ../../homeManagerModules ];
+  imports = [ ../../home-manager-modules ];
   ai.enable = true;
+  ai.aider.enable = true;
+  ai.llm.enable = true;
   browsers.enable = true;
   comms.enable = true;
   comms.discord.enable = true;

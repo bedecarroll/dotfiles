@@ -8,12 +8,13 @@ with lib;
     ./comms.nix
     ./data.nix
     ./editors.nix
+    ./editor-utils.nix
     ./gcc.nix
     ./golang.nix
     ./help.nix
     ./iac.nix
     ./network.nix
-    ./nix_utils.nix
+    ./nix-utils.nix
     ./node.nix
     ./perf.nix
     ./python.nix
@@ -29,12 +30,13 @@ with lib;
   base.enable = mkDefault true;
   data.enable = mkDefault true;
   editors.enable = mkDefault true;
+  editor-utils.enable = mkDefault true;
   gcc.enable = mkDefault true;
   golang.enable = mkDefault true;
   help.enable = mkDefault true;
   iac.enable = mkDefault true;
   network.enable = mkDefault true;
-  nix_utils.enable = mkDefault true;
+  nix-utils.enable = mkDefault true;
   node.enable = mkDefault true;
   perf.enable = mkDefault true;
   python.enable = mkDefault true;

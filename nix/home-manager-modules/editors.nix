@@ -19,7 +19,6 @@ in
     home.packages = with pkgs; [
       nano
       glow
-      tree-sitter
       (pkgs-unstable.neovim.override { extraLuaPackages = ps: with ps; [ jsregexp ]; })
     ];
   };

@@ -6,21 +6,22 @@
 }:
 with lib;
 let
-  cfg = config.nix_utils;
+  cfg = config.nix-utils;
 in
 {
 
   options = {
-    nix_utils.enable = mkEnableOption "useful nix stuff";
+    nix-utils.enable = mkEnableOption "useful nix stuff";
   };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      cachix
       nh
-      nvd
-      nix-output-monitor
       nixfmt-rfc-style
+      nix-output-monitor
       nixpkgs-fmt
+      nvd
     ];
   };
 }

@@ -1,10 +1,20 @@
 {
   description = "NixOS configurations";
 
+  nixConfig = {
+    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-monitored = {
       url = "github:ners/nix-monitored";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,20 +28,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    hypr-contrib = {
-      url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -55,9 +57,9 @@
             inherit inputs;
           };
           modules = [
-            ./nix/systemConfigs/kepler/configuration.nix
+            ./nix/system-configs/kepler/configuration.nix
             disko.nixosModules.disko
-            ./nix/systemConfigs/kepler/disko-config.nix
+            ./nix/system-configs/kepler/disko-config.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
             #inputs.stylix.nixosModules.stylix
           ];
@@ -72,7 +74,7 @@
               config.allowUnfree = true;
             };
           };
-          modules = [ ./nix/systemConfigs/kepler/home.nix ];
+          modules = [ ./nix/system-configs/kepler/home.nix ];
         };
       };
     };
