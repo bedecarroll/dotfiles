@@ -16,9 +16,10 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      mpv
-      yt-dlp
       ffmpeg
+      mpv
+      vlc
+      yt-dlp
     ];
   };
 }

@@ -12,6 +12,7 @@ with lib;
     ./gcc.nix
     ./golang.nix
     ./help.nix
+    ./hyprland.nix
     ./iac.nix
     ./network.nix
     ./nix-utils.nix

@@ -13,5 +13,6 @@
       "flakes"
       "ca-derivations"
     ];
+    trusted-users = [ "@wheel" ];
   };
 }

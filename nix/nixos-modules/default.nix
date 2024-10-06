@@ -17,6 +17,7 @@
     ./security.nix
     ./usb.nix
     ./users.nix
+    ./video.nix
     ./vpn.nix
   ];
 }

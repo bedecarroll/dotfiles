@@ -1,4 +1,13 @@
-{ ... }:
+{ lib, config, ... }:
+with lib;
+let
+  cfg = config.hardware;
+in
 {
-  services.fwupd.enable = true;
+
+  options = {
+    hardware.enable = mkEnableOption "hardware management";
+  };
+
+  config = mkIf cfg.enable { services.fwupd.enable = true; };
 }

@@ -6,6 +6,15 @@
     ../../nixos-modules
   ];
 
+  # nixos-modules settings
+  audio.enable = true;
+  bluetooth.enable = true;
+  hardware.enable = true;
+  hyprland.enable = true;
+  usb.enable = true;
+  video.enable = true;
+  vpn.enable = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   # lower this to 10 when stable
