@@ -7,6 +7,7 @@ with lib;
     ./browsers.nix
     ./comms.nix
     ./data.nix
+    ./dev-utils.nix
     ./editors.nix
     ./editor-utils.nix
     ./gcc.nix
@@ -30,6 +31,7 @@ with lib;
 
   base.enable = mkDefault true;
   data.enable = mkDefault true;
+  dev-utils.enable = mkDefault true;
   editors.enable = mkDefault true;
   editor-utils.enable = mkDefault true;
   gcc.enable = mkDefault true;

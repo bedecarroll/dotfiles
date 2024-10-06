@@ -18,25 +18,18 @@ in
     home.packages = with pkgs; [
       bc
       coreutils
-      direnv # .envrc files to autoload
-      dotenv-linter
-      entr
       fd
-      grex
-      #hwloc  # Broken bash completions
+      hwloc # lstopo for hw diagrams
       jc
-      lazygit
       lnav
       lshw
       moreutils
       pdfgrep
       poppler_utils
-      procs
-      # Provides lstopo for hw diagrams
+      procs # ps replacement
       sqlite-utils
       tree
       unzip
-      watchexec
     ];
   };
 }

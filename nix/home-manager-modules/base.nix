@@ -24,9 +24,7 @@ in
       eza
       fzf
       git
-      git-extras
       jq
-      pre-commit
       ripgrep
       tmux
       zoxide
