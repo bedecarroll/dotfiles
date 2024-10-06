@@ -21,6 +21,7 @@ in
       entr
       gh
       git-extras
+      graphite-cli # stacked diffs for github
       grex # generate regex from test cases
       lazygit
       pre-commit
