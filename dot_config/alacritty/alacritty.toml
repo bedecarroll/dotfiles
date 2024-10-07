@@ -1,0 +1,20 @@
+import = ["local_hints.yml"]
+
+[font.bold]
+family = "fira code"
+style = "Bold"
+
+[font.bold_italic]
+family = "fira code"
+style = "Bold Italic"
+
+[font.italic]
+family = "fira code"
+style = "Italic"
+
+[font.normal]
+family = "fira code"
+style = "Regular"
+
+[window]
+startup_mode = "Maximized"

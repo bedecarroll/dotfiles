@@ -25,6 +25,7 @@ in
       grex # generate regex from test cases
       lazygit
       pre-commit
+      tig
       watchexec
     ];
   };

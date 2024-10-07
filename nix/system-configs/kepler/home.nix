@@ -30,12 +30,13 @@
   nixpkgs.config.allowUnfreePredicate = _: true;
 
   imports = [ ../../home-manager-modules ];
-  ai.enable = true;
   ai.aider.enable = true;
+  ai.enable = true;
   ai.llm.enable = true;
   browsers.enable = true;
-  comms.enable = true;
   comms.discord.enable = true;
+  comms.enable = true;
+  hyprland.enable = true;
   python.uv.enable = true;
   security.onepw.enable = true;
   storage.dropbox.enable = true;

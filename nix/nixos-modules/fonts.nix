@@ -4,5 +4,6 @@
     fira-code
     fira-code-symbols
     comic-mono
+    jetbrains-mono
   ];
 }

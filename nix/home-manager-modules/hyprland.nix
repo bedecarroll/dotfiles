@@ -16,27 +16,62 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      fuzzel
+      waybar
+      hyprlock
+      lxqt.lxqt-policykit
+      networkmanagerapplet
+      mako
       wl-clipboard
       cliphist
-      gnome.gnome-keyring
     ];
 
+    services.hypridle = {
+      enable = true;
+
+      settings = {
+        general = {
+          lock_cmd = "pidof hyprlock || hyprlock";
+        };
+
+        listener = [
+          {
+            on-timeout = "loginctl lock-session";
+            timeout = 360;
+          }
+          {
+            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = "hyprctl dispatch dpms off";
+            timeout = 420;
+          }
+        ];
+      };
+    };
+
     wayland.windowManager.hyprland = {
+      enable = true;
+
       plugins = [
         pkgs.hyprlandPlugins.borders-plus-plus
         pkgs.hyprlandPlugins.hyprbars
         pkgs.hyprlandPlugins.hyprexpo
-        pkgs.hyprlandPlugins.hyprtrails
       ];
+
       settings = {
         # https://wiki.hyprland.org/Configuring/Variables/#variable-types
         "$mod" = "SUPER";
+        "$terminal" = "${lib.getExe pkgs.wezterm}";
+        "$browser" = "${lib.getExe pkgs.firefox}";
+        "$launcher" = "${lib.getExe pkgs.fuzzel}";
 
         # https://wiki.hyprland.org/Configuring/Keywords/#executing
         exec-once = [
-          # "env XDG_CACHE_HOME=`${pkgs.coreutils}/bin/mktemp -d --suffix '-eww'` ${lib.getExe pkgs.eww} open bar"
-          "${pkgs.wl-clipboard}/bin/wl-paste --watch ${lib.getExe pkgs.cliphist} store"
-          "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets"
+          "${lib.getExe pkgs.mako} &"
+          "${lib.getExe pkgs.waybar} &"
+          "${lib.getExe pkgs.lxqt.lxqt-policykit} &"
+          "${pkgs.networkmanagerapplet}/nm-applet &"
+          "[workspace 1 silent] $terminal"
+          "[workspace 2 silent] $browser"
         ];
 
         # https://wiki.hyprland.org/Configuring/Monitors/
@@ -47,6 +82,7 @@ in
           gaps_in = 2;
           gaps_out = 4;
           border_size = 0;
+          resize_on_border = true;
           "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
           "col.inactive_border" = "rgba(595959aa)";
         };
@@ -77,13 +113,36 @@ in
             enabled = true;
             size = 3;
             passes = 3;
-            new_optimizations = 3;
+            # new_optimizations = 3;
           };
         };
 
         # https://wiki.hyprland.org/Configuring/Animations/
         animations = {
-          enabled = false;
+          enabled = true;
+
+          bezier = [
+            "fluent_decel, 0, 0.2, 0.4, 1"
+            "easeOutCirc, 0, 0.55, 0.45, 1"
+            "easeOutCubic, 0.33, 1, 0.68, 1"
+            "easeinoutsine, 0.37, 0, 0.63, 1"
+          ];
+          animation = [
+            # Windows
+            "windowsIn, 1, 4, easeOutCubic, popin 20%" # window open
+            "windowsOut, 1, 4, fluent_decel, popin 80%" # window close.
+            "windowsMove, 1, 2, easeinoutsine, slide" # everything in between, moving, dragging, resizing.
+
+            # Fade
+            "fadeIn, 1, 3, easeOutCubic" # fade in (open) -> layers and windows
+            "fadeOut, 1, 2, easeOutCubic" # fade out (close) -> layers and windows
+            "fadeSwitch, 0, 1, easeOutCirc" # fade on changing activewindow and its opacity
+            "fadeShadow, 1, 10, easeOutCirc" # fade on changing activewindow for shadows
+            "fadeDim, 1, 4, fluent_decel" # the easing of the dimming of inactive windows
+            "border, 1, 2.7, easeOutCirc" # for animating the border's color switch speed
+            "borderangle, 1, 30, fluent_decel, once" # for animating the border's gradient angle - styles: once (default), loop
+            "workspaces, 1, 5, easeOutCubic, fade" # styles: slide, slidevert, fade, slidefade, slidefadevert
+          ];
         };
 
         # https://wiki.hyprland.org/Configuring/Dwindle-Layout/
@@ -94,70 +153,57 @@ in
           no_gaps_when_only = true;
         };
 
-        # https://wiki.hyprland.org/Configuring/Variables/#gestures
-        gestures = {
-          workspace_swipe = false;
-        };
-
         # https://wiki.hyprland.org/Configuring/Variables/#misc
-        misc = {
-          disable_hyprland_logo = true;
-          disable_splash_rendering = true;
-
-          mouse_move_enables_dpms = true;
-          key_press_enables_dpms = true;
-        };
+        # misc = {
+        # disable_hyprland_logo = true;
+        # disable_splash_rendering = true;
+        #
+        # mouse_move_enables_dpms = true;
+        # key_press_enables_dpms = true;
+        # };
 
         bind = [
-          "$mod, Return, exec, ${lib.getExe pkgs.wezterm}"
+          "$mod, F1, exec, show-keybinds"
+
+          # App start
+          "$mod, T, exec, $terminal"
+          "$mod, B, exec, $browser"
+          "$mod, SPACE, exec, $launcher"
+
           "$mod, Q, killactive,"
-          "$mod, S, togglefloating,"
-          "$mod, L, exec, ${lib.getExe pkgs.swaylock-effects} -f"
-          "$mod, space, exec, ${lib.getExe pkgs.fuzzel}"
-          "$mod, C, exec, ${lib.getExe pkgs.cliphist} list | ${lib.getExe pkgs.fuzzel} -d --tabs 2 --width 100 | ${lib.getExe pkgs.cliphist} decode | ${pkgs.wl-clipboard}/bin/wl-copy"
-          "$mod, E, exec, BEMOJI_PICKER_CMD='${lib.getExe pkgs.fuzzel} -d' ${lib.getExe pkgs.bemoji} -n -e | ${pkgs.wl-clipboard}/bin/wl-copy"
+          "$mod, P, pseudo,"
+          "$mod, J, togglesplit,"
+          "$mod, O, exec, toggleopaque,"
 
-          # Screenshot
-          ", Print, exec, ${lib.getExe pkgs.grim} `date +'%Y-%m-%dT%H:%M:%S'`.png"
-          "$mod, Print, exec, ${lib.getExe pkgs.grim} - | ${lib.getExe pkgs.satty} --filename - --fullscreen --initial-tool crop --copy-command ${pkgs.wl-clipboard}/bin/wl-copy"
+          # Move focus with mod + arrow keys
+          "$mod, left, movefocus, l"
+          "$mod, right, movefocus, r"
+          "$mod, up, movefocus, u"
+          "$mod, down, movefocus, d"
 
-          # Backlight
-          ", XF86MonBrightnessUp, exec, ${lib.getExe pkgs.light} -A 5"
-          ", XF86MonBrightnessDown, exec, ${lib.getExe pkgs.light} -U 5"
+          # Switch workspaces with mod + [0-9]
+          "$mod, 1, workspace, 1"
+          "$mod, 2, workspace, 2"
+          "$mod, 3, workspace, 3"
+          "$mod, 4, workspace, 4"
+          "$mod, 5, workspace, 5"
+          "$mod, 6, workspace, 6"
+          "$mod, 7, workspace, 7"
+          "$mod, 8, workspace, 8"
+          "$mod, 9, workspace, 9"
+          "$mod, 0, workspace, 10"
 
-          # Audio
-          ", XF86AudioMute, exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-          ", XF86AudioRaiseVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"
-          ", XF86AudioLowerVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"
-          ", XF86AudioMicMute, exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-          ", XF86AudioPlay, exec, ${lib.getExe pkgs.playerctl} play-pause"
-          ", XF86AudioStop, exec, ${lib.getExe pkgs.playerctl} stop"
-          ", XF86AudioNext, exec, ${lib.getExe pkgs.playerctl} next"
-          ", XF86AudioPrev, exec, ${lib.getExe pkgs.playerctl} previous"
-
-          # Switch workspaces
-          "$mod, ampersand, workspace, 1"
-          "$mod, eacute, workspace, 2"
-          "$mod, quotedbl, workspace, 3"
-          "$mod, apostrophe, workspace, 4"
-          "$mod, parenleft, workspace, 5"
-          "$mod, minus, workspace, 6"
-          "$mod, egrave, workspace, 7"
-          "$mod, underscore, workspace, 8"
-          "$mod, ccedilla, workspace, 9"
-          "$mod, agrave, workspace, 10"
-
-          # Switch window to workspace
-          "$mod SHIFT, ampersand, movetoworkspacesilent, 1"
-          "$mod SHIFT, eacute, movetoworkspacesilent, 2"
-          "$mod SHIFT, quotedbl, movetoworkspacesilent, 3"
-          "$mod SHIFT, apostrophe, movetoworkspacesilent, 4"
-          "$mod SHIFT, parenleft, movetoworkspacesilent, 5"
-          "$mod SHIFT, minus, movetoworkspacesilent, 6"
-          "$mod SHIFT, egrave, movetoworkspacesilent, 7"
-          "$mod SHIFT, underscore, movetoworkspacesilent, 8"
-          "$mod SHIFT, ccedilla, movetoworkspacesilent, 9"
-          "$mod SHIFT, agrave, movetoworkspacesilent, 10"
+          # Move active window to a workspace with mod + SHIFT + [0-9]
+          "$mod SHIFT, 1, movetoworkspace, 1"
+          "$mod SHIFT, 2, movetoworkspace, 2"
+          "$mod SHIFT, 3, movetoworkspace, 3"
+          "$mod SHIFT, 4, movetoworkspace, 4"
+          "$mod SHIFT, 5, movetoworkspace, 5"
+          "$mod SHIFT, 6, movetoworkspace, 6"
+          "$mod SHIFT, 7, movetoworkspace, 7"
+          "$mod SHIFT, 8, movetoworkspace, 8"
+          "$mod SHIFT, 9, movetoworkspace, 9"
+          "$mod SHIFT, 0, movetoworkspace, 10"
         ];
 
         bindm = [
@@ -165,6 +211,27 @@ in
           "$mod, mouse:272, movewindow"
           "$mod, mouse:273, resizewindow"
         ];
+
+        plugin = {
+          hyprbars = {
+            bar_height = 30;
+            bar_color = "rgb(1e1e1e)";
+            col.text = "$foreground";
+            bar_text_size = 8;
+            bar_text_font = "Fira Code Symbol";
+            bar_button_padding = 12;
+            bar_padding = 10;
+            bar_precedence_over_border = true;
+            hyprbars-button = [
+              "$color1, 20, , hyprctl dispatch killactive"
+              "$color3, 20, , hyprctl dispatch fullscreen 2"
+              "$color4, 20, , hyprctl dispatch togglefloating"
+            ];
+          };
+        };
+
+        # Disable windows forcing maximize
+        windowrulev2 = "suppressevent maximize, class:.*";
       };
     };
   };

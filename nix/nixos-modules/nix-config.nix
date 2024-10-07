@@ -15,4 +15,8 @@
     ];
     trusted-users = [ "@wheel" ];
   };
+  programs.nh = {
+    enable = true;
+    flake = "/home/bc/.local/share/chezmoi";
+  };
 }
