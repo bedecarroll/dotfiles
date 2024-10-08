@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # Make less display raw characters, good for piping to PYGMENTIZE
 export LESS="-r"

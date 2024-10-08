@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 # https://unix.stackexchange.com/questions/107851/using-export-in-bashrc
 
 export EDITOR="nvim"
