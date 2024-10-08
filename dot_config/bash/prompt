@@ -1,7 +1,9 @@
-# shellcheck shell=bash
+#!/usr/bin/env bash
 
 # Know who is owning your shell (great when you're in vim)
-if ps --no-headers -o comm $PPID | grep -qE 'tmux|etterminal|mosh|init|Relay'; then
+# NOTE: we want the parent command name so this shellcheck is invalid
+# shellcheck disable=SC2009
+if ps --no-headers -o comm $PPID | grep -qE 'tmux|etterminal|mosh|init|Relay|wezterm'; then
   shellparent=''
 else
   shellparent="[$(ps --no-headers -o comm $PPID)]"
