@@ -3,9 +3,10 @@
 # Know who is owning your shell (great when you're in vim)
 # NOTE: we want the parent command name so this shellcheck is invalid
 # shellcheck disable=SC2009
-if ps --no-headers -o comm $PPID | grep -qE 'tmux|etterminal|mosh|init|Relay|wezterm'; then
+parent_command_name=$(ps -o comm $PPID | tail -n -1 | rev | cut -f1 -d'/' | rev)
+if echo "$parent_command_name" | grep -qE 'tmux|etterminal|mosh|init|Relay|wezterm'; then
   shellparent=''
 else
-  shellparent="[$(ps --no-headers -o comm $PPID)]"
+  shellparent="[$parent_command_name]"
 fi
 export PROMPT_COMMAND='PS1="[\$?][\j]$shellparent \u@$(hostname)\$ "'

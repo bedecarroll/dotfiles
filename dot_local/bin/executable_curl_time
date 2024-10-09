@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+REPEAT_COUNT=20
+
+echo "remote_ip,time_namelookup,time_connect,time_connect,time_appconnect,time_pretransfer,time_redirect,time_starttransfer,time_total"
+# You could use %output{>>test_curl.txt} here to redirect to a file but this isn't always available
+for _ in $(seq 1 $REPEAT_COUNT); do
+  curl --ipv4 -w "%{remote_ip},%{time_namelookup},%{time_connect},%{time_appconnect},%{time_pretransfer},%{time_redirect},%{time_starttransfer},%{time_total}\n" -o /dev/null -k -s "$1"
+done

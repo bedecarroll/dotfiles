@@ -1,0 +1,18 @@
+target-version = "py38"
+exclude = ["alembic"]
+
+[lint]
+select = ["ALL"]
+ignore = [
+  "FIX002", # Todos aren't an error
+  "TD003",  # Todos don't all have links
+  "E501",   # line too long, handled by ruff
+  "B904",   # Allow raising exceptions without from e, for HTTPException
+  "D203",   # Prefer no blank line before class
+  "D213",   # D212 looks better
+  "COM812", # ruff recommends disabling this as it impacts formatter
+  "ISC001", # ruff recommends disabling this as it impacts formatter
+]
+
+[format]
+docstring-code-format = true

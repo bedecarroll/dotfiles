@@ -8,6 +8,10 @@
 {{- else if lookPath "bat" }}
   pager = bat
 {{ end }}
+[pull]
+  rebase = true
+[push]
+  autoSetupRemote = true
 [init]
   defaultBranch = master
 [diff]
@@ -20,11 +24,12 @@
 [merge]
   conflictstyle = diff3
 [alias]
+  d = "diff --staged"
+  edit = "!nvim -p $(git ls-files -o -m --exclude-standard && git show --relative --name-only --pretty="format:" ${commit} | grep -v '^$')"
   last = "log -1 HEAD --stat"
   ll = "log --oneline"
-  st = "status -sb"
-  edit = "!nvim -p $(git ls-files -o -m --exclude-standard && git show --relative --name-only --pretty="format:" ${commit} | grep -v '^$')"
   sb = "!checkout_fzf() { git branch | fzf | xargs git checkout; }; checkout_fzf"
+  st = "status --short --branch"
 [commit]
   verbose = true
 [include]

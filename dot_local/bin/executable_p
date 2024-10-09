@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+"""Generate pastable file from TMUX output."""
+
+# Prints are normal and we aren't sending user input to .run()
+# ruff: noqa: T201,S603
+
+from __future__ import annotations
+
+import argparse
+import os
+import re
+import subprocess
+import sys
+import time
+from enum import StrEnum, auto
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+
+class FinishCommands(StrEnum):
+    """Supported commands to send output to."""
+
+    GIST = auto()
+    TEE = auto()
+
+
+FINISH_COMMAND = FinishCommands.TEE
+PROMPT_RE = re.compile(r"^\[\d+\]\[\d+\].*\s\S+@\S+\$\s")
+MAX_SCROLLBACK = -10_000_000
+
+
+Command = str
+Output = list[str]
+CommandOutput = list[Output]
+FilteredCommandOutput = CommandOutput
+
+
+def _gen_finishing_command(what_command: FinishCommands) -> list[str]:
+    """Shell command(s) that handle the output."""
+    match what_command:
+        case FinishCommands.GIST:
+            return [
+                "gh",
+                "gist",
+                "create",
+            ]
+        case FinishCommands.TEE:
+            dt = time.strftime("%Y%m%d-%H%M%S")
+            return [
+                "tee",
+                str(Path(f"~/paste_{dt}.txt").expanduser()),
+            ]
+
+
+def get_wezterm_pane_history() -> Output:
+    """Get wezterm buffer and split it into lines."""
+    pane_scrollback = subprocess.run(
+        [
+            "/usr/bin/env",
+            "wezterm",
+            "cli",
+            "get-text",
+            "--start-line",
+            str(MAX_SCROLLBACK),
+        ],
+        stdout=subprocess.PIPE,
+        check=True,
+        encoding="utf-8",
+    )
+
+    return pane_scrollback.stdout.splitlines()
+
+
+def get_tmux_pane_history() -> Output:
+    """Get tmux buffer and split it into lines."""
+    pane_scrollback = subprocess.run(
+        [
+            "/usr/bin/env",
+            "tmux",
+            "capture-pane",
+            "-p",  # output to stdout
+            "-S",
+            "-",  # means -S will go to the start of the pane history
+        ],
+        stdout=subprocess.PIPE,
+        check=True,
+        encoding="utf-8",
+    )
+
+    return pane_scrollback.stdout.splitlines()
+
+
+def split_tmux_history(scrollback: Output) -> CommandOutput:
+    """Take a pane history and split based on the prompt regex."""
+    # Not a defaultdict so that we can get duplicate commands
+    command_and_ouput: list[list[str]] = []
+    output: list[str] = []
+    for line in scrollback:
+        if PROMPT_RE.match(line) and output:
+            # NOTE: Skip when there is no output
+            if len(output) > 1:
+                command_and_ouput.append(output)
+            output = []
+        output.append(line)
+
+    if not command_and_ouput:
+        print("No command prompts found. Check regex.", file=sys.stderr)
+        sys.exit(50)
+    return command_and_ouput
+
+
+def get_wanted_output(command_and_ouput: CommandOutput) -> FilteredCommandOutput:
+    """Use FZF to find out which outputs the user wants."""
+    fuzzy_search_lines: list[Command] = []
+    with TemporaryDirectory() as td:
+        # Index is the filename and what number to select
+        for index, output in enumerate(command_and_ouput):
+            # This is the line with the command you ran, e.g. $ ls
+            prompt_command: Command = output[0]
+            # Generate what FZF is going to allow you to select from
+            fuzzy_search_lines.append(f"{index}\t{prompt_command}")
+            # Generate the temp files
+            with (td / Path(str(index))).open("w") as cf:
+                cf.write("\n".join(output))
+
+        selected_output = subprocess.run(
+            [
+                "/usr/bin/env",
+                "fzf",
+                "--tac",  # reverse order so it matches history
+                "--multi",  # allow multi select
+                "+s",  # disable sorting
+                f"--preview=cat {td}/{{1}}",
+            ],
+            # Send the commands and filenames to fuzzy find on
+            input="\n".join(fuzzy_search_lines),
+            check=False,  # Failure means we wanted nothing
+            capture_output=True,
+            encoding="utf-8",
+        )
+        # We wanted nothing, exit
+        if selected_output.returncode != 0:
+            sys.exit(0)
+
+        filtered_command_and_output = []
+        for line in selected_output.stdout.splitlines():
+            index = int(line.split("\t")[0])
+            filtered_command_and_output.append(command_and_ouput[index])
+        return filtered_command_and_output
+
+
+def generate_output(
+    filtered_command_and_output: FilteredCommandOutput, destination: FinishCommands
+) -> None:
+    """Take the output we want and do 'something' with it."""
+    output_strings = []
+    for selected_output in filtered_command_and_output:
+        command: Command = selected_output[0]
+        print(f'Pasting output of "{command}"')
+        output_strings.append("\n".join(selected_output))
+    final_output = "\n".join(output_strings)
+    subprocess.run(
+        _gen_finishing_command(destination),
+        input=final_output,
+        check=False,
+        encoding="utf-8",
+        stdout=subprocess.DEVNULL,
+    )
+
+
+def main() -> None:
+    """Entrypoint."""
+    possible_destinations = ", ".join(f"{x.value}" for x in FinishCommands)
+    parser = argparse.ArgumentParser(description="Get selected text from scrollback.")
+    parser.add_argument(
+        "output_destination",
+        type=FinishCommands,
+        nargs="?",
+        default=FinishCommands.TEE,
+        help=f"Possible destinations: {possible_destinations}. Default is tee, a file in your homedir.",
+    )
+    args = parser.parse_args()
+
+    if "TMUX" in os.environ:
+        scrollback = get_tmux_pane_history()
+    else:
+        scrollback = get_wezterm_pane_history()
+    split_scrollback = split_tmux_history(scrollback)
+    filtered_output = get_wanted_output(split_scrollback)
+    generate_output(filtered_output, args.output_destination)
+
+
+if __name__ == "__main__":
+    main()

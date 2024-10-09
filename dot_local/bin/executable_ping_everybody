@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+read -r -d '' doc <<"EOF"
+Log every device and ping every other device.
+
+Arguments:
+  -d|--debug = Enable debug mode, see commands but don't run (excludes passwords)
+
+Usage:
+  pingeverybody ~/bad_hosts
+
+Example:
+  ./pingeverybody ~/bad_hosts | tee ping_failures
+EOF
+
+if [[ $# -eq 0 ]]; then
+  echo "$doc"
+  exit 1
+fi
+
+while :; do
+  case $1 in
+  --clowntown)
+    _clowntown_mode=1
+    ;;
+  -d | --debug)
+    _debug_mode=1
+    ;;
+  -?*)
+    echo "ERROR: Unknown argument"
+    echo "$doc"
+    exit 1
+    ;;
+  *)
+    break
+    ;;
+  esac
+  shift
+done
+
+echoerr() { printf "\033[0;31m%s\n\033[0m" "$*" >&2; }
+
+# Start here
+ping_count=10
+pkt_len=1200
+ping_arguments=(
+  "-q" # Quiet, only so summary
+  "-s" # Length
+  "$pkt_len"
+  "-c" # How many pings
+  "$ping_count"
+)
+
+# We want a raw list of IPs so filter any delimiters
+mapfile -t sorted_unique_ips < <(tr ' ' '\n' <"$1" | sort -u | grep '^[1-9a-fA-F]' | tr -d ',')
+if [[ $_debug_mode ]]; then
+  echo "Going to use these IPs: ${sorted_unique_ips[*]}"
+fi
+
+for from_ip in "${sorted_unique_ips[@]}"; do
+  for to_ip in "${sorted_unique_ips[@]}"; do
+    # Skip pinging ourself...
+    if [[ "$from_ip" = "$to_ip" ]]; then
+      continue
+    fi
+
+    echoerr "Pinging $from_ip -> $to_ip"
+
+    ping_cmd="ssh \"$from_ip\" \"ping ${ping_arguments[*]} $to_ip\""
+    if [[ -z ${_debug_mode} ]]; then
+      ping_res=$(eval "$ping_cmd")
+      if [[ ${ping_res} != *" 0% packet loss,"* ]]; then
+        echo "src:$from_ip,dst:$to_ip"
+        echo "$ping_res" | grep -A1 "packets transmitted"
+      fi
+    else
+      echo "$ping_cmd"
+    fi
+  done
+done

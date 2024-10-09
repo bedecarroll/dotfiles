@@ -80,6 +80,16 @@
           };
           modules = [ ./nix/system-configs/kepler/home.nix ];
         };
+        "bc@liberty" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [ ./nix/system-configs/liberty/home.nix ];
+        };
       };
     };
 }
