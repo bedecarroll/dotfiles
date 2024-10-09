@@ -6,10 +6,7 @@
   };
 
   config = lib.mkIf config.hyprland.enable {
-    # Optional, hint electron apps to use wayland:
-    environment.sessionVariables.NIXOS_OZONE_WL = "1";
+    # Needed but config is in home-manager
     programs.hyprland.enable = true;
-    services.hypridle.enable = true;
-    programs.hyprlock.enable = true;
   };
 }
