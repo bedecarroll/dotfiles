@@ -18,15 +18,17 @@ wezterm.on("gui-startup", function(cmd)
 end)
 
 -- Pwd in top right
-wezterm.on("update-right-status", function(window, pane)
+wezterm.on("update-status", function(window, pane)
 	local working_dir = pane:get_current_working_dir()
-	if working_dir then
-		FPATH = working_dir.file_path
-	else
-		FPATH = ""
-	end
+  local tab = pane:tab()
+  ZOOMED = ""
+  for _, p in ipairs(tab:panes_with_info()) do
+    if p.is_zoomed then
+      ZOOMED = "Z"
+    end
+  end
 	window:set_right_status(wezterm.format({
-		{ Text = FPATH .. "  " },
+		{ Text = ZOOMED .. " " .. (working_dir.file_path or "") .. "  " },
 	}))
 end)
 
