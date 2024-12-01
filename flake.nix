@@ -37,6 +37,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs =
@@ -78,7 +79,10 @@
               config.allowUnfree = true;
             };
           };
-          modules = [ ./nix/system-configs/kepler/home.nix ];
+          modules = [
+            ./nix/system-configs/kepler/home.nix
+            inputs.catppuccin.homeManagerModules.catppuccin
+          ];
         };
         "bc@liberty" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
@@ -88,7 +92,10 @@
               config.allowUnfree = true;
             };
           };
-          modules = [ ./nix/system-configs/liberty/home.nix ];
+          modules = [
+            ./nix/system-configs/liberty/home.nix
+            inputs.catppuccin.homeManagerModules.catppuccin
+          ];
         };
       };
     };
