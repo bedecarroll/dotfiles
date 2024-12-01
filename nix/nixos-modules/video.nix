@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  pkgs-unstable,
   ...
 }:
 with lib;
@@ -21,9 +20,8 @@ in
       libva-utils
       vdpauinfo
     ];
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
-      extraPackages = [ pkgs-unstable.vpl-gpu-rt ];
     };
   };
 }
