@@ -10,48 +10,72 @@ let
 in
 {
 
+  imports = [
+    ./hypridle.nix
+    ./hyprlock.nix
+  ];
+
   options = {
     hyprland.enable = mkEnableOption "Hyprland config";
   };
 
   config = mkIf cfg.enable {
+    hypridle.enable = true;
+    hyprlock.enable = true;
+
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
     home.packages = with pkgs; [
-      fuzzel
-      waybar
-      hyprlock
       lxqt.lxqt-policykit
       networkmanagerapplet
-      mako
       wl-clipboard
       cliphist
+      libnotify
     ];
 
-    services.hypridle = {
+    # Top bar
+    programs.waybar = {
+      enable = true;
+      catppuccin.enable = true;
+      catppuccin.flavor = "mocha";
+
+    };
+
+    # App launcher
+    programs.fuzzel = {
+      enable = true;
+      catppuccin.enable = true;
+      catppuccin.flavor = "mocha";
+
+      settings = {
+        main = {
+          terminal = "${lib.getExe pkgs.wezterm}";
+        };
+      };
+    };
+
+    # Desktop notifications
+    services.mako = {
+      enable = true;
+      catppuccin.enable = true;
+      catppuccin.flavor = "mocha";
+
+    };
+
+    services.hyprpaper = {
       enable = true;
 
       settings = {
-        general = {
-          lock_cmd = "pidof hyprlock || hyprlock";
-        };
+        preload = [ "~/.local/share/chezmoi/nix/wallpapers/line_icons.png" ];
 
-        listener = [
-          {
-            on-timeout = "loginctl lock-session";
-            timeout = 360;
-          }
-          {
-            on-resume = "hyprctl dispatch dpms on";
-            on-timeout = "hyprctl dispatch dpms off";
-            timeout = 420;
-          }
-        ];
+        wallpaper = [ ", ~/.local/share/chezmoi/nix/wallpapers/line_icons.png" ];
       };
     };
 
     wayland.windowManager.hyprland = {
       enable = true;
+      catppuccin.enable = true;
+      catppuccin.flavor = "mocha";
 
       plugins = [
         pkgs.hyprlandPlugins.borders-plus-plus
