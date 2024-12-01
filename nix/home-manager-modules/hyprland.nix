@@ -129,10 +129,6 @@ in
         # https://wiki.hyprland.org/Configuring/Variables/#decoration
         decoration = {
           rounding = 2;
-          drop_shadow = true;
-          shadow_range = 4;
-          shadow_render_power = 3;
-          "col.shadow" = "rgba(1a1a1aee)";
 
           # https://wiki.hyprland.org/Configuring/Variables/#blur
           blur = {
@@ -176,7 +172,6 @@ in
         dwindle = {
           pseudotile = true;
           preserve_split = true;
-          no_gaps_when_only = true;
         };
 
         # https://wiki.hyprland.org/Configuring/Variables/#misc
