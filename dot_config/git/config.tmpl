@@ -34,3 +34,10 @@
   verbose = true
 [include]
   path = local/config
+{{- if lookPath "delta" }}
+  path = catppuccin
+[delta]
+  features = catppuccin-mocha
+  side-by-side = true
+  hyperlinks = true
+{{ end }}
