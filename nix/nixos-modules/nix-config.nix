@@ -19,4 +19,6 @@
     enable = true;
     flake = "/home/bc/.local/share/chezmoi";
   };
+  # Needed for lua_ls in nvim etc
+  programs.nix-ld.enable = true;
 }
