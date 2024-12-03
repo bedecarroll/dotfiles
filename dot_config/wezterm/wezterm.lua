@@ -11,25 +11,37 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
+config.color_scheme = "Catppuccin Mocha"
+
 -- Maximize window by default
 wezterm.on("gui-startup", function(cmd)
 	local _, _, window = mux.spawn_window(cmd or {})
 	window:gui_window():maximize()
 end)
 
--- Pwd in top right
+-- Set right status
 wezterm.on("update-status", function(window, pane)
+	local overrides = window:get_config_overrides() or {}
+	local override = ""
+	if next(overrides) ~= nil then
+		override = "F12"
+	end
+
 	local working_dir = pane:get_current_working_dir()
 	local tab = pane:tab()
-	ZOOMED = ""
-	for _, p in ipairs(tab:panes_with_info()) do
-		if p.is_zoomed then
-			ZOOMED = "Z"
+	local zoomed = ""
+	if tab then
+		for _, p in ipairs(tab:panes_with_info()) do
+			if p.is_zoomed then
+				zoomed = "Z"
+			end
 		end
 	end
-	window:set_right_status(wezterm.format({
-		{ Text = ZOOMED .. " " .. (working_dir.file_path or "") .. "  " },
-	}))
+	if working_dir then
+		window:set_right_status(wezterm.format({
+			{ Text = override .. " " .. zoomed .. " " .. (working_dir.file_path or "") .. "  " },
+		}))
+	end
 end)
 
 -- Disable leader
@@ -57,6 +69,8 @@ function Startswith(str, prefix)
 end
 
 -- Options
+-- https://github.com/wez/wezterm/issues/5990#issuecomment-2305416553
+config.front_end = "WebGpu"
 -- NOTE: you need resize for :maximize to work
 config.window_decorations = "RESIZE"
 config.enable_scroll_bar = true
@@ -140,7 +154,7 @@ table.insert(
 table.insert(keys, { key = "7", mods = "LEADER|SHIFT", action = act.CloseCurrentTab({ confirm = true }) })
 table.insert(keys, { key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) })
 table.insert(keys, { key = "p", mods = "LEADER", action = act.ActivateTabRelative(-1) })
-for i = 1, 8 do
+for i = 1, 9 do
 	table.insert(keys, { key = tostring(i), mods = "LEADER", action = act.ActivateTab(i - 1) })
 end
 
