@@ -36,16 +36,11 @@ in
     # Top bar
     programs.waybar = {
       enable = true;
-      catppuccin.enable = true;
-      catppuccin.flavor = "mocha";
-
     };
 
     # App launcher
     programs.fuzzel = {
       enable = true;
-      catppuccin.enable = true;
-      catppuccin.flavor = "mocha";
 
       settings = {
         main = {
@@ -57,9 +52,6 @@ in
     # Desktop notifications
     services.mako = {
       enable = true;
-      catppuccin.enable = true;
-      catppuccin.flavor = "mocha";
-
     };
 
     services.hyprpaper = {
@@ -74,8 +66,6 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      catppuccin.enable = true;
-      catppuccin.flavor = "mocha";
 
       plugins = [
         pkgs.hyprlandPlugins.borders-plus-plus

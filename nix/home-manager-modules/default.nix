@@ -8,11 +8,12 @@ with lib;
     ./comms.nix
     ./data.nix
     ./dev-utils.nix
-    ./editors.nix
     ./editor-utils.nix
+    ./editors.nix
     ./gcc.nix
     ./golang.nix
     ./help.nix
+    ./hmcatppuccin.nix
     ./hyprland.nix
     ./iac.nix
     ./network.nix
@@ -32,11 +33,12 @@ with lib;
   base.enable = mkDefault true;
   data.enable = mkDefault true;
   dev-utils.enable = mkDefault true;
-  editors.enable = mkDefault true;
   editor-utils.enable = mkDefault true;
+  editors.enable = mkDefault true;
   gcc.enable = mkDefault true;
   golang.enable = mkDefault true;
   help.enable = mkDefault true;
+  hmcatppuccin.enable = mkDefault true;
   iac.enable = mkDefault true;
   network.enable = mkDefault true;
   nix-utils.enable = mkDefault true;

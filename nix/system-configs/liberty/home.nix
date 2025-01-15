@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Home Manager needs a bit of information about you and the
@@ -10,7 +15,9 @@
   #programs.man.enable = false;
   #home.extraOutputsToInstall = [ "man" ];
   # https://github.com/nix-community/home-manager/issues/432#issuecomment-615841327
-  home.sessionVariables = { LANG = "en_US.UTF-8"; };
+  home.sessionVariables = {
+    LANG = "en_US.UTF-8";
+  };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
