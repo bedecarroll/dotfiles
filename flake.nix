@@ -9,34 +9,17 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.0";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-monitored = {
-      url = "github:ners/nix-monitored";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    ags = {
-      url = "github:Aylur/ags";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    nix-monitored.url = "github:ners/nix-monitored";
+    sops-nix.url = "github:Mic92/sops-nix";
+    ags.url = "github:Aylur/ags";
     nur.url = "github:nix-community/NUR";
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    stylix.url = "github:danth/stylix";
+    disko.url = "github:nix-community/disko";
     catppuccin.url = "github:catppuccin/nix";
   };
 
@@ -46,6 +29,7 @@
       nixos-hardware,
       disko,
       home-manager,
+      determinate,
       ...
     }@inputs:
     let
@@ -67,6 +51,7 @@
             ./nix/system-configs/kepler/disko-config.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
             #inputs.stylix.nixosModules.stylix
+            determinate.nixosModules.default
           ];
         };
       };
