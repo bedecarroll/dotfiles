@@ -20,7 +20,7 @@ in
       #ansible-later
       ansible-lint
       #awscli2
-      terraform
+      opentofu
       terraformer
     ];
   };
