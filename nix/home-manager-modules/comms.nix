@@ -18,7 +18,7 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       home.packages = with pkgs; [
-        neomutt
+        # neomutt # notmuch is broken
         weechat
       ];
     })
