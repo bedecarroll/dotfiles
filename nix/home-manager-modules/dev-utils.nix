@@ -27,6 +27,8 @@ in
       tig
       watchexec
       jujutsu
+      just
+      mise
     ];
   };
 }
