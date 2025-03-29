@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  pkgs-unstable,
   ...
 }:
 with lib;
@@ -28,7 +29,7 @@ in
       watchexec
       jujutsu
       just
-      mise
+      pkgs-unstable.mise
     ];
   };
 }
