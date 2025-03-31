@@ -10,6 +10,7 @@
     ./keyboard.nix
     ./locale.nix
     ./minimum-pkgs.nix
+    ./monitoring.nix
     ./networking.nix
     ./nix-config.nix
     ./ntp.nix
