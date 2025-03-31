@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   nixpkgs.config.allowUnfree = true;
   nix.gc = {
@@ -21,4 +21,9 @@
   };
   # Needed for lua_ls in nvim etc
   programs.nix-ld.enable = true;
+
+  # NixOS specific packages
+  environment.systemPackages = with pkgs; [
+    nixos-generators
+  ];
 }
