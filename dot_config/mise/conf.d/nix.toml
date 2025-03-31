@@ -1,7 +1,0 @@
-[tasks.home]
-description = "Update home-manager"
-run = 'nh home switch ~/.local/share/chezmoi'
-
-[tasks.os]
-description = "Update nixos"
-run = 'nh os switch ~/.local/share/chezmoi'
