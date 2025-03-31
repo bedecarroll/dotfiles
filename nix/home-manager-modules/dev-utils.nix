@@ -17,7 +17,6 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      direnv # .envrc files to autoload
       dotenv-linter
       entr
       gh
