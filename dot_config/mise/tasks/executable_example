@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Example file task"
+
+echo 'Example task'
