@@ -11,6 +11,7 @@
   bluetooth.enable = true;
   hardware.enable = true;
   hyprland.enable = true;
+  monitoring.enable = true;
   usb.enable = true;
   video.enable = true;
   vpn.enable = true;
