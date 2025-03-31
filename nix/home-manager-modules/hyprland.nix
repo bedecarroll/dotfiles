@@ -77,7 +77,7 @@ in
         # https://wiki.hyprland.org/Configuring/Variables/#variable-types
         "$mod" = "SUPER";
         "$terminal" = "${lib.getExe pkgs.wezterm}";
-        "$browser" = "${lib.getExe pkgs.firefox}";
+        "$browser" = "${lib.getExe pkgs.brave}";
         "$launcher" = "${lib.getExe pkgs.fuzzel}";
 
         # https://wiki.hyprland.org/Configuring/Keywords/#executing
