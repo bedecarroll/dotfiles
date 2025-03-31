@@ -66,7 +66,7 @@
           };
           modules = [
             ./nix/system-configs/kepler/home.nix
-            inputs.catppuccin.homeManagerModules.catppuccin
+            inputs.catppuccin.homeModules.catppuccin
           ];
         };
         "bc@liberty" = home-manager.lib.homeManagerConfiguration {
@@ -79,7 +79,7 @@
           };
           modules = [
             ./nix/system-configs/liberty/home.nix
-            inputs.catppuccin.homeManagerModules.catppuccin
+            inputs.catppuccin.homeModules.catppuccin
           ];
         };
       };
