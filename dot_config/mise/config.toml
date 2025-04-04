@@ -1,3 +1,5 @@
 [settings]
 python.uv_venv_auto = true
 experimental = true
+# This is so we prefer system versions (so many pkg managers)
+auto_install = false
