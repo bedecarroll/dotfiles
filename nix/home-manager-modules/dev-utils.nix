@@ -17,18 +17,20 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      cookiecutter
       dotenv-linter
       entr
       gh
       git-extras
       grex # generate regex from test cases
-      lazygit
-      pre-commit
-      tig
-      watchexec
       jujutsu
       just
+      lazygit
       pkgs-unstable.mise
+      pre-commit
+      tig
+      typos
+      watchexec
     ];
   };
 }
