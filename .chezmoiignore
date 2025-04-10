@@ -1,6 +1,7 @@
 {{- $osid := .chezmoi.os -}}
 README.md
 install.sh
+.github/
 
 # No need for nix stuff
 flake.nix
