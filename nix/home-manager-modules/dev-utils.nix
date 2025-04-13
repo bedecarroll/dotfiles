@@ -23,9 +23,9 @@ in
       gh
       git-extras
       grex # generate regex from test cases
-      jujutsu
       just
       lazygit
+      pkgs-unstable.jujutsu
       pkgs-unstable.mise
       pre-commit
       tig
