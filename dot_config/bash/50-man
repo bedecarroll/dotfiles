@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# The trailing : works to allow system MANPATH to work
+export MANPATH="$XDG_DATA_HOME/man:$MANPATH"
