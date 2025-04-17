@@ -29,6 +29,7 @@ nix/
 .config/kitty/
 .config/alacritty/
 .config/bash/kitty
+.config/wezterm/
 {{ end }}
 
 {{ if not .is_wsl }}
