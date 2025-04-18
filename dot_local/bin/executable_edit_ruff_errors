@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nvim "$(ruff check --output-format=json | jq -r '.[].filename' | sort -u)"
