@@ -12,7 +12,6 @@ in
 
   options = {
     security.enable = mkEnableOption "security tooling";
-    security.onepw.enable = mkEnableOption "1password";
   };
 
   config = mkMerge [
@@ -25,6 +24,5 @@ in
         yubikey-personalization
       ];
     })
-    (mkIf cfg.onepw.enable { home.packages = with pkgs; [ _1password-gui ]; })
   ];
 }

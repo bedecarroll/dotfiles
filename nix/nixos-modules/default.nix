@@ -16,6 +16,7 @@
     ./ntp.nix
     ./power.nix
     ./security.nix
+    ./security-tools.nix
     ./usb.nix
     ./users.nix
     ./video.nix

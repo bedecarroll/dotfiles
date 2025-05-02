@@ -38,7 +38,6 @@
   comms.enable = true;
   hyprland.enable = true;
   python.uv.enable = true;
-  security.onepw.enable = true;
   storage.dropbox.enable = true;
   video.enable = true;
 }

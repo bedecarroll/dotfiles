@@ -12,6 +12,7 @@
   hardware.enable = true;
   hyprland.enable = true;
   monitoring.enable = true;
+  onepw.enable = true;
   usb.enable = true;
   video.enable = true;
   vpn.enable = true;
