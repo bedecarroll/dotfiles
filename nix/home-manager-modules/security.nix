@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable,
   lib,
   config,
   ...
@@ -18,8 +19,9 @@ in
     (mkIf cfg.enable {
       home.packages = with pkgs; [
         age
+        age-plugin-yubikey
         cacert
-        sops
+        pkgs-unstable.sops
         yubikey-manager
         yubikey-personalization
       ];

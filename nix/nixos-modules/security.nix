@@ -2,6 +2,7 @@
 {
   environment.systemPackages = with pkgs; [ tpm2-tss ];
   services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.pcscd.enable = true;
   security.sudo.wheelNeedsPassword = false;
   # https://nixos.wiki/wiki/TPM
   security.tpm2.enable = true;
