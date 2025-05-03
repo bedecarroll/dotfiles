@@ -22,6 +22,8 @@ nix/
 .ssh/authorized_keys
 # Local scripts
 .local/bin/t
+# Ignore local mise config
+.config/mise/conf.d/local.toml
 {{ end }}
 
 {{ if not .needs_terminal }}

@@ -1,0 +1,6 @@
+[settings]
+sops.age_key_file = "~/.config/sops/age/keys.txt"
+sops.rops = false
+
+[env]
+_.file = "~/.config/mise/conf.d/env.yaml"
