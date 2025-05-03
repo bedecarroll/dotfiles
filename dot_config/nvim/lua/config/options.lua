@@ -64,3 +64,7 @@ vim.opt.foldenable = false
 
 -- Disable mouse
 vim.opt.mouse = ""
+
+-- Disable system clipboard sync
+-- Use + or * registers
+vim.opt.clipboard = ""
