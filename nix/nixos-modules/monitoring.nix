@@ -17,7 +17,6 @@ in
     programs.atop = {
       enable = true;
       setuidWrapper.enable = true;
-      netatop.enable = true;
     };
   };
 }
