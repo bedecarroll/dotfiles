@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
@@ -22,10 +22,16 @@
   # sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0 /dev/nvme0n1p2
   # We use pcrs=0 and not pcrs=0+7 because we don't have secure boot
 
+  # This is needed to auto-unlock LUKS with TPM 2 - https://discourse.nixos.org/t/full-disk-encryption-tpm2/29454/2
+  boot.initrd.systemd.enable = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # lower this to 10 when stable
-  boot.loader.systemd-boot.configurationLimit = 20;
+  boot.loader.systemd-boot.configurationLimit = 5;
+
+  systemd = {
+    coredump.enable = true;
+  };
 
   networking.hostName = "kepler"; # Define your hostname.
 
