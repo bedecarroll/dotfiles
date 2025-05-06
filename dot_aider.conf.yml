@@ -1,0 +1,5 @@
+model: gemini/gemini-2.5-flash-preview-04-17
+# Disable this to skip yubikey prompt
+auto-commits: false
+# Disable auto-lint until we figure out good workflow
+auto-lint: false
