@@ -18,6 +18,7 @@ in
     home.packages = with pkgs; [
       ast-grep
       glow
+      hugo
       tree-sitter
     ];
   };
