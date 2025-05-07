@@ -18,6 +18,7 @@ in
     home.packages = with pkgs; [
       # bandwhich # broken
       curl
+      dig
       gping
       httpie
       mtr
