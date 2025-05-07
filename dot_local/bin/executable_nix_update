@@ -7,3 +7,6 @@
 
 nh os switch ~/.local/share/chezmoi
 nh home switch ~/.local/share/chezmoi
+
+# Keep 5 generations
+nh clean all --keep 5
