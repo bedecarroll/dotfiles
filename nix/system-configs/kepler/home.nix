@@ -32,7 +32,6 @@
   imports = [ ../../home-manager-modules ];
   ai.aider.enable = true;
   ai.enable = true;
-  ai.llm.enable = true;
   browsers.enable = true;
   comms.discord.enable = true;
   comms.enable = true;
