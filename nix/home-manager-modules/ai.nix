@@ -24,7 +24,7 @@ in
         pkgs-unstable.codex
       ];
     })
-    (mkIf cfg.aider.enable { home.packages = [ pkgs-unstable.aider-chat ]; })
+    (mkIf cfg.aider.enable { home.packages = [ pkgs-unstable.aider-chat-full ]; })
     (mkIf cfg.llm.enable { home.packages = [ pkgs-unstable.llm ]; })
   ];
 }
