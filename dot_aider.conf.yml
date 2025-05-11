@@ -1,3 +1,4 @@
+# NOTE: aider will collapse down so you can override with repo config
 model: gemini/gemini-2.5-flash-preview-04-17
 # Disable this to skip yubikey prompt
 auto-commits: false
