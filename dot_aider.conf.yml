@@ -1,5 +1,24 @@
 model: gemini/gemini-2.5-flash-preview-04-17
 # Disable this to skip yubikey prompt
 auto-commits: false
-# Disable auto-lint until we figure out good workflow
-auto-lint: false
+cache-prompts: true
+
+lint: true
+lint-cmd:
+  - mise run lint-fix
+
+test: true
+test-cmd: mise run test
+
+# Code style
+read:
+  - CONVENTIONS.md
+
+commit-prompt: |
+  Follow the commitizen convention. Keep the title under 50 characters and wrap message at 72 characters, output only the commit text.
+  Output nothing but the commit text.
+  <example>
+  feat: add a new feature
+
+  commit description
+  </example>
