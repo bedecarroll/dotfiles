@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable,
   lib,
   config,
   ...
@@ -17,7 +18,7 @@ in
 
   config = mkMerge [
     # This is an option because UV outside of nixpkgs is better
-    (mkIf cfg.uv.enable { home.packages = with pkgs; [ uv ]; })
+    (mkIf cfg.uv.enable { home.packages = with pkgs-unstable; [ uv ]; })
     (mkIf cfg.enable {
       home.packages = with pkgs; [
         poetry
