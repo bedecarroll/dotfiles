@@ -4,11 +4,8 @@ model: gemini/gemini-2.5-flash-preview-04-17
 auto-commits: false
 cache-prompts: true
 
-lint: true
 lint-cmd:
   - mise run lint-fix
-
-test: true
 test-cmd: mise run test
 
 # Code style
