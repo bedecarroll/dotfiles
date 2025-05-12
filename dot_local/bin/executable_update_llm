@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+uv tool install -U llm --with llm-anthropic --with llm-gemini --with llm-deepseek --with llm-grok
