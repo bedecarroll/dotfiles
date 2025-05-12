@@ -24,6 +24,7 @@ nix/
 .local/bin/t
 # Ignore local mise config
 .config/mise/conf.d/local.toml
+.config/jj/conf.d/local.toml
 .config/io.datasette.llm/
 .aider.conf.yml
 {{ end }}

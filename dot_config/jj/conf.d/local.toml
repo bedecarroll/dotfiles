@@ -1,0 +1,5 @@
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "~/.ssh/id_ed25519_sk.pub"
+backends.ssh.allowed-signers = "~/.config/git/local/allowed_signers"
