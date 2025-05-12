@@ -1,3 +1,12 @@
 [user]
 name = "Bede Carroll"
 email = {{ .github_email | quote }}
+
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "~/.ssh/id_ed25519_sk.pub"
+backends.ssh.allowed-signers = "~/.config/git/local/allowed_signers"
+
+[ui]
+show-cryptographic-signatures = true
