@@ -14,7 +14,8 @@ nix/
 # If there is a local config it is for a personal device
 .config/bash/local/
 .config/tmux/local/
-.config/git/local/
+.config/git/conf.d/local
+.config/git/authorized_keys
 # SSH config is personal only
 .ssh/config
 .ssh/id_ed25519_sk.pub
