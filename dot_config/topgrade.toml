@@ -4,11 +4,12 @@ assume_yes = true
 
 # Disable specific steps - same options as the command line flag
 disable = [
-  "vagrant",
-  "node",
-  "vscode",
+  "home_manager",
   "micro",
   "nix",
-  "home_manager",
+  "node",
   "poetry",
+  "vagrant",
+  "vim",
+  "vscode",
 ]
