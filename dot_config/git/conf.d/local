@@ -17,3 +17,6 @@
 
 [tag]
   gpgsign = true
+
+[diff "sopsdiffer"]
+  textconv = "sops decrypt"
