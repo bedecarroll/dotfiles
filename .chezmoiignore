@@ -15,10 +15,6 @@ nix/
 .config/bash/local/
 .config/tmux/local/
 .config/git/conf.d/local
-{{ if ne .chezmoi.hostname "kepler" }}
-# Yubikey config not needed anywhere else, git silent ignores missing
-.config/git/conf.d/yubikey
-{{ end }}
 .config/git/authorized_keys
 # SSH config is personal only
 .ssh/config
@@ -32,6 +28,11 @@ nix/
 .config/jj/conf.d/local.toml
 .config/io.datasette.llm/
 .aider.conf.yml
+{{ end }}
+
+{{ if ne .chezmoi.hostname "kepler" }}
+# Yubikey config not needed anywhere else, git silent ignores missing
+.config/git/conf.d/yubikey
 {{ end }}
 
 {{ if not .needs_terminal }}
