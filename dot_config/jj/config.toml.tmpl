@@ -5,3 +5,29 @@ email = {{ .github_email | quote }}
 [ui]
 show-cryptographic-signatures = true
 default-command = ["log", "--no-pager", "--limit", "5"]
+
+# Following settings from:
+# https://zerowidth.com/2025/jj-tips-and-tricks/
+[revset-aliases]
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+# set all remote bookmarks (commits pushed to remote branches) to be immutable
+'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
+
+[git]
+push-new-bookmarks = true
+
+[template-aliases]
+'format_short_change_id(id)' = 'id.shortest()'
+
+[aliases]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+c = ["commit"]
+ci = ["commit", "--interactive"]
+e = ["edit"]
+i = ["git", "init", "--colocate"]
+nb = ["bookmark", "create", "-r @-"] # "new bookmark"
+pull = ["git", "fetch"]
+push = ["git", "push", "--allow-new"]
+r = ["rebase"]
+s = ["squash"]
+si = ["squash", "--interactive"]
