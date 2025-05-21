@@ -9,18 +9,14 @@
   # };
 
   inputs = {
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.0";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    home-manager.url = "github:nix-community/home-manager/release-24.11";
-    nix-monitored.url = "github:ners/nix-monitored";
-    sops-nix.url = "github:Mic92/sops-nix";
-    ags.url = "github:Aylur/ags";
-    nur.url = "github:nix-community/NUR";
-    stylix.url = "github:danth/stylix";
-    disko.url = "github:nix-community/disko";
     catppuccin.url = "github:catppuccin/nix";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    disko.url = "github:nix-community/disko";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.0";
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs =
@@ -40,6 +36,7 @@
       nixosConfigurations = {
         kepler = nixpkgs.lib.nixosSystem {
           specialArgs = {
+            inherit inputs;
             pkgs-unstable = import inputs.nixpkgs-unstable {
               inherit system;
               config.allowUnfree = true;
@@ -85,7 +82,7 @@
       };
       # Export wallpapers as a package
       packages = {
-        wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix {};
+        wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix { };
       };
     };
 }
