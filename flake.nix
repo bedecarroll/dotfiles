@@ -51,6 +51,19 @@
             determinate.nixosModules.default
           ];
         };
+        euler = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            # Provide inputs so modules can import sops-nix
+            inherit inputs;
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [
+            ./nix/system-configs/euler/configuration.nix
+          ];
+        };
       };
       homeConfigurations = {
         "bc@kepler" = home-manager.lib.homeManagerConfiguration {
