@@ -36,7 +36,9 @@
   comms.discord.enable = true;
   comms.enable = true;
   hyprland.enable = true;
+  hyprpaper.enable = true;
   python.uv.enable = true;
   storage.dropbox.enable = true;
   video.enable = true;
+  waybar.enable = true;
 }

@@ -13,6 +13,8 @@ in
   imports = [
     ./hypridle.nix
     ./hyprlock.nix
+    ./hyprpaper.nix
+    ./waybar.nix
   ];
 
   options = {
@@ -22,6 +24,8 @@ in
   config = mkIf cfg.enable {
     hypridle.enable = true;
     hyprlock.enable = true;
+    hyprpaper.enable = true;
+    waybar.enable = true;
 
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -32,11 +36,6 @@ in
       cliphist
       libnotify
     ];
-
-    # Top bar
-    programs.waybar = {
-      enable = true;
-    };
 
     # App launcher
     programs.fuzzel = {
@@ -52,16 +51,6 @@ in
     # Desktop notifications
     services.mako = {
       enable = true;
-    };
-
-    services.hyprpaper = {
-      enable = true;
-
-      settings = {
-        preload = [ "~/.local/share/chezmoi/nix/wallpapers/line_icons.png" ];
-
-        wallpaper = [ ", ~/.local/share/chezmoi/nix/wallpapers/line_icons.png" ];
-      };
     };
 
     wayland.windowManager.hyprland = {
