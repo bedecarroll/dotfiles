@@ -9,11 +9,22 @@
   # nixos-modules settings
   audio.enable = true;
   bluetooth.enable = true;
+  fonts.enable = true;
+  greetd.enable = true;
   hardware.enable = true;
   hyprland.enable = true;
+  keyboard.enable = true;
+  locale.enable = true;
+  minimumPackages.enable = true;
   monitoring.enable = true;
+  networking.enable = true;
+  nixConfig.enable = true;
+  ntp.enable = true;
   onepw.enable = true;
+  power.enable = true;
+  securityDefaults.enable = true;
   usb.enable = true;
+  usersConfig.enable = true;
   video.enable = true;
   vpn.enable = true;
 

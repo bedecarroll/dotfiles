@@ -1,11 +1,20 @@
-{ ... }:
+{ lib, config, ... }:
+with lib;
+let
+  cfg = config.usersConfig;
+in
 {
-  users.users.bc = {
-    isNormalUser = true;
-    extraGroups = [
-      "networkmanager"
-      "tss" # tss group has access to TPM devices
-      "wheel"
-    ];
+  options = {
+    usersConfig.enable = mkEnableOption "local user accounts";
+  };
+  config = mkIf cfg.enable {
+    users.users.bc = {
+      isNormalUser = true;
+      extraGroups = [
+        "networkmanager"
+        "tss" # tss group has access to TPM devices
+        "wheel"
+      ];
+    };
   };
 }
