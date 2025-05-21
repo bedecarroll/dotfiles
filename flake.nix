@@ -83,5 +83,9 @@
           ];
         };
       };
+      # Export wallpapers as a package
+      packages = {
+        wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix {};
+      };
     };
 }
