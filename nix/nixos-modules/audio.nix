@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.audio;
@@ -14,5 +19,8 @@ in
       enable = true;
       pulse.enable = true;
     };
+    environment.systemPackages = with pkgs; [
+      pavucontrol
+    ];
   };
 }
