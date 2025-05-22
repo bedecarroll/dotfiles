@@ -40,7 +40,7 @@ case ":${PATH}:" in
 esac
 
 # We have bun installed
-if [[ -d "$HOME/.bun" ]]; then
+if [[ -d "$HOME/.bun" || -d "$HOME/.cache/.bun" ]]; then
   case ":${PATH}:" in
   *:"$HOME/.bun/bin":*) ;;
   *)
