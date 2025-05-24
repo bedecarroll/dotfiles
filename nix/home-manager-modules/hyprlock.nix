@@ -12,13 +12,11 @@ in
     programs.hyprlock = {
       enable = true;
 
+      # A lot of the settings from
+      # https://github.com/catppuccin/hyprlock/blob/main/hyprlock.conf
       settings = {
         general = {
-          no_fade_in = true;
-          no_fade_out = true;
-          hide_cursor = false;
-          grace = 0;
-          disable_loading_bar = true;
+          hide_cursor = true;
         };
 
         background = [
@@ -34,20 +32,22 @@ in
 
         input-field = [
           {
-            size = "250, 60";
-            outline_thickness = 2;
-            dots_size = 0.2; # Scale of input-field height, 0.2 - 0.8
-            dots_spacing = 0.35; # Scale of dots' absolute size, 0.0 - 1.0
+            size = "300, 60";
+            outline_thickness = 4;
+            dots_size = 0.2;
+            dots_spacing = 0.2;
             dots_center = true;
-            outer_color = "rgba(0, 0, 0, 0)";
-            inner_color = "rgba(0, 0, 0, 0.2)";
-            font_color = "$foreground";
+            outer_color = "rgb(cba6f7)";
+            inner_color = "rgb(313244)";
+            font_color = "rgb(cdd6f4)";
             fade_on_empty = false;
-            rounding = -1;
-            check_color = "rgb(204, 136, 34)";
-            placeholder_text = "<i><span foreground=\"##cdd6f4\">Input Password</span></i>";
+            placeholder_text = ''<span foreground="##cdd6f4"><i>󰌾 Logged in as </i><span foreground="##cba6f7">$USER</span></span>'';
             hide_input = false;
-            position = "0, -200";
+            check_color = "rgb(cba6f7)";
+            fail_color = "rgb(f38ba8)";
+            fail_text = "<i>$FAIL <b>($ATTEMPTS)</b></i>";
+            capslock_color = "rgb(f9e2af)";
+            position = "0, -47";
             halign = "center";
             valign = "center";
           }
@@ -55,23 +55,23 @@ in
 
         label = [
           {
-            text = "cmd[update:1000] echo \"$(date +\"%A, %B %d\")\"";
-            color = "rgba(242, 243, 244, 0.75)";
-            font_size = 22;
-            font_family = "JetBrains Mono";
-            position = "0, 300";
-            halign = "center";
-            valign = "center";
+            text = "$TIME";
+            color = "rgb(cdd6f4)";
+            font_size = 90;
+            font_family = "JetBrainsMono Nerd Font";
+            position = "-30, 0";
+            halign = "right";
+            valign = "top";
           }
 
           {
-            text = "cmd[update:1000] echo \"$(date +\"%-I:%M\")\"";
-            color = "rgba(242, 243, 244, 0.75)";
-            font_size = 95;
-            font_family = "JetBrains Mono Extrabold";
-            position = "0, 200";
-            halign = "center";
-            valign = "center";
+            text = ''cmd[update:43200000] date +"%A, %d %B %Y"'';
+            color = "rgb(cdd6f4)";
+            font_size = 25;
+            font_family = "JetBrainsMono Nerd Font";
+            position = "-30, -150";
+            halign = "right";
+            valign = "top";
           }
         ];
       };

@@ -11,9 +11,11 @@ in
 {
 
   imports = [
+    ./fuzzel.nix
     ./hypridle.nix
     ./hyprlock.nix
     ./hyprpaper.nix
+    ./mako.nix
     ./waybar.nix
   ];
 
@@ -22,9 +24,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    fuzzel.enable = true;
     hypridle.enable = true;
     hyprlock.enable = true;
     hyprpaper.enable = true;
+    mako.enable = true;
     waybar.enable = true;
 
     home.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -36,22 +40,6 @@ in
       cliphist
       libnotify
     ];
-
-    # App launcher
-    programs.fuzzel = {
-      enable = true;
-
-      settings = {
-        main = {
-          terminal = "${lib.getExe pkgs.wezterm}";
-        };
-      };
-    };
-
-    # Desktop notifications
-    services.mako = {
-      enable = true;
-    };
 
     wayland.windowManager.hyprland = {
       enable = true;

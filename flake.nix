@@ -9,7 +9,6 @@
   # };
 
   inputs = {
-    catppuccin.url = "github:catppuccin/nix";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     disko.url = "github:nix-community/disko";
     home-manager.url = "github:nix-community/home-manager/release-24.11";
@@ -76,7 +75,6 @@
           };
           modules = [
             ./nix/system-configs/kepler/home.nix
-            inputs.catppuccin.homeModules.catppuccin
           ];
         };
         "bc@liberty" = home-manager.lib.homeManagerConfiguration {
@@ -89,7 +87,6 @@
           };
           modules = [
             ./nix/system-configs/liberty/home.nix
-            inputs.catppuccin.homeModules.catppuccin
           ];
         };
       };

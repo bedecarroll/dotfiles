@@ -13,7 +13,6 @@ with lib;
     ./gcc.nix
     ./golang.nix
     ./help.nix
-    ./hmcatppuccin.nix
     ./hyprland.nix
     ./iac.nix
     ./network.nix
@@ -38,7 +37,6 @@ with lib;
   gcc.enable = mkDefault true;
   golang.enable = mkDefault true;
   help.enable = mkDefault true;
-  hmcatppuccin.enable = mkDefault true;
   iac.enable = mkDefault true;
   network.enable = mkDefault true;
   nix-utils.enable = mkDefault true;
