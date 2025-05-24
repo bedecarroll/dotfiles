@@ -19,7 +19,7 @@ in
       noto-fonts-cjk-sans
       noto-fonts-emoji
       liberation_ttf
-      nerdfonts
+      nerd-fonts.jetbrains-mono
       roboto-mono
       font-awesome
       # Coding/terminal fonts

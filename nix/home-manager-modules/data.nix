@@ -20,7 +20,7 @@ in
       gron
       miller
       #visidata # this thing always breaks
-      xsv
+      xan
     ];
   };
 }

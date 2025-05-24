@@ -4,10 +4,10 @@
   inputs = {
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     disko.url = "github:nix-community/disko";
-    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    home-manager.url = "https://flakehub.com/f/nix-community/home-manager/*";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2411.0";
+    nixpkgs-unstable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*";
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
