@@ -1,13 +1,6 @@
 {
   description = "NixOS configurations";
 
-  # nixConfig = {
-  #   extra-substituters = [ "https://nix-community.cachix.org" ];
-  #   extra-trusted-public-keys = [
-  #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-  #   ];
-  # };
-
   inputs = {
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     disko.url = "github:nix-community/disko";
@@ -46,13 +39,11 @@
             disko.nixosModules.disko
             ./nix/system-configs/kepler/disko-config.nix
             nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
-            #inputs.stylix.nixosModules.stylix
             determinate.nixosModules.default
           ];
         };
         euler = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            # Provide inputs so modules can import sops-nix
             inherit inputs;
             pkgs-unstable = import inputs.nixpkgs-unstable {
               inherit system;
@@ -90,7 +81,6 @@
           ];
         };
       };
-      # Export wallpapers as a package
       packages = {
         wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix { };
       };

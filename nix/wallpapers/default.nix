@@ -2,7 +2,10 @@
 pkgs.stdenv.mkDerivation {
   pname = "wallpapers";
   version = "1.0";
-  src = ./.;
+  src = builtins.path {
+    path = ./.;
+    name = "wallpapers";
+  };
   # Copy all wallpaper files into the output
   phases = [ "installPhase" ];
   installPhase = ''
