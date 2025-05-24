@@ -204,16 +204,16 @@ in
           hyprbars = {
             bar_height = 30;
             bar_color = "rgb(1e1e1e)";
-            col.text = "$foreground";
+            col.text = "rgb(cdd6f4)";
             bar_text_size = 8;
             bar_text_font = "Fira Code Symbol";
             bar_button_padding = 12;
             bar_padding = 10;
             bar_precedence_over_border = true;
             hyprbars-button = [
-              "$color1, 20, , hyprctl dispatch killactive"
-              "$color3, 20, , hyprctl dispatch fullscreen 2"
-              "$color4, 20, , hyprctl dispatch togglefloating"
+              "rgb(f38ba8), 20, , hyprctl dispatch killactive"
+              "rgb(f9e2af), 20, , hyprctl dispatch fullscreen 2"
+              "rgb(74c7ec), 20, , hyprctl dispatch togglefloating"
             ];
           };
         };
