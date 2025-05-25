@@ -19,6 +19,7 @@ in
       # bandwhich # broken
       curl
       dig
+      eternal-terminal
       gping
       httpie
       mtr
