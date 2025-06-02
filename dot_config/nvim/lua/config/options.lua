@@ -49,9 +49,6 @@ vim.opt.undofile = true
 -- Delete comment character when joining commented lines
 vim.opt.formatoptions:append({ "j" })
 
--- Stop continuing comments when using o/O
-vim.opt.formatoptions:remove({ "o" })
-
 -- Set default indent
 vim.opt.expandtab = true -- expand tabs into spaces
 vim.opt.shiftwidth = 2 -- when indenting with '>', use 2 spaces width
