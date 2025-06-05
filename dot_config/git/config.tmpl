@@ -8,6 +8,9 @@
 {{- else if lookPath "bat" }}
   pager = bat
 {{ end }}
+{{- if lookPath "mergiraf" }}
+  attributesfile = "~/.config/git/gitattributes"
+{{ end }}
 [pull]
   rebase = true
 [push]
@@ -30,6 +33,9 @@
   ll = "log --oneline"
   sb = "!checkout_fzf() { git branch | fzf | xargs git checkout; }; checkout_fzf"
   st = "status --short --branch"
+{{- if lookPath "difft" }}
+  difft = "-c diff.external=difft diff"
+{{ end }}
 [commit]
   verbose = true
 [include]
@@ -40,4 +46,9 @@
   features = catppuccin-mocha
   side-by-side = true
   hyperlinks = true
+{{ end }}
+{{- if lookPath "mergiraf" }}
+[merge "mergiraf"]
+  name = mergiraf
+  driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L"
 {{ end -}}

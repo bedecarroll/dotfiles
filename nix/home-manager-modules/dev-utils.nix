@@ -18,6 +18,7 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       cookiecutter
+      difftastic
       dotenv-linter
       entr
       gh
@@ -25,6 +26,7 @@ in
       grex # generate regex from test cases
       just
       lazygit
+      mergiraf
       pkgs-unstable.jujutsu
       pkgs-unstable.mise
       pre-commit
