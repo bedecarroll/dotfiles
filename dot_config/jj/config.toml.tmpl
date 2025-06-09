@@ -21,14 +21,15 @@ write-change-id-header = true
 'format_short_change_id(id)' = 'id.shortest()'
 
 [aliases]
-tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 c = ["commit"]
 ci = ["commit", "--interactive"]
 e = ["edit"]
 i = ["git", "init", "--colocate"]
 nb = ["bookmark", "create", "-r @-"] # "new bookmark"
+n = ["new", "trunk()"]
 pull = ["git", "fetch"]
-push = ["git", "push", "--allow-new"]
+push = ["git", "push", "--allow-new", "--change", "@"]
 r = ["rebase"]
-s = ["squash"]
 si = ["squash", "--interactive"]
+s = ["squash"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
