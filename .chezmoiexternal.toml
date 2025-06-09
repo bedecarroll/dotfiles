@@ -1,6 +1,10 @@
 [".local/bin/extract"]
     type = "file"
+{{ if eq .chezmoi.os "darwin" }}
+    url = "https://github.com/bedecarroll/extract/releases/latest/download/extract-macos-aarch64"
+{{ else }}
     url = "https://github.com/bedecarroll/extract/releases/latest/download/extract-linux-x86_64"
+{{ end }}
     executable = true
 [".config/vim/autoload/plug.vim"]
     type = "file"
