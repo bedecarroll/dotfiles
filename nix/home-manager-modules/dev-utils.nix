@@ -26,6 +26,7 @@ in
       grex # generate regex from test cases
       just
       lazygit
+      markdownlint-cli2
       mergiraf
       pkgs-unstable.jujutsu
       pkgs-unstable.mise

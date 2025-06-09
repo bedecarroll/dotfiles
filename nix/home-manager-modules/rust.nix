@@ -16,9 +16,12 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      rustc
       cargo
+      clippy
+      mdbook
       rust-analyzer
+      rustc
+      rustfmt
     ];
   };
 }
