@@ -29,6 +29,7 @@ nix/
 .config/mise/conf.d/env.yaml
 .config/jj/conf.d/local.toml
 .config/io.datasette.llm/
+.config/claude/
 .aider.conf.yml
 {{ end }}
 
