@@ -34,11 +34,12 @@ in
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
     home.packages = with pkgs; [
+      cliphist
+      grim
+      libnotify
       lxqt.lxqt-policykit
       networkmanagerapplet
       wl-clipboard
-      cliphist
-      libnotify
     ];
 
     wayland.windowManager.hyprland = {
@@ -56,6 +57,8 @@ in
         "$terminal" = "${lib.getExe pkgs.wezterm}";
         "$browser" = "${lib.getExe pkgs.brave}";
         "$launcher" = "${lib.getExe pkgs.fuzzel}";
+        "$grimshot" = "${lib.getExe pkgs.grim}";
+        "$screenshot-path" = "/home/bc/Pictures/screenshots";
 
         # https://wiki.hyprland.org/Configuring/Keywords/#executing
         exec-once = [
@@ -141,15 +144,6 @@ in
           preserve_split = true;
         };
 
-        # https://wiki.hyprland.org/Configuring/Variables/#misc
-        # misc = {
-        # disable_hyprland_logo = true;
-        # disable_splash_rendering = true;
-        #
-        # mouse_move_enables_dpms = true;
-        # key_press_enables_dpms = true;
-        # };
-
         bind = [
           "$mod, F1, exec, show-keybinds"
 
@@ -192,6 +186,20 @@ in
           "$mod SHIFT, 8, movetoworkspace, 8"
           "$mod SHIFT, 9, movetoworkspace, 9"
           "$mod SHIFT, 0, movetoworkspace, 10"
+
+          # Screenshot
+          # All visible outputs
+          ", Print, exec, $grimshot --notify save screen $($screenshot-path/$(date +'screenshot_%Y-%m-%d-%H%M%S.%3N.png')"
+          # Manually select a region
+          "SHIFT, Print, exec, $grimshot --notify save area $($screenshot-path/$(date +'screenshot_%Y-%m-%d-%H%M%S.%3N.png')"
+          # Currently active window
+          "ALT, Print, exec, $grimshot --notify save active $($screenshot-path/$(date +'screenshot_%Y-%m-%d-%H%M%S.%3N.png')"
+          # Manually select a window
+          "SHIFT_ALT, Print, exec, $grimshot --notify save window $($screenshot-path/$(date +'screenshot_%Y-%m-%d-%H%M%S.%3N.png')"
+          "CTRL, Print, exec, $grimshot --notify copy screen"
+          "CTRL_SHIFT, Print, exec, $grimshot --notify copy area"
+          "CTRL_ALT, Print, exec, $grimshot --notify copy active"
+          "CTRL_SHIFT_ALT, Print, exec, $grimshot --notify copy window"
         ];
 
         bindm = [
