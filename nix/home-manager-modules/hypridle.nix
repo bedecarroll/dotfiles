@@ -20,7 +20,7 @@ in
         listener = [
           {
             on-timeout = "loginctl lock-session";
-            timeout = 360;
+            timeout = 36000;
           }
           {
             on-resume = "hyprctl dispatch dpms on";
