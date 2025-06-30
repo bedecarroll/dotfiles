@@ -17,7 +17,9 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       cargo
+      cargo-audit
       cargo-flamegraph
+      cargo-tarpaulin
       clippy
       mdbook
       rust-analyzer
