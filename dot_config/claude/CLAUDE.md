@@ -161,6 +161,8 @@ requested for plain-text search.
 we have reached a checkpoint tell Bede so that he can manually perform the
 operation
 - The `grep` command is aliased to `rg`
+- The `ls` command is aliased to `eza` and you will need the `-h` flag to see
+hidden folders (folders that start with `.`)
 - The `mise` task runner tool is available to manage repeatable workflows. This
 tool is helpful in ensuring repeatable environments and common tasks for multiple
 developers
@@ -171,3 +173,6 @@ developers
 `nursery` level for `clippy`. When profiling the `cargo flamegraph` command is available.
 `Rust` code is expected to be documented using `mdbook` which is available to you
 - When benchmarking the `hyperfine` utility is available
+- The tool `markdownlint-cli2` is to be used on `markdown` files to ensure consistency.
+The tool can be run with `markdownlint-cli2 "**/*.md" --fix` to automatically fix
+as many errors as possible.
