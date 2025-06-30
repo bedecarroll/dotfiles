@@ -31,6 +31,7 @@ in
       pkgs-unstable.jujutsu
       pkgs-unstable.mise
       pre-commit
+      sqlite-interactive
       tig
       typos
       watchexec
