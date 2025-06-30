@@ -4,7 +4,7 @@ email = {{ .github_email | quote }}
 
 [ui]
 show-cryptographic-signatures = true
-default-command = ["log", "--no-pager", "--limit", "5"]
+default-command = ["status", "--no-pager"]
 
 # Following settings from:
 # https://zerowidth.com/2025/jj-tips-and-tricks/
@@ -26,9 +26,11 @@ ci = ["commit", "--interactive"]
 e = ["edit"]
 i = ["git", "init", "--colocate"]
 nb = ["bookmark", "create", "-r @-"] # "new bookmark"
+nc = ["new", "-A", "@"]
 n = ["new", "trunk()"]
 pull = ["git", "fetch"]
 push = ["git", "push", "--allow-new", "--change", "@"]
+resolvem = ["resolve", "--tool", "mergiraf"]
 r = ["rebase"]
 si = ["squash", "--interactive"]
 s = ["squash"]
