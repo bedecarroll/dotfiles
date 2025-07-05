@@ -15,6 +15,7 @@ nix/
 # If there is a local config it is for a personal device
 .config/bash/local/
 .config/tmux/local/
+.config/wezterm/local.lua
 .config/git/conf.d/local
 .config/git/authorized_keys
 # SSH config is personal only
