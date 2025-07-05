@@ -65,6 +65,53 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j $(nproc)
 ```
 
+## Euler VM Deployment
+
+Build and deploy the euler NixOS VM to Proxmox:
+
+```bash
+# Build VM image
+nix build .#vms.x86_64-linux.euler -o ~/euler-vm
+
+# Import VMA file to Proxmox
+# Transfer the VMA file to your Proxmox host, then:
+qmrestore ~/euler-vm/nixos.vma <VM_ID> --storage local-lvm --unique
+
+# Start the VM
+qm start <VM_ID>
+
+# Get SOPS key from VM
+ssh bc@euler "sudo age-keygen -y /var/lib/sops-nix/key.txt"
+
+# Add public key to SOPS and encrypt secrets
+# Edit nix/system-configs/euler/secrets.sops.yaml
+sops -e -i nix/system-configs/euler/secrets.sops.yaml
+
+# Deploy configuration changes
+deploy .#euler
+```
+
+## Pascal Reverse Proxy Deployment
+
+Deploy pascal NixOS reverse proxy to Oracle OCI:
+
+```bash
+# Create Oracle OCI instance with Ubuntu/Oracle Linux
+
+# Install NixOS via nixos-infect
+curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | NIX_CHANNEL=nixos-25.05 bash
+
+# Get SOPS key from server
+ssh bc@pascal "sudo age-keygen -y /var/lib/sops-nix/key.txt"
+
+# Add public key to SOPS and encrypt secrets
+# Edit nix/system-configs/pascal/secrets.sops.yaml
+sops -e -i nix/system-configs/pascal/secrets.sops.yaml
+
+# Deploy configuration
+deploy .#pascal
+```
+
 ## References
 
 * Delta catppuccin config comes from: [Delta catppuccin](https://github.com/catppuccin/delta)

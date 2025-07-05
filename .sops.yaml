@@ -1,0 +1,15 @@
+keys:
+  - &age_keys >-
+    age1yubikey1qwzq9klxc03flzl4k5lt5kc43jxxcht9ncu9vvwggy6qmt66w6nqu5cc5du,
+    age1g6w5097k0j8ccp7ksc5mt0wa6w8657ausuk4tkn2vdwg6lz8c9ssazqryw,
+    age1w8r39s2u2fcjhpm5yw6wzjf9je2u08p3uaqmp5rpjkdef2f6dcns5vyk8w
+
+creation_rules:
+  - path_regex: nix/shared-secrets\.sops\.yaml$
+    key_groups:
+      - age:
+          - *age_keys
+  - path_regex: nix/system-configs/euler/secrets\.sops\.yaml$
+    key_groups:
+      - age:
+          - *age_keys

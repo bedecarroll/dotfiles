@@ -2,9 +2,14 @@
   description = "NixOS configurations";
 
   inputs = {
+    deploy-rs.url = "github:serokell/deploy-rs";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     disko.url = "github:nix-community/disko";
     home-manager.url = "https://flakehub.com/f/nix-community/home-manager/*";
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs-unstable.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*";
@@ -13,11 +18,14 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       nixos-hardware,
       disko,
       home-manager,
       determinate,
+      nixos-generators,
+      deploy-rs,
       ...
     }@inputs:
     let
@@ -43,6 +51,7 @@
           ];
         };
         euler = nixpkgs.lib.nixosSystem {
+          inherit system;
           specialArgs = {
             inherit inputs;
             pkgs-unstable = import inputs.nixpkgs-unstable {
@@ -52,6 +61,21 @@
           };
           modules = [
             ./nix/system-configs/euler/configuration.nix
+            determinate.nixosModules.default
+          ];
+        };
+        pascal = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [
+            ./nix/system-configs/pascal/configuration.nix
+            determinate.nixosModules.default
           ];
         };
       };
@@ -81,8 +105,48 @@
           ];
         };
       };
-      packages = {
+      packages.${system} = {
         wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix { };
       };
+
+      vms.${system} = {
+        euler = nixos-generators.nixosGenerate {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [
+            ./nix/system-configs/euler/configuration.nix
+          ];
+          format = "proxmox";
+        };
+      };
+
+      # Deploy-rs configuration for remote deployment
+      deploy.nodes = {
+        euler = {
+          hostname = "euler";
+          sshUser = "bc";
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.euler;
+          };
+        };
+        pascal = {
+          hostname = "pascal"; # Use IP address or hostname
+          sshUser = "bc";
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.pascal;
+          };
+        };
+      };
+
+      # Deploy checks to prevent deployment mistakes
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }

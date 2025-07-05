@@ -4,6 +4,7 @@ install.sh
 .github/
 
 # No need for nix stuff
+.sops.yaml
 flake.nix
 flake.lock
 nix/

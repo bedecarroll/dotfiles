@@ -15,10 +15,11 @@ in
   config = mkIf cfg.enable {
     # Enough to get the system going
     environment.systemPackages = with pkgs; [
-      vim # text editor
-      git # version control
-      wezterm # terminal emulator
+      age # encryption tool for SOPS
       chezmoi # dotfiles
+      git # version control
+      vim # text editor
+      wezterm # terminal emulator
     ];
   };
 }

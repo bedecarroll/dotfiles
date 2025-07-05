@@ -3,6 +3,8 @@
   imports = [
     ./audio.nix
     ./bluetooth.nix
+    ./containers.nix
+    ./containers
     ./fonts.nix
     ./greetd.nix
     ./hardware.nix
@@ -15,6 +17,7 @@
     ./nix-config.nix
     ./ntp.nix
     ./power.nix
+    ./reverse-proxy.nix
     ./security.nix
     ./security-tools.nix
     ./usb.nix
