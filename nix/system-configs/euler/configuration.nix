@@ -70,6 +70,8 @@
   containerSupport.enable = true;
   # Enable Tailscale for VM connectivity
   vpn.enable = true;
+  # Enable Eternal Terminal for persistent SSH sessions
+  services.eternal-terminal.enable = true;
   # Enable Linkding bookmark manager service
   linkding.enable = true;
   # Configure Linkding service

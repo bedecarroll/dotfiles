@@ -4,6 +4,7 @@
     ./audio.nix
     ./bluetooth.nix
     ./containers
+    ./eternal-terminal.nix
     ./fonts.nix
     ./greetd.nix
     ./hardware.nix

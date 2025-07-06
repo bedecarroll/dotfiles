@@ -45,6 +45,8 @@
   vpn.enable = true;
   # Enable reverse proxy with Tailscale integration
   reverseProxy.enable = true;
+  # Enable Eternal Terminal for persistent SSH sessions
+  services.eternal-terminal.enable = true;
 
   # SOPS secrets configuration (disabled until encrypted)
   # sops.secrets = {
