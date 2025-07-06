@@ -6,8 +6,13 @@ in
 {
   options = {
     ntp.enable = mkEnableOption "NTP time servers";
+    ntp.servers = mkOption {
+      type = types.listOf types.str;
+      default = [ "time.cloudflare.com" ];
+      description = "NTP servers to use";
+    };
   };
   config = mkIf cfg.enable {
-    networking.timeServers = [ "time.cloudflare.com" ];
+    networking.timeServers = cfg.servers;
   };
 }

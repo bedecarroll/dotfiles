@@ -128,6 +128,12 @@
   # Ensure DHCP is enabled for automatic network configuration
   networking.useDHCP = lib.mkDefault true;
 
+  # Open SSH and eternal-terminal ports
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 2022 ];
+  };
+
   # Automatic system updates
   system.autoUpgrade = {
     enable = true;

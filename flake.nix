@@ -137,8 +137,8 @@
           };
         };
         pascal = {
-          hostname = "pascal"; # Use IP address or hostname
-          sshUser = "bc";
+          hostname = "159.54.182.73"; # Use IP address or hostname
+          sshUser = "root";
           profiles.system = {
             user = "root";
             path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.pascal;
