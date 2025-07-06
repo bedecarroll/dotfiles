@@ -3,7 +3,6 @@
   imports = [
     ./audio.nix
     ./bluetooth.nix
-    ./containers.nix
     ./containers
     ./fonts.nix
     ./greetd.nix

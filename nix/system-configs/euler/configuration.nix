@@ -74,6 +74,8 @@
   linkding.enable = true;
   # Configure Linkding service
   linkding.environmentFiles = [ config.sops.secrets.linkding_env.path ];
+  # Configure CSRF trusted origins for reverse proxy
+  linkding.csrfTrustedOrigins = [ "https://linkding.bede.ai" ];
   # Enable Golink URL shortener service
   golink.enable = true;
   golink.environmentFiles = [ config.sops.secrets.golink_env.path ];

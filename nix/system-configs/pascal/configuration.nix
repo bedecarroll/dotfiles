@@ -72,13 +72,9 @@
 
   # Configure reverse proxy virtual hosts
   reverseProxy.virtualHosts = {
-    # Example: proxy to internal linkding service
-    "linkding.pascal.your-tailnet.ts.net" = {
-      extraConfig = ''
-        bind tailscale/linkding
-        tailscale_auth
-        reverse_proxy 100.64.0.1:9090  # Replace with your euler VM's Tailscale IP
-      '';
+    # Proxy linkding.bede.ai to euler's linkding service
+    "linkding.bede.ai" = {
+      upstream = "euler:9090";
     };
     # Add more services as needed
   };
