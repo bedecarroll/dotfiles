@@ -14,22 +14,22 @@ in
             options = {
               serverAliases = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 description = "Additional domain names for this virtual host";
               };
-              
+
               upstream = mkOption {
                 type = types.nullOr types.str;
                 default = null;
                 description = "Upstream server for reverse proxy (e.g., 'localhost:8080' or 'euler:9090')";
               };
-              
+
               useACMEHost = mkOption {
                 type = types.nullOr types.str;
                 default = null;
                 description = "Use certificates from this ACME host";
               };
-              
+
               extraConfig = mkOption {
                 type = types.str;
                 default = "";
@@ -69,7 +69,7 @@ in
       virtualHosts = mapAttrs (name: vhost: {
         serverAliases = vhost.serverAliases;
         useACMEHost = vhost.useACMEHost;
-        extraConfig = 
+        extraConfig =
           optionalString (vhost.upstream != null) "reverse_proxy ${vhost.upstream}"
           + optionalString (vhost.extraConfig != "") (
             (if vhost.upstream != null then "\n" else "") + vhost.extraConfig
@@ -82,4 +82,3 @@ in
     networking.firewall.allowedTCPPorts = cfg.firewallPorts;
   };
 }
-

@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.linkding;
@@ -7,7 +12,7 @@ in
   options = {
     linkding = {
       enable = mkEnableOption "Enable Linkding bookmark manager service";
-      
+
       image = mkOption {
         type = types.str;
         default = "sissbruecker/linkding:latest";
@@ -82,13 +87,16 @@ in
 
       csrfTrustedOrigins = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Trusted origins for CSRF protection";
       };
 
       database = {
         engine = mkOption {
-          type = types.enum ["sqlite" "postgres"];
+          type = types.enum [
+            "sqlite"
+            "postgres"
+          ];
           default = "sqlite";
           description = "Database engine to use";
         };
@@ -132,7 +140,7 @@ in
 
       environmentFiles = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of environment files to load";
       };
 
@@ -157,48 +165,64 @@ in
       volumes = [
         "${cfg.dataDir}:/etc/linkding/data"
       ];
-      environment = {
-        LD_SUPERUSER_NAME = cfg.superuserName;
-      } // optionalAttrs (cfg.superuserPassword != null) {
-        LD_SUPERUSER_PASSWORD = cfg.superuserPassword;
-      } // optionalAttrs (cfg.contextPath != null) {
-        LD_CONTEXT_PATH = cfg.contextPath;
-      } // optionalAttrs cfg.enableAuthProxy {
-        LD_ENABLE_AUTH_PROXY = "True";
-        LD_AUTH_PROXY_USERNAME_HEADER = cfg.authProxyUsernameHeader;
-      } // optionalAttrs (cfg.authProxyLogoutUrl != null) {
-        LD_AUTH_PROXY_LOGOUT_URL = cfg.authProxyLogoutUrl;
-      } // optionalAttrs cfg.disableBackgroundTasks {
-        LD_DISABLE_BACKGROUND_TASKS = "True";
-      } // optionalAttrs cfg.disableUrlValidation {
-        LD_DISABLE_URL_VALIDATION = "True";
-      } // optionalAttrs (cfg.csrfTrustedOrigins != []) {
-        LD_CSRF_TRUSTED_ORIGINS = concatStringsSep "," cfg.csrfTrustedOrigins;
-      } // optionalAttrs (cfg.database.engine == "postgres") {
-        LD_DB_ENGINE = "postgres";
-        LD_DB_DATABASE = cfg.database.name;
-      } // optionalAttrs (cfg.database.user != null) {
-        LD_DB_USER = cfg.database.user;
-      } // optionalAttrs (cfg.database.password != null) {
-        LD_DB_PASSWORD = cfg.database.password;
-      } // optionalAttrs (cfg.database.host != null) {
-        LD_DB_HOST = cfg.database.host;
-      } // optionalAttrs (cfg.database.port != null) {
-        LD_DB_PORT = toString cfg.database.port;
-      } // optionalAttrs (cfg.database.options != null) {
-        LD_DB_OPTIONS = cfg.database.options;
-      };
+      environment =
+        {
+          LD_SUPERUSER_NAME = cfg.superuserName;
+        }
+        // optionalAttrs (cfg.superuserPassword != null) {
+          LD_SUPERUSER_PASSWORD = cfg.superuserPassword;
+        }
+        // optionalAttrs (cfg.contextPath != null) {
+          LD_CONTEXT_PATH = cfg.contextPath;
+        }
+        // optionalAttrs cfg.enableAuthProxy {
+          LD_ENABLE_AUTH_PROXY = "True";
+          LD_AUTH_PROXY_USERNAME_HEADER = cfg.authProxyUsernameHeader;
+        }
+        // optionalAttrs (cfg.authProxyLogoutUrl != null) {
+          LD_AUTH_PROXY_LOGOUT_URL = cfg.authProxyLogoutUrl;
+        }
+        // optionalAttrs cfg.disableBackgroundTasks {
+          LD_DISABLE_BACKGROUND_TASKS = "True";
+        }
+        // optionalAttrs cfg.disableUrlValidation {
+          LD_DISABLE_URL_VALIDATION = "True";
+        }
+        // optionalAttrs (cfg.csrfTrustedOrigins != [ ]) {
+          LD_CSRF_TRUSTED_ORIGINS = concatStringsSep "," cfg.csrfTrustedOrigins;
+        }
+        // optionalAttrs (cfg.database.engine == "postgres") {
+          LD_DB_ENGINE = "postgres";
+          LD_DB_DATABASE = cfg.database.name;
+        }
+        // optionalAttrs (cfg.database.user != null) {
+          LD_DB_USER = cfg.database.user;
+        }
+        // optionalAttrs (cfg.database.password != null) {
+          LD_DB_PASSWORD = cfg.database.password;
+        }
+        // optionalAttrs (cfg.database.host != null) {
+          LD_DB_HOST = cfg.database.host;
+        }
+        // optionalAttrs (cfg.database.port != null) {
+          LD_DB_PORT = toString cfg.database.port;
+        }
+        // optionalAttrs (cfg.database.options != null) {
+          LD_DB_OPTIONS = cfg.database.options;
+        };
       environmentFiles = cfg.environmentFiles;
       autoStart = true;
     };
 
     virtualisation.oci-containers.backend = "podman";
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir} 0755 root root -"
-    ] ++ optionals cfg.enableBackups [
-      "d ${cfg.backupDir} 0755 root root -"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "d ${cfg.dataDir} 0755 root root -"
+      ]
+      ++ optionals cfg.enableBackups [
+        "d ${cfg.backupDir} 0755 root root -"
+      ];
 
     systemd.services.linkding-backup = mkIf cfg.enableBackups {
       description = "Backup linkding data";
@@ -207,7 +231,7 @@ in
         ExecStart = "${pkgs.rsync}/bin/rsync -av ${cfg.dataDir}/ ${cfg.backupDir}/";
       };
     };
-    
+
     systemd.timers.linkding-backup = mkIf cfg.enableBackups {
       wantedBy = [ "timers.target" ];
       timerConfig = {

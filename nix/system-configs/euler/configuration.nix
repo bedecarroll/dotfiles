@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   inputs,
   ...
@@ -30,7 +29,13 @@
   };
 
   # Ensure filesystem modules are available in initrd
-  boot.initrd.availableKernelModules = [ "virtio_pci" "virtio_blk" "virtio_scsi" "ahci" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "virtio_pci"
+    "virtio_blk"
+    "virtio_scsi"
+    "ahci"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
@@ -44,11 +49,11 @@
 
   # Disable unnecessary services for headless VM
   systemd.services.systemd-udev-settle.enable = false;
-  
+
   # Configure SOPS-nix to generate age key automatically for new VMs
   sops.age.generateKey = true;
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
-  
+
   # Ensure the sops-nix directory persists
   systemd.tmpfiles.rules = [
     "d /var/lib/sops-nix 0755 root root -"
@@ -113,25 +118,27 @@
       X11Forwarding = false;
     };
   };
-  
+
   # Add your SSH public key for remote access
   users.users.bc.openssh.authorizedKeys.keys = [
     "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIHnBzfvZNjJja79pwp/ZmiGdoN8gzzcMPyu8zlbkVavGAAAABHNzaDo="
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIc7XLm936xcCFngohG73fs9T5lfikrHzYHErvGF+mna"
   ];
 
-
   # Host-specific settings
   networking.hostName = "euler";
   time.timeZone = "UTC";
-  
+
   # Ensure DHCP is enabled for automatic network configuration
   networking.useDHCP = lib.mkDefault true;
 
   # Open SSH and eternal-terminal ports
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 2022 ];
+    allowedTCPPorts = [
+      22
+      2022
+    ];
   };
 
   # Automatic system updates

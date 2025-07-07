@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   inputs,
   ...
@@ -61,10 +60,10 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [
-    "virtio_scsi"    # Critical: OCI uses virtio-scsi for block storage
-    "dm_mod"         # Critical: Required for LVM device mapper
-    "dm_snapshot"    # LVM snapshot support
-    "dm_mirror"      # LVM mirror support
+    "virtio_scsi" # Critical: OCI uses virtio-scsi for block storage
+    "dm_mod" # Critical: Required for LVM device mapper
+    "dm_snapshot" # LVM snapshot support
+    "dm_mirror" # LVM mirror support
   ];
 
   # Enable LVM support in initrd for /dev/mapper/ocivolume-root

@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.golink;
@@ -7,7 +12,7 @@ in
   options = {
     golink = {
       enable = mkEnableOption "Enable Golink URL shortener service";
-      
+
       image = mkOption {
         type = types.str;
         default = "ghcr.io/tailscale/golink:main";
@@ -34,7 +39,7 @@ in
 
       environmentFiles = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of environment files to load";
       };
 
@@ -59,18 +64,20 @@ in
       volumes = [
         "${cfg.dataDir}:/home/nonroot"
       ];
-      environment = {};
+      environment = { };
       environmentFiles = cfg.environmentFiles;
       autoStart = true;
     };
 
     virtualisation.oci-containers.backend = "podman";
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir} 0755 65532 65532 -"
-    ] ++ optionals cfg.enableBackups [
-      "d ${cfg.backupDir} 0755 root root -"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "d ${cfg.dataDir} 0755 65532 65532 -"
+      ]
+      ++ optionals cfg.enableBackups [
+        "d ${cfg.backupDir} 0755 root root -"
+      ];
 
     systemd.services.golink-backup = mkIf cfg.enableBackups {
       description = "Backup golink data";
@@ -79,7 +86,7 @@ in
         ExecStart = "${pkgs.rsync}/bin/rsync -av ${cfg.dataDir}/ ${cfg.backupDir}/";
       };
     };
-    
+
     systemd.timers.golink-backup = mkIf cfg.enableBackups {
       wantedBy = [ "timers.target" ];
       timerConfig = {
