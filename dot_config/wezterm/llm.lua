@@ -54,9 +54,9 @@ function M.ask(win, pane, n, new)
 
 				w:perform_action(
 					act.SplitPane({
-						direction = "Right",
-						size = { Percent = 45 },
-						command = { args = { "bash", "-lc", "less -R " .. tmp_out } },
+						direction = "Bottom",
+						size = { Percent = 25 },
+						command = { args = { "bash", "-lc", "bat -l markdown --style=plain " .. tmp_out } },
 					}),
 					p
 				)
