@@ -5,9 +5,9 @@ return {
 		opts = {
 			ensure_installed = {
 				"bash-language-server",
-				"biome",
 				"jinja-lsp",
 				"jq-lsp",
+				"oxlint",
 			},
 		},
 	},
