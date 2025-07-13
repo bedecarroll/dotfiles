@@ -1,7 +1,10 @@
 [user]
 name = "Bede Carroll"
 email = {{ .github_email | quote }}
-
+{{ if lookPath "watchman" }}
+[core]
+fsmonitor = "watchman"
+{{ end }}
 [ui]
 show-cryptographic-signatures = true
 default-command = ["status", "--no-pager"]

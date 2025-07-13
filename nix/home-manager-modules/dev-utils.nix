@@ -35,6 +35,8 @@ in
       tig
       typos
       watchexec
+      watchman
+      zoxide
     ];
   };
 }
