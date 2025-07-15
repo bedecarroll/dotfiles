@@ -1,4 +1,8 @@
 # Needed for atuin. Must be the very last thing.
 if [ -f "$HOME/.nix-profile/share/bash/bash-preexec.sh" ]; then
   source "$HOME/.nix-profile/share/bash/bash-preexec.sh"
+else
+# For non-Nix systems
+# curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o ~/.bash-preexec.sh
+  [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 fi
