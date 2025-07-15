@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 
-llm logs list --json | jq -r '.[-1].response' | glow -p
+response=$(llm logs list --json | jq -r '.[-1].response')
+
+if command -v glow &>/dev/null; then
+  echo "$response" | glow -p
+else
+  echo "$response" | less
+fi
