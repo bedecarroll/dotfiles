@@ -16,15 +16,15 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      cargo
       cargo-audit
+      cargo-binutils
       cargo-flamegraph
+      cargo-llvm-cov
+      cargo-nextest
       cargo-tarpaulin
-      clippy
       mdbook
-      rust-analyzer
       rustc
-      rustfmt
+      rustup
     ];
   };
 }
