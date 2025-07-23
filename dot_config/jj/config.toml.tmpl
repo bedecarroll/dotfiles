@@ -30,10 +30,10 @@ e = ["edit"]
 fpush = ["git", "push", "--named", "master=@"] # force push/direct to master
 i = ["git", "init", "--colocate"]
 nb = ["bookmark", "create", "-r @-"] # "new bookmark"
-nc = ["new", "-A", "@"]
+nc = ["new", "-A", "git_head()"]
 n = ["new", "trunk()"]
 pull = ["git", "fetch"]
-push = ["git", "push", "--allow-new", "--change", "@"]
+push = ["git", "push", "--allow-new", "--change", "@-"]
 resolvem = ["resolve", "--tool", "mergiraf"]
 r = ["rebase"]
 si = ["squash", "--interactive"]
