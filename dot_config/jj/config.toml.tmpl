@@ -8,6 +8,11 @@ fsmonitor = "watchman"
 [ui]
 show-cryptographic-signatures = true
 default-command = ["status", "--no-pager"]
+diff-editor = ":builtin"
+{{ if lookPath "delta" }}
+pager = "delta"
+diff-formatter = ":git"
+{{ end }}
 
 # Following settings from:
 # https://zerowidth.com/2025/jj-tips-and-tricks/
@@ -24,6 +29,7 @@ write-change-id-header = true
 'format_short_change_id(id)' = 'id.shortest()'
 
 [aliases]
+alias = ["config", "list", "aliases"]
 c = ["commit"]
 ci = ["commit", "--interactive"]
 e = ["edit"]
@@ -39,3 +45,8 @@ r = ["rebase"]
 si = ["squash", "--interactive"]
 s = ["squash"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+
+[[scope]]
+--when.commands = ["status", "log"]
+[[scope.ui]]
+paginate = "never"
