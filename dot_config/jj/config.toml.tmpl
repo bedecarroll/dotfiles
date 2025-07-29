@@ -33,17 +33,19 @@ alias = ["config", "list", "aliases"]
 c = ["commit"]
 ci = ["commit", "--interactive"]
 e = ["edit"]
+# fp = force push
 fp = ["util", "exec", "--", "bash", "-c", """
 set -euo pipefail
 jj bookmark move -t 'git_head()' -f 'trunk()'
 jj git push
 """, ""]
-i = ["git", "init", "--colocate"]
-p = ["util", "exec", "--", "bash", "-c", """
+# fr = fetch/rebase
+fr = ["util", "exec", "--", "bash", "-c", """
 set -euo pipefail
 jj git fetch
 jj rebase -d 'trunk()'
 """, ""]
+i = ["git", "init", "--colocate"]
 pull = ["git", "fetch"]
 push = ["git", "push", "--allow-new", "--change", "@-"]
 resolvem = ["resolve", "--tool", "mergiraf"]
