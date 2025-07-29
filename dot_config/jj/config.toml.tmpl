@@ -46,6 +46,7 @@ jj git fetch
 jj rebase -d 'trunk()'
 """, ""]
 i = ["git", "init", "--colocate"]
+l = ["log", "-n", "20", "all()"]
 pull = ["git", "fetch"]
 push = ["git", "push", "--allow-new", "--change", "@-"]
 resolvem = ["resolve", "--tool", "mergiraf"]
@@ -54,7 +55,7 @@ si = ["squash", "--interactive"]
 s = ["squash"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 
-[[scope]]
+[[--scope]]
 --when.commands = ["status", "log"]
-[[scope.ui]]
+[--scope.ui]
 paginate = "never"
