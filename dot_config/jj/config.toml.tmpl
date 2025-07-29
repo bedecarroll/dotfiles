@@ -33,11 +33,12 @@ alias = ["config", "list", "aliases"]
 c = ["commit"]
 ci = ["commit", "--interactive"]
 e = ["edit"]
-fpush = ["git", "push", "--named", "master=@"] # force push/direct to master
+fp = ["util", "exec", "--", "bash", "-c", """
+set -euo pipefail
+jj bookmark move -t 'git_head()' -f 'trunk()'
+jj git push
+""", ""]
 i = ["git", "init", "--colocate"]
-nb = ["bookmark", "create", "-r @-"] # "new bookmark"
-nc = ["new", "-A", "git_head()"]
-n = ["new", "trunk()"]
 p = ["util", "exec", "--", "bash", "-c", """
 set -euo pipefail
 jj git fetch
