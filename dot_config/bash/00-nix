@@ -11,10 +11,3 @@ elif [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" ]; then
 elif [ ! -d "/nix/" ]; then
   return 233
 fi
-
-# Source nix completions
-if [ -d "$HOME/.nix-profile/share/bash-completion" ]; then
-  for COMPLETION in "$HOME/.nix-profile/share/bash-completion/completions/"*; do
-    [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
-  done
-fi
