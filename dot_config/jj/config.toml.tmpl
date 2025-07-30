@@ -39,15 +39,15 @@ set -euo pipefail
 jj bookmark move -t 'git_head()' -f 'trunk()'
 jj git push
 """, ""]
-# fr = fetch/rebase
-fr = ["util", "exec", "--", "bash", "-c", """
+i = ["git", "init", "--colocate"]
+l = ["log", "-n", "20", "all()"]
+pull = ["git", "fetch"]
+# pr = pull/rebase
+pr = ["util", "exec", "--", "bash", "-c", """
 set -euo pipefail
 jj git fetch
 jj rebase -d 'trunk()'
 """, ""]
-i = ["git", "init", "--colocate"]
-l = ["log", "-n", "20", "all()"]
-pull = ["git", "fetch"]
 push = ["git", "push", "--allow-new", "--change", "@-"]
 resolvem = ["resolve", "--tool", "mergiraf"]
 r = ["rebase"]
