@@ -5,18 +5,13 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 
-# Source standard configs
-for x in "$XDG_CONFIG_HOME"/bash/*; do
-  # Ignore directories
-  if [ -f "$x" ]; then
-    source "$x"
-  fi
-done
-
-# Source system/work specific files
-if [ -d "$XDG_CONFIG_HOME/bash/local" ]; then
-  for x in "$XDG_CONFIG_HOME"/bash/local/*; do
-    [ -f "$x" ] || continue
-    source "$x"
+case $- in
+*i*)
+  shopt -s nullglob # empty globs expand to nothing
+  for file in "$XDG_CONFIG_HOME"/bash/* "$XDG_CONFIG_HOME"/bash/local/*; do
+    [ -f "$file" ] || continue
+    source "$file"
   done
-fi
+  shopt -u nullglob
+  ;;
+esac
