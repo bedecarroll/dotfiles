@@ -54,6 +54,13 @@ r = ["rebase"]
 si = ["squash", "--interactive"]
 s = ["squash"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+# tup = tug/up
+tup = ["util", "exec", "--", "bash", "-c", """
+set -euo pipefail
+jj tug
+jj up
+""", ""]
+up = ["git", "push", "-r", "@-"]
 
 [[--scope]]
 --when.commands = ["status", "log"]
