@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
-if [[ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
-  source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+if command -v brew >/dev/null 2>&1; then
+  BREW_PREFIX="${HOMEBREW_PREFIX:-$(brew --prefix)}"
+  if [[ -r "$BREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
+    source "$BREW_PREFIX/etc/profile.d/bash_completion.sh"
+  fi
 fi
