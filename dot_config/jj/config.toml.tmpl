@@ -10,10 +10,8 @@ fsmonitor = "watchman"
 [ui]
 show-cryptographic-signatures = true
 default-command = ["status", "--no-pager"]
-diff-editor = ":builtin"
-{{ if lookPath "delta" }}
-pager = "delta"
-diff-formatter = ":git"
+{{ if lookPath "difft" }}
+diff-formatter = ["difft", "--color=always", "$left", "$right"]
 {{ end }}
 
 # Following settings from:
