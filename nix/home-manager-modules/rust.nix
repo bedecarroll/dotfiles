@@ -25,6 +25,7 @@ in
       mdbook
       rustc
       rustup
+      sccache
     ];
   };
 }
