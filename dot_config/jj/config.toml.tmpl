@@ -9,7 +9,7 @@ fsmonitor = "watchman"
 {{ end }}
 [ui]
 show-cryptographic-signatures = true
-default-command = ["status", "--no-pager"]
+default-command = ["log"]
 {{ if lookPath "difft" }}
 diff-formatter = ["difft", "--color=always", "$left", "$right"]
 {{ end }}
@@ -25,8 +25,11 @@ diff-formatter = ["difft", "--color=always", "$left", "$right"]
 push-new-bookmarks = true
 write-change-id-header = true
 
+[templates]
+log = "builtin_log_compact ++ if(!description && !empty, diff.summary())"
+
 [template-aliases]
-'format_short_change_id(id)' = 'id.shortest()'
+"format_short_change_id(id)" = "id.shortest()"
 
 [aliases]
 alias = ["config", "list", "aliases"]
