@@ -5,3 +5,6 @@ behavior = "own"
 backend = "ssh"
 key = "~/.ssh/id_ed25519_sk.pub"
 backends.ssh.allowed-signers = "~/.config/git/allowed_signers"
+
+[git]
+sign-on-push = true

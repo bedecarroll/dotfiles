@@ -8,7 +8,6 @@ email = {{ .github_email | quote }}
 fsmonitor = "watchman"
 {{ end }}
 [ui]
-show-cryptographic-signatures = true
 default-command = ["log"]
 {{ if lookPath "difft" }}
 diff-formatter = ["difft", "--color=always", "$left", "$right"]
