@@ -4,24 +4,22 @@
 # Prints are normal and we aren't sending user input to .run()
 # ruff: noqa: T201,S603
 
-from __future__ import annotations
-
 import argparse
 import os
 import re
 import subprocess
 import sys
 import time
-from enum import StrEnum, auto
+from enum import Enum
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 
-class FinishCommands(StrEnum):
+class FinishCommands(Enum):
     """Supported commands to send output to."""
 
-    GIST = auto()
-    TEE = auto()
+    GIST = "gist"
+    TEE = "tee"
 
 
 FINISH_COMMAND = FinishCommands.TEE
@@ -29,30 +27,23 @@ PROMPT_RE = re.compile(r"^\[\d+\]\[\d+\].*\s\S+@\S+\$\s")
 MAX_SCROLLBACK = -10_000_000
 
 
-Command = str
-Output = list[str]
-CommandOutput = list[Output]
-FilteredCommandOutput = CommandOutput
-
-
-def _gen_finishing_command(what_command: FinishCommands) -> list[str]:
+def _gen_finishing_command(what_command):
     """Shell command(s) that handle the output."""
-    match what_command:
-        case FinishCommands.GIST:
-            return [
-                "gh",
-                "gist",
-                "create",
-            ]
-        case FinishCommands.TEE:
-            dt = time.strftime("%Y%m%d-%H%M%S")
-            return [
-                "tee",
-                str(Path(f"~/paste_{dt}.txt").expanduser()),
-            ]
+    if what_command == FinishCommands.GIST:
+        return [
+            "gh",
+            "gist",
+            "create",
+        ]
+    elif what_command == FinishCommands.TEE:
+        dt = time.strftime("%Y%m%d-%H%M%S")
+        return [
+            "tee",
+            str(Path("~/paste_{}.txt".format(dt)).expanduser()),
+        ]
 
 
-def get_wezterm_pane_history() -> Output:
+def get_wezterm_pane_history():
     """Get wezterm buffer and split it into lines."""
     pane_scrollback = subprocess.run(
         [
@@ -71,7 +62,7 @@ def get_wezterm_pane_history() -> Output:
     return pane_scrollback.stdout.splitlines()
 
 
-def get_tmux_pane_history() -> Output:
+def get_tmux_pane_history():
     """Get tmux buffer and split it into lines."""
     pane_scrollback = subprocess.run(
         [
@@ -90,11 +81,11 @@ def get_tmux_pane_history() -> Output:
     return pane_scrollback.stdout.splitlines()
 
 
-def split_tmux_history(scrollback: Output) -> CommandOutput:
+def split_tmux_history(scrollback):
     """Take a pane history and split based on the prompt regex."""
     # Not a defaultdict so that we can get duplicate commands
-    command_and_ouput: list[list[str]] = []
-    output: list[str] = []
+    command_and_ouput = []
+    output = []
     for line in scrollback:
         if PROMPT_RE.match(line) and output:
             # NOTE: Skip when there is no output
@@ -109,18 +100,18 @@ def split_tmux_history(scrollback: Output) -> CommandOutput:
     return command_and_ouput
 
 
-def get_wanted_output(command_and_ouput: CommandOutput) -> FilteredCommandOutput:
+def get_wanted_output(command_and_ouput):
     """Use FZF to find out which outputs the user wants."""
-    fuzzy_search_lines: list[Command] = []
+    fuzzy_search_lines = []
     with TemporaryDirectory() as td:
         # Index is the filename and what number to select
         for index, output in enumerate(command_and_ouput):
             # This is the line with the command you ran, e.g. $ ls
-            prompt_command: Command = output[0]
+            prompt_command = output[0]
             # Generate what FZF is going to allow you to select from
-            fuzzy_search_lines.append(f"{index}\t{prompt_command}")
+            fuzzy_search_lines.append("{}\t{}".format(index, prompt_command))
             # Generate the temp files
-            with (td / Path(str(index))).open("w") as cf:
+            with open(os.path.join(td, str(index)), "w") as cf:
                 cf.write("\n".join(output))
 
         selected_output = subprocess.run(
@@ -130,7 +121,7 @@ def get_wanted_output(command_and_ouput: CommandOutput) -> FilteredCommandOutput
                 "--tac",  # reverse order so it matches history
                 "--multi",  # allow multi select
                 "+s",  # disable sorting
-                f"--preview=cat {td}/{{1}}",
+                "--preview=cat {}/{{1}}".format(td),
             ],
             # Send the commands and filenames to fuzzy find on
             input="\n".join(fuzzy_search_lines),
@@ -149,14 +140,12 @@ def get_wanted_output(command_and_ouput: CommandOutput) -> FilteredCommandOutput
         return filtered_command_and_output
 
 
-def generate_output(
-    filtered_command_and_output: FilteredCommandOutput, destination: FinishCommands
-) -> None:
+def generate_output(filtered_command_and_output, destination):
     """Take the output we want and do 'something' with it."""
     output_strings = []
     for selected_output in filtered_command_and_output:
-        command: Command = selected_output[0]
-        print(f'Pasting output of "{command}"')
+        command = selected_output[0]
+        print('Pasting output of "{}"'.format(command))
         output_strings.append("\n".join(selected_output))
     final_output = "\n".join(output_strings)
     subprocess.run(
@@ -168,18 +157,33 @@ def generate_output(
     )
 
 
-def main() -> None:
+def _parse_destination(dest_str):
+    """Parse destination string to FinishCommands enum."""
+    if dest_str == "gist":
+        return FinishCommands.GIST
+    elif dest_str == "tee":
+        return FinishCommands.TEE
+    else:
+        raise argparse.ArgumentTypeError("destination must be 'gist' or 'tee'")
+
+
+def main():
     """Entrypoint."""
-    possible_destinations = ", ".join(f"{x.value}" for x in FinishCommands)
+    possible_destinations = ", ".join(x.value for x in FinishCommands)
     parser = argparse.ArgumentParser(description="Get selected text from scrollback.")
     parser.add_argument(
         "output_destination",
-        type=FinishCommands,
+        type=_parse_destination,
         nargs="?",
-        default=FinishCommands.TEE,
-        help=f"Possible destinations: {possible_destinations}. Default is tee, a file in your homedir.",
+        help="Possible destinations: {}. Default is tee, a file in your homedir.".format(possible_destinations),
     )
     args = parser.parse_args()
+
+    # Determine destination: CLI arg takes precedence over env var
+    destination = args.output_destination
+    if destination is None:
+        env_dest = os.environ.get("PASTE_DEST", "tee").lower()
+        destination = _parse_destination(env_dest)
 
     if "TMUX" in os.environ:
         scrollback = get_tmux_pane_history()
@@ -187,7 +191,7 @@ def main() -> None:
         scrollback = get_wezterm_pane_history()
     split_scrollback = split_tmux_history(scrollback)
     filtered_output = get_wanted_output(split_scrollback)
-    generate_output(filtered_output, args.output_destination)
+    generate_output(filtered_output, destination)
 
 
 if __name__ == "__main__":
