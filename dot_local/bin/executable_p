@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Generate pastable file from TMUX output."""
 
-# Prints are normal and we aren't sending user input to .run()
-# ruff: noqa: T201,S603
+# Disable and lower linting because we target py38
+# ruff: noqa: PGH004
+# ruff: noqa
+# pyright: basic
 
 import argparse
 import os
@@ -20,6 +22,7 @@ class FinishCommands(Enum):
 
     GIST = "gist"
     TEE = "tee"
+    STDOUT = "stdout"
 
 
 FINISH_COMMAND = FinishCommands.TEE
@@ -34,6 +37,7 @@ def _gen_finishing_command(what_command):
             "gh",
             "gist",
             "create",
+            "--web",
         ]
     elif what_command == FinishCommands.TEE:
         dt = time.strftime("%Y%m%d-%H%M%S")
@@ -45,67 +49,79 @@ def _gen_finishing_command(what_command):
 
 def get_wezterm_pane_history():
     """Get wezterm buffer and split it into lines."""
-    pane_scrollback = subprocess.run(
-        [
-            "/usr/bin/env",
-            "wezterm",
-            "cli",
-            "get-text",
-            "--start-line",
-            str(MAX_SCROLLBACK),
-        ],
-        stdout=subprocess.PIPE,
-        check=True,
-        encoding="utf-8",
-    )
-
-    return pane_scrollback.stdout.splitlines()
+    try:
+        pane_scrollback = subprocess.run(
+            [
+                "/usr/bin/env",
+                "wezterm",
+                "cli",
+                "get-text",
+                "--start-line",
+                str(MAX_SCROLLBACK),
+            ],
+            stdout=subprocess.PIPE,
+            check=True,
+            encoding="utf-8",
+        )
+        return pane_scrollback.stdout.splitlines()
+    except subprocess.CalledProcessError as e:
+        print("Error running wezterm: {}".format(e), file=sys.stderr)
+        sys.exit(1)
+    except FileNotFoundError:
+        print("wezterm not found. Install wezterm or use tmux.", file=sys.stderr)
+        sys.exit(2)
 
 
 def get_tmux_pane_history():
     """Get tmux buffer and split it into lines."""
-    pane_scrollback = subprocess.run(
-        [
-            "/usr/bin/env",
-            "tmux",
-            "capture-pane",
-            "-p",  # output to stdout
-            "-S",
-            "-",  # means -S will go to the start of the pane history
-        ],
-        stdout=subprocess.PIPE,
-        check=True,
-        encoding="utf-8",
-    )
-
-    return pane_scrollback.stdout.splitlines()
+    try:
+        pane_scrollback = subprocess.run(
+            [
+                "/usr/bin/env",
+                "tmux",
+                "capture-pane",
+                "-p",  # output to stdout
+                "-S",
+                "-",  # means -S will go to the start of the pane history
+            ],
+            stdout=subprocess.PIPE,
+            check=True,
+            encoding="utf-8",
+        )
+        return pane_scrollback.stdout.splitlines()
+    except subprocess.CalledProcessError as e:
+        print("Error running tmux: {}".format(e), file=sys.stderr)
+        sys.exit(3)
+    except FileNotFoundError:
+        print("tmux not found. Install tmux or use wezterm.", file=sys.stderr)
+        sys.exit(4)
 
 
 def split_tmux_history(scrollback):
     """Take a pane history and split based on the prompt regex."""
     # Not a defaultdict so that we can get duplicate commands
-    command_and_ouput = []
+    command_and_output = []
     output = []
     for line in scrollback:
         if PROMPT_RE.match(line) and output:
             # NOTE: Skip when there is no output
             if len(output) > 1:
-                command_and_ouput.append(output)
+                command_and_output.append(output)
             output = []
-        output.append(line)
+        output.append(line.rstrip(" \t"))
 
-    if not command_and_ouput:
+    if not command_and_output:
         print("No command prompts found. Check regex.", file=sys.stderr)
-        sys.exit(50)
-    return command_and_ouput
+        sys.exit(10)
+    return command_and_output
 
 
-def get_wanted_output(command_and_ouput):
+def get_wanted_output(command_and_output):
     """Use FZF to find out which outputs the user wants."""
     fuzzy_search_lines = []
     with TemporaryDirectory() as td:
         # Index is the filename and what number to select
-        for index, output in enumerate(command_and_ouput):
+        for index, output in enumerate(command_and_output):
             # This is the line with the command you ran, e.g. $ ls
             prompt_command = output[0]
             # Generate what FZF is going to allow you to select from
@@ -114,21 +130,26 @@ def get_wanted_output(command_and_ouput):
             with open(os.path.join(td, str(index)), "w") as cf:
                 cf.write("\n".join(output))
 
-        selected_output = subprocess.run(
-            [
-                "/usr/bin/env",
-                "fzf",
-                "--tac",  # reverse order so it matches history
-                "--multi",  # allow multi select
-                "+s",  # disable sorting
-                "--preview=cat {}/{{1}}".format(td),
-            ],
-            # Send the commands and filenames to fuzzy find on
-            input="\n".join(fuzzy_search_lines),
-            check=False,  # Failure means we wanted nothing
-            capture_output=True,
-            encoding="utf-8",
-        )
+        try:
+            selected_output = subprocess.run(
+                [
+                    "/usr/bin/env",
+                    "fzf",
+                    "--tac",  # reverse order so it matches history
+                    "--multi",  # allow multi select
+                    "+s",  # disable sorting
+                    "--preview=cat {}/{{1}}".format(td),
+                ],
+                # Send the commands and filenames to fuzzy find on
+                input="\n".join(fuzzy_search_lines),
+                check=False,  # Failure means we wanted nothing
+                capture_output=True,
+                encoding="utf-8",
+            )
+        except FileNotFoundError:
+            print("fzf not found. Install fzf to use this tool.", file=sys.stderr)
+            sys.exit(5)
+
         # We wanted nothing, exit
         if selected_output.returncode != 0:
             sys.exit(0)
@@ -136,7 +157,7 @@ def get_wanted_output(command_and_ouput):
         filtered_command_and_output = []
         for line in selected_output.stdout.splitlines():
             index = int(line.split("\t")[0])
-            filtered_command_and_output.append(command_and_ouput[index])
+            filtered_command_and_output.append(command_and_output[index])
         return filtered_command_and_output
 
 
@@ -145,16 +166,22 @@ def generate_output(filtered_command_and_output, destination):
     output_strings = []
     for selected_output in filtered_command_and_output:
         command = selected_output[0]
-        print('Pasting output of "{}"'.format(command))
+        if destination != FinishCommands.STDOUT:
+            print('Pasting output of "{}"'.format(command))
         output_strings.append("\n".join(selected_output))
     final_output = "\n".join(output_strings)
-    subprocess.run(
-        _gen_finishing_command(destination),
-        input=final_output,
-        check=False,
-        encoding="utf-8",
-        stdout=subprocess.DEVNULL,
-    )
+
+    finishing_command = _gen_finishing_command(destination)
+    if finishing_command is None:
+        print(final_output)
+    else:
+        subprocess.run(
+            finishing_command,
+            input=final_output,
+            check=False,
+            encoding="utf-8",
+            stdout=subprocess.DEVNULL,
+        )
 
 
 def _parse_destination(dest_str):
@@ -163,8 +190,12 @@ def _parse_destination(dest_str):
         return FinishCommands.GIST
     elif dest_str == "tee":
         return FinishCommands.TEE
+    elif dest_str == "stdout":
+        return FinishCommands.STDOUT
     else:
-        raise argparse.ArgumentTypeError("destination must be 'gist' or 'tee'")
+        raise argparse.ArgumentTypeError(
+            "destination must be 'gist', 'tee', or 'stdout'"
+        )
 
 
 def main():
@@ -175,7 +206,9 @@ def main():
         "output_destination",
         type=_parse_destination,
         nargs="?",
-        help="Possible destinations: {}. Default is tee, a file in your homedir.".format(possible_destinations),
+        help="Possible destinations: {}. Default is tee, a file in your homedir.".format(
+            possible_destinations
+        ),
     )
     args = parser.parse_args()
 
