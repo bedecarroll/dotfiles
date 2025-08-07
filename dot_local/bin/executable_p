@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate pastable file from TMUX output."""
+"""Generate pastable file from TMUX/WezTerm output."""
 
 # Disable and lower linting because we target py38
 # ruff: noqa: PGH004
@@ -9,6 +9,7 @@
 import argparse
 import os
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -25,7 +26,6 @@ class FinishCommands(Enum):
     STDOUT = "stdout"
 
 
-FINISH_COMMAND = FinishCommands.TEE
 PROMPT_RE = re.compile(r"^\[\d+\]\[\d+\].*\s\S+@\S+\$\s")
 MAX_SCROLLBACK = -10_000_000
 
@@ -37,14 +37,15 @@ def _gen_finishing_command(what_command):
             "gh",
             "gist",
             "create",
-            "--web",
-        ]
+        ], None
     elif what_command == FinishCommands.TEE:
         dt = time.strftime("%Y%m%d-%H%M%S")
+        tee_path = str(Path("~/paste_{}.txt".format(dt)).expanduser())
         return [
             "tee",
-            str(Path("~/paste_{}.txt".format(dt)).expanduser()),
-        ]
+            str(tee_path),
+        ], str(tee_path)
+    return None, None
 
 
 def get_wezterm_pane_history():
@@ -59,7 +60,7 @@ def get_wezterm_pane_history():
                 "--start-line",
                 str(MAX_SCROLLBACK),
             ],
-            stdout=subprocess.PIPE,
+            capture_output=True,
             check=True,
             encoding="utf-8",
         )
@@ -84,7 +85,7 @@ def get_tmux_pane_history():
                 "-S",
                 "-",  # means -S will go to the start of the pane history
             ],
-            stdout=subprocess.PIPE,
+            capture_output=True,
             check=True,
             encoding="utf-8",
         )
@@ -97,7 +98,7 @@ def get_tmux_pane_history():
         sys.exit(4)
 
 
-def split_tmux_history(scrollback):
+def split_output(scrollback):
     """Take a pane history and split based on the prompt regex."""
     # Not a defaultdict so that we can get duplicate commands
     command_and_output = []
@@ -138,7 +139,7 @@ def get_wanted_output(command_and_output):
                     "--tac",  # reverse order so it matches history
                     "--multi",  # allow multi select
                     "+s",  # disable sorting
-                    "--preview=cat {}/{{1}}".format(td),
+                    "--preview=cat {}/{{1}}".format(shlex.quote(td)),
                 ],
                 # Send the commands and filenames to fuzzy find on
                 input="\n".join(fuzzy_search_lines),
@@ -167,14 +168,15 @@ def generate_output(filtered_command_and_output, destination):
     for selected_output in filtered_command_and_output:
         command = selected_output[0]
         if destination != FinishCommands.STDOUT:
-            print('Pasting output of "{}"'.format(command))
+            print('Pasting output of "{}"'.format(command), file=sys.stderr)
         output_strings.append("\n".join(selected_output))
     final_output = "\n".join(output_strings)
 
-    finishing_command = _gen_finishing_command(destination)
+    finishing_command, tee_path = _gen_finishing_command(destination)
     if finishing_command is None:
         print(final_output)
-    else:
+        return
+    try:
         subprocess.run(
             finishing_command,
             input=final_output,
@@ -182,15 +184,33 @@ def generate_output(filtered_command_and_output, destination):
             encoding="utf-8",
             stdout=subprocess.DEVNULL,
         )
+    except FileNotFoundError as e:
+        print("Required command not found: {}".format(e), file=sys.stderr)
+        sys.exit(6)
+
+    if destination == FinishCommands.GIST:
+        try:
+            gist_url = subprocess.run(
+                ["gh", "api", "gists", "-q", ".[0] | .html_url"],
+                capture_output=True,
+                check=True,
+                encoding="utf-8",
+            )
+            print(gist_url.stdout.strip())
+        except subprocess.CalledProcessError as e:
+            print("Error getting gist URL: {}".format(e), file=sys.stderr)
+    elif destination == FinishCommands.TEE and tee_path:
+        print(tee_path)
 
 
 def _parse_destination(dest_str):
     """Parse destination string to FinishCommands enum."""
-    if dest_str == "gist":
+    dest = dest_str.lower()
+    if dest == "gist":
         return FinishCommands.GIST
-    elif dest_str == "tee":
+    elif dest == "tee":
         return FinishCommands.TEE
-    elif dest_str == "stdout":
+    elif dest == "stdout":
         return FinishCommands.STDOUT
     else:
         raise argparse.ArgumentTypeError(
@@ -216,13 +236,20 @@ def main():
     destination = args.output_destination
     if destination is None:
         env_dest = os.environ.get("PASTE_DEST", "tee").lower()
-        destination = _parse_destination(env_dest)
+        try:
+            destination = _parse_destination(env_dest)
+        except argparse.ArgumentTypeError:
+            print(
+                "Invalid PASTE_DEST ({}); defaulting to 'tee'.".format(env_dest),
+                file=sys.stderr,
+            )
+            destination = FinishCommands.TEE
 
     if "TMUX" in os.environ:
         scrollback = get_tmux_pane_history()
     else:
         scrollback = get_wezterm_pane_history()
-    split_scrollback = split_tmux_history(scrollback)
+    split_scrollback = split_output(scrollback)
     filtered_output = get_wanted_output(split_scrollback)
     generate_output(filtered_output, destination)
 
