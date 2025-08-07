@@ -4,8 +4,8 @@
 name = "Bede Carroll"
 email = {{ .github_email | quote }}
 {{ if lookPath "watchman" }}
-[core]
-fsmonitor = "watchman"
+[fsmonitor]
+backend = "watchman"
 {{ end }}
 [ui]
 default-command = ["log"]
