@@ -14,3 +14,5 @@ alias printfuncs="declare -f | sed '/^_.* \(\)$/,/^}/d'"
 
 # type does aliases
 alias which='type'
+
+alias chmox='chmod +x'
