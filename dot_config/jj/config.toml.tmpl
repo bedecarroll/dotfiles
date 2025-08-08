@@ -6,12 +6,13 @@ email = {{ .github_email | quote }}
 {{ if lookPath "watchman" }}
 [fsmonitor]
 backend = "watchman"
+watchman.register-snapshot-trigger = true
 {{ end }}
 [ui]
 default-command = ["log"]
-{{ if lookPath "difft" }}
+{{- if lookPath "difft" }}
 diff-formatter = ["difft", "--color=always", "$left", "$right"]
-{{ end }}
+{{ end -}}
 
 # Following settings from:
 # https://zerowidth.com/2025/jj-tips-and-tricks/
