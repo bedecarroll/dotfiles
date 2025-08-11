@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export PATH="$HOME/.local/bin/llm_bin:$PATH"
+
+CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude --dangerously-skip-permissions
