@@ -28,6 +28,12 @@
   video.enable = true;
   vpn.enable = true;
 
+  # Disable all touchscreens system-wide via libinput
+  # This udev rule sets LIBINPUT_IGNORE_DEVICE for touchscreen-class devices
+  services.udev.extraRules = ''
+    ACTION=="add|change", ENV{ID_INPUT_TOUCHSCREEN}=="1", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+  '';
+
   # https://discourse.nixos.org/t/full-disk-encryption-tpm2/29454
   # After setting up the disks we can get the TPM to unlock the disk
   # sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0 /dev/nvme0n1p2
