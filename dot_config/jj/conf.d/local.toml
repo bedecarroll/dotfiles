@@ -1,7 +1,7 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
 [signing]
-behavior = "own"
+behavior = "drop"
 backend = "ssh"
 key = "~/.ssh/id_ed25519_sk.pub"
 backends.ssh.allowed-signers = "~/.config/git/allowed_signers"
