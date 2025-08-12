@@ -16,12 +16,14 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      (lib.hiPrio clang)
       cargo-audit
       cargo-binutils
       cargo-flamegraph
       cargo-llvm-cov
       cargo-nextest
       cargo-tarpaulin
+      lld
       mdbook
       rustc
       rustup
