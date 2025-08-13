@@ -3,4 +3,5 @@ echo "[blocked] git is disabled in this environment." 1>&2
 echo "Do not commit. If you need to get repo status use jj (Jujutsu)." 1>&2
 echo "- Active changes: jj show" 1>&2
 echo "- List changed files: jj diff --name-only" 1>&2
+echo "- Fully list of commands and options available with --help" 1>&2
 exit 1

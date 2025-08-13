@@ -3,4 +3,5 @@ echo "[blocked] grep is disabled in this environment." 1>&2
 echo "Use ripgrep (rg) or ast-grep instead." 1>&2
 echo "- rg: fast recursive text search. Example: rg -n \"pattern\" PATH/" 1>&2
 echo "- ast-grep: structural code search (AST). Example: ast-grep -p \"pattern\" -l PATH/" 1>&2
+echo "- Fully list of commands and options available with --help for ast-grep and rg" 1>&2
 exit 1
