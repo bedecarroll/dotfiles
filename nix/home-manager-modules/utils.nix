@@ -31,6 +31,7 @@ in
       sqlite-utils
       tree
       unzip
+      (lib.hiPrio uutils-coreutils-noprefix)
     ];
   };
 }
