@@ -9,4 +9,4 @@ mapfile -t files < <(
 # Skip if no files
 ((${#files[@]} == 0)) && exit 0
 
-GITHUB_TOKEN=$(gh auth token) pre-commit run --files "${files[@]}"
+GITHUB_TOKEN="$(gh auth token)" pre-commit run --files "${files[@]}"
