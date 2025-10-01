@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Get all changes between @ and trunk()
+files=$(
+  jj diff -r '(latest(children(fork_point(@ | trunk())) & first_ancestors(@)))::@' --name-only
+)
+
+GITHUB_TOKEN=$(gh auth token) pre-commit run --files "$files"
