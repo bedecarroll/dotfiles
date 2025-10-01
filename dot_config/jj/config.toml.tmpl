@@ -13,13 +13,19 @@ default-command = ["log"]
 {{- if lookPath "difft" }}
 diff-formatter = ["difft", "--color=always", "$left", "$right"]
 {{ end -}}
-
 # Following settings from:
 # https://zerowidth.com/2025/jj-tips-and-tricks/
 [revset-aliases]
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 # set all remote bookmarks (commits pushed to remote branches) to be immutable
 'immutable_heads()' = "builtin_immutable_heads() | remote_bookmarks()"
+'unmerged_mine()' = 'mine() ~ ::trunk() ~ empty()'
+# tail + tip of a set
+'ends(x)' = 'roots(x) | heads(x)'
+# any commit in the set that carries a local bookmark
+'with_bookmarks(x)' = 'x & bookmarks()'
+# final set used by `open`
+'open_set()' = 'ends(unmerged_mine()) | with_bookmarks(unmerged_mine())'
 
 [git]
 push-new-bookmarks = true
@@ -44,6 +50,8 @@ jj git push
 """, ""]
 i = ["git", "init", "--colocate"]
 l = ["log", "-n", "20", "all()"]
+nt = ["new", "trunk()"]
+open = ["log", "-r", "open_set()"]
 pull = ["git", "fetch"]
 # pr = pull/rebase
 pr = ["util", "exec", "--", "bash", "-c", """
