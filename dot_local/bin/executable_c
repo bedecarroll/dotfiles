@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# Ensure our overrides take precedence
-export PATH="$HOME/.local/bin/llm_bin:$PATH"
-
-OPENAI_API_KEY="" codex --dangerously-bypass-approvals-and-sandbox
