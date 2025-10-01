@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+cat <<'MSG'
+You are in a tmux environment configured with 0-based indexing for both windows and panes. Please follow the guidance below so activity remains visible to the user:
+- Run commands through tmux panes so the user can observe what is happening.
+- Check pane assignments with: tmux list-panes -t <session>:0 -F '#{pane_index} #{pane_id} #{pane_current_command}'
+- Pane 0 (left) is reserved for the user. Do not send commands there.
+- Pane 1 (top right) is the primary pane for your commands.
+- Pane 2 (bottom right) can be used for secondary or parallel work.
+- Send commands with: tmux send-keys -t <session>:0.<pane-index> "<command>" C-m
+- For paginated CLIs (e.g., network devices) disable paging first ("set cli pager off" or similar) before collecting output.
+- After running a long command, pause for about a second before capturing output to avoid truncation.
+- Capture output with: tmux capture-pane -pt <session>:0.<pane-index> -S -200
+- Keep commands concise and summarize the important results for the user.
+MSG

@@ -1,0 +1,434 @@
+#!/usr/bin/env bash
+
+# Codex helper wrapper
+
+run_codex_passthrough() {
+  exec codex --dangerously-bypass-approvals-and-sandbox "$@"
+}
+
+TROUBLESHOOTING_PROMPT="Please run and read the output of env_help"
+
+special_sessions=(
+  "New session|run_new_session|Start a fresh Codex session."
+  "Launch troubleshooting session|launch_troubleshooting_session|Open a tmux layout with Codex running in the left pane."
+)
+
+format_rollout_label() {
+  local session_file=$1
+
+  if [[ $session_file == rollout-* ]]; then
+    local trimmed=${session_file#rollout-}
+    trimmed=${trimmed%.jsonl}
+
+    if [[ $trimmed == *T* ]]; then
+      local date_part=${trimmed%%T*}
+      local rest_part=${trimmed#*T}
+      IFS='-' read -r hour_part minute_part second_part uuid_rest <<<"$rest_part"
+
+      if [[ -n $hour_part && -n $minute_part && -n $second_part && -n $uuid_rest ]]; then
+        local time_part
+        time_part=$(printf '%s:%s:%s' "$hour_part" "$minute_part" "$second_part")
+        printf '%s %s - %s' "$date_part" "$time_part" "$uuid_rest"
+        return
+      fi
+    fi
+  fi
+
+  printf '%s' "$session_file"
+}
+
+session_has_user_message() {
+  local path=$1
+  jq -e '
+    def from_payload($payload):
+      if ($payload.content? // []) | length > 0 then
+        $payload.content | map(.text // "") | join(" ")
+      else
+        $payload.message // ""
+      end;
+
+    def entry_text($entry):
+      if ($entry.payload? // null) != null then
+        from_payload($entry.payload)
+      elif ($entry.content? // []) | length > 0 then
+        $entry.content | map(.text // "") | join(" ")
+      else
+        $entry.message // ""
+      end;
+
+    def clean_text($text):
+      ($text // "")
+      | sub("^\\s+"; "")
+      | sub("\\s+$"; "");
+
+    def is_real($text):
+      clean_text($text) as $clean
+      | ($clean != "")
+        and ($clean | startswith("<user_instructions>") | not)
+        and ($clean | startswith("</user_instructions>") | not)
+        and ($clean | startswith("<environment_context>") | not);
+
+    select(
+      (.type == "event_msg"
+        and (.payload.type // "") == "user_message"
+        and is_real(entry_text(.)))
+      or (.type == "response_item"
+        and (.payload.role // "") == "user"
+        and is_real(entry_text(.)))
+      or (.type == "message"
+        and (.role // "") == "user"
+        and is_real(entry_text(.)))
+    )
+  ' "$path" >/dev/null 2>&1
+}
+
+gather_session_entries() {
+  session_entries=()
+
+  local dirs=()
+  local dir
+  for dir in "$@"; do
+    if [[ -d $dir ]]; then
+      dirs+=("$dir")
+    fi
+  done
+
+  if [[ ${#dirs[@]} -eq 0 ]]; then
+    return
+  fi
+
+  local path
+  if command -v rg >/dev/null 2>&1; then
+    local -a rg_args
+    rg_args=(
+      --files-with-matches
+      --max-count 1
+      --no-messages
+      --glob '*.jsonl'
+      --pcre2
+      -e '"type":"event_msg","payload":\{"type":"user_message","message":"(?!<user_instructions>|</user_instructions>|<environment_context>)'
+      -e '"type":"message"[^\n]*"role":"user"[^\n]*"text":"(?!<user_instructions>|</user_instructions>|<environment_context>)'
+      -e '"type":"response_item"[^\n]*"role":"user"[^\n]*"text":"(?!<user_instructions>|</user_instructions>|<environment_context>)'
+      -e '"type":"response_item"[^\n]*"role":"user"[^\n]*"message":"(?!<user_instructions>|</user_instructions>|<environment_context>)'
+    )
+
+    while IFS= read -r path; do
+      local session_file=${path##*/}
+      local display_label
+      display_label=$(format_rollout_label "$session_file")
+      session_entries+=("$(printf '%s\t%s' "$display_label" "$path")")
+    done < <(rg "${rg_args[@]}" "${dirs[@]}" 2>/dev/null | sort -r)
+  else
+    while IFS= read -r path; do
+      if ! session_has_user_message "$path"; then
+        continue
+      fi
+
+      local session_file=${path##*/}
+      local display_label
+      display_label=$(format_rollout_label "$session_file")
+      session_entries+=("$(printf '%s\t%s' "$display_label" "$path")")
+    done < <(find "${dirs[@]}" -type f -name '*.jsonl' -print 2>/dev/null | sort -r)
+  fi
+}
+
+build_preview_script() {
+  local script
+  script=$(mktemp)
+
+  cat <<'EOFP' >"$script"
+#!/usr/bin/env bash
+display=${DISPLAY_LABEL-}
+path=${SESSION_PATH-}
+
+if [[ -z ${display-} || -z ${path-} ]]; then
+  record=${RECORD-}
+  if [[ -z $record ]]; then
+    IFS= read -r record || record=""
+  fi
+
+  if [[ -n $record ]]; then
+    IFS=$'\t' read -r display path <<< "$record"
+  fi
+fi
+
+if [[ -z $path && -n ${SPECIAL_PREVIEW_DATA-} ]]; then
+  while IFS='|' read -r special_label special_description; do
+    if [[ $display == "$special_label" ]]; then
+      printf '%s\n' "$special_description"
+      exit 0
+    fi
+  done <<<"$SPECIAL_PREVIEW_DATA"
+fi
+
+if [[ -z $path ]]; then
+  printf '%s\n' "Session file not found."
+  exit 0
+fi
+
+if [[ ! -f $path ]]; then
+  printf '%s\n' "Session file not found."
+  exit 0
+fi
+
+jq -r -s '
+  def from_payload($payload):
+    if ($payload.content? // []) | length > 0 then
+      $payload.content | map(.text // "") | join(" ")
+    else
+      $payload.message // ""
+    end;
+
+  def entry_text($entry):
+    if ($entry.payload? // null) != null then
+      from_payload($entry.payload)
+    elif ($entry.content? // []) | length > 0 then
+      $entry.content | map(.text // "") | join(" ")
+    else
+      $entry.message // ""
+    end;
+
+  def clean_text($text):
+    ($text // "")
+    | sub("^\\s+"; "")
+    | sub("\\s+$"; "");
+
+  def is_real($text):
+    clean_text($text) as $clean
+    | ($clean != "")
+      and ($clean | startswith("<user_instructions>") | not)
+      and ($clean | startswith("</user_instructions>") | not)
+      and ($clean | startswith("<environment_context>") | not);
+
+  def first_real_user($items):
+    [$items[] | entry_text(.) | select(is_real(.))][0];
+
+  (first_real_user(.) // "No user message found.")
+' "$path" | fmt -w 100
+EOFP
+
+  printf '%s\n' "$script"
+}
+
+select_session() {
+  local preview_script
+  preview_script=$(build_preview_script)
+  trap '[[ -n ${preview_script:-} ]] && rm -f "$preview_script"' EXIT
+  export PREVIEW_SCRIPT="$preview_script"
+
+  local -a options=()
+  local special_preview_data=""
+  local entry label handler description
+  for entry in "${special_sessions[@]}"; do
+    IFS='|' read -r label handler description <<<"$entry"
+    options+=("$label")
+    if [[ -n $description ]]; then
+      special_preview_data+="${label}|${description}"$'\n'
+    fi
+  done
+
+  if [[ -n $special_preview_data ]]; then
+    special_preview_data=${special_preview_data%$'\n'}
+    export SPECIAL_PREVIEW_DATA="$special_preview_data"
+  else
+    unset SPECIAL_PREVIEW_DATA
+  fi
+
+  if [[ ${#session_entries[@]} -gt 0 ]]; then
+    options+=("${session_entries[@]}")
+  fi
+
+  local selection
+  # shellcheck disable=SC2016
+  if ! selection=$(printf '%s\n' "${options[@]}" | fzf --prompt 'Codex session> ' --delimiter=$'\t' --with-nth=1 --nth=1 --preview 'DISPLAY_LABEL={1} SESSION_PATH={2..} bash "$PREVIEW_SCRIPT"' --preview-window right:wrap --preview-label "Session details"); then
+    unset PREVIEW_SCRIPT
+    unset SPECIAL_PREVIEW_DATA
+    rm -f "$preview_script"
+    trap - EXIT
+    return 1
+  fi
+
+  unset PREVIEW_SCRIPT
+  unset SPECIAL_PREVIEW_DATA
+  rm -f "$preview_script"
+  trap - EXIT
+
+  if [[ -z $selection ]]; then
+    return 1
+  fi
+
+  printf '%s\n' "$selection"
+}
+
+extract_session_path() {
+  local selection=$1
+  IFS=$'\t' read -r _display path <<<"$selection"
+  printf '%s\n' "$path"
+}
+
+extract_session_uuid() {
+  local session_path=$1
+  local uuid
+  uuid=$(jq -r 'select(has("id")) | .id' "$session_path" 2>/dev/null | head -n 1)
+
+  if [[ -n $uuid && $uuid != "null" ]]; then
+    printf '%s\n' "$uuid"
+    return
+  fi
+
+  local session_file
+  session_file=$(basename "$session_path")
+  uuid="${session_file%.jsonl}"
+
+  if [[ $session_file == rollout-* ]]; then
+    local trimmed=${session_file#rollout-}
+    trimmed=${trimmed%.jsonl}
+    uuid=${trimmed##*-}
+  fi
+
+  printf '%s\n' "$uuid"
+}
+
+run_new_session() {
+  run_codex_passthrough "$@"
+}
+
+launch_tmux_codex_session() {
+  local base_name=$1
+  local prompt=$2
+
+  if ! command -v tmux >/dev/null 2>&1; then
+    printf '%s\n' "tmux not found; install tmux to launch this session." >&2
+    return 1
+  fi
+
+  local base="${base_name:-session}"
+  local session="$base"
+  local index=1
+
+  while tmux has-session -t "$session" 2>/dev/null; do
+    session="${base}${index}"
+    index=$((index + 1))
+  done
+
+  if [[ $session != "$base" ]]; then
+    printf "tmux session name '%s' already in use. Using '%s'.\n" "$base" "$session" >&2
+  fi
+
+  if ! tmux new-session -d -s "$session" -n main; then
+    return 1
+  fi
+
+  tmux set-option -t "$session" base-index 0 >/dev/null
+  tmux set-window-option -t "${session}:0" pane-base-index 0 >/dev/null
+  tmux split-window -h -t "${session}:0" >/dev/null
+
+  local panes=()
+  while IFS= read -r pane; do
+    panes+=("$pane")
+  done < <(tmux list-panes -t "${session}:0" -F '#{pane_id}')
+  local left_pane="${panes[0]}"
+  local right_top="${panes[1]:-${panes[0]}}"
+
+  if [[ -n $right_top ]]; then
+    tmux split-window -v -t "$right_top" >/dev/null
+    panes=()
+    while IFS= read -r pane; do
+      panes+=("$pane")
+    done < <(tmux list-panes -t "${session}:0" -F '#{pane_id}')
+    left_pane="${panes[0]}"
+    right_top="${panes[1]:-${panes[0]}}"
+  fi
+
+  if [[ -n $left_pane ]]; then
+    if [[ -n $prompt ]]; then
+      local command
+      printf -v command 'c --new-session "%s"' "$prompt"
+      tmux send-keys -t "$left_pane" "$command" C-m
+    else
+      tmux send-keys -t "$left_pane" "c --new-session" C-m
+    fi
+    tmux select-pane -t "$left_pane" >/dev/null 2>&1 || true
+  fi
+
+  tmux attach -t "$session"
+}
+
+launch_troubleshooting_session() {
+  launch_tmux_codex_session "troubleshooting" "$TROUBLESHOOTING_PROMPT"
+}
+
+main() {
+  if [[ $# -gt 0 ]]; then
+    case "$1" in
+    --new-session | --new)
+      shift
+      run_new_session "$@"
+      return $?
+      ;;
+    *)
+      run_codex_passthrough "$@"
+      return $?
+      ;;
+    esac
+  fi
+
+  local sessions_root="${HOME}/.codex/sessions"
+  local current_year
+  current_year=$(date +%Y)
+  local current_month
+  current_month=$(date +%m)
+
+  local previous_year previous_month previous_output
+  if previous_output=$(date -v-1m '+%Y %m' 2>/dev/null); then
+    read -r previous_year previous_month <<<"$previous_output"
+  else
+    previous_year=$(date -d 'last month' +%Y 2>/dev/null)
+    previous_month=$(date -d 'last month' +%m 2>/dev/null)
+  fi
+
+  local current_dir="${sessions_root}/${current_year}/${current_month}"
+  local previous_dir=""
+
+  if [[ -n $previous_year && -n $previous_month ]]; then
+    previous_dir="${sessions_root}/${previous_year}/${previous_month}"
+  fi
+
+  if [[ -n $previous_dir && $previous_dir != "$current_dir" ]]; then
+    gather_session_entries "$current_dir" "$previous_dir"
+  else
+    gather_session_entries "$current_dir"
+  fi
+
+  local selection
+  if ! selection=$(select_session); then
+    exit 0
+  fi
+
+  if [[ -z $selection ]]; then
+    exit 0
+  fi
+
+  local special_entry label handler
+  for special_entry in "${special_sessions[@]}"; do
+    IFS='|' read -r label handler _ <<<"$special_entry"
+    if [[ $selection == "$label" ]]; then
+      "$handler"
+      exit $?
+    fi
+  done
+
+  local session_path
+  session_path=$(extract_session_path "$selection")
+
+  if [[ -z $session_path ]]; then
+    run_codex_passthrough
+  fi
+
+  local session_uuid
+  session_uuid=$(extract_session_uuid "$session_path")
+
+  run_codex_passthrough resume "$session_uuid"
+}
+
+main "$@"
