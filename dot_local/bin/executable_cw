@@ -269,7 +269,17 @@ extract_session_path() {
 extract_session_uuid() {
   local session_path=$1
   local uuid
-  uuid=$(jq -r 'select(has("id")) | .id' "$session_path" 2>/dev/null | head -n 1)
+  uuid=$(jq -r '
+    if type == "object" then
+      if (.payload.id? | type == "string") then .payload.id
+      elif (.payload.session_id? | type == "string") then .payload.session_id
+      elif (.session.id? | type == "string") then .session.id
+      elif (.id? | type == "string") then .id
+      else empty end
+    else
+      empty
+    end
+  ' "$session_path" 2>/dev/null | head -n 1)
 
   if [[ -n $uuid && $uuid != "null" ]]; then
     printf '%s\n' "$uuid"
