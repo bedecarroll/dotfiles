@@ -28,6 +28,11 @@
   video.enable = true;
   vpn.enable = true;
 
+  services.logind = {
+    lidSwitchExternalPower = "ignore";
+    lidSwitchDocked = "ignore";
+  };
+
   # Disable all touchscreens system-wide via libinput
   # This udev rule sets LIBINPUT_IGNORE_DEVICE for touchscreen-class devices
   services.udev.extraRules = ''
