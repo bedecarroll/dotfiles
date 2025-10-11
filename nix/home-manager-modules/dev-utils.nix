@@ -30,6 +30,7 @@ in
       mergiraf
       pkgs-unstable.jujutsu
       pkgs-unstable.mise
+      pkgs-unstable.usage
       pre-commit
       sqlite-interactive
       tig
