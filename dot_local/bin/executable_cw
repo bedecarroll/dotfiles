@@ -3,7 +3,7 @@
 # Codex helper wrapper
 
 run_codex_passthrough() {
-  exec codex --dangerously-bypass-approvals-and-sandbox "$@"
+  exec codex --search --dangerously-bypass-approvals-and-sandbox "$@"
 }
 
 TROUBLESHOOTING_PROMPT="Please run and read the output of env_help"
@@ -353,10 +353,10 @@ launch_tmux_codex_session() {
   if [[ -n $left_pane ]]; then
     if [[ -n $prompt ]]; then
       local command
-      printf -v command 'c --new-session "%s"' "$prompt"
+      printf -v command 'cw --new-session "%s"' "$prompt"
       tmux send-keys -t "$left_pane" "$command" C-m
     else
-      tmux send-keys -t "$left_pane" "c --new-session" C-m
+      tmux send-keys -t "$left_pane" "cw --new-session" C-m
     fi
     tmux select-pane -t "$left_pane" >/dev/null 2>&1 || true
   fi
