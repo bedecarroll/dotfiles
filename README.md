@@ -32,6 +32,13 @@ Now run the following command to get environment setup.
 cd && dnf install git hostname vim procps -y && sh -c "$(curl -fsLS git.io/JO2iE)"
 ```
 
+### WSL
+
+```bash
+rustup default stable
+bat cache --build
+```
+
 ## Configs
 
 ### Bash
