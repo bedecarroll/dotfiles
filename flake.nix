@@ -104,6 +104,18 @@
             ./nix/system-configs/liberty/home.nix
           ];
         };
+        "bc@newton" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [
+            ./nix/system-configs/liberty/home.nix
+          ];
+        };
       };
       packages.${system} = {
         wallpapers = pkgs.callPackage ./nix/wallpapers/default.nix { };
