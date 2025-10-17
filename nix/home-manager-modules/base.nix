@@ -18,6 +18,7 @@ in
     home.packages = with pkgs; [
       atuin
       bash
+      bash-completion
       bash-preexec
       bat
       delta
