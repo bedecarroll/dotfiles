@@ -31,7 +31,8 @@ in
       sqlite-utils
       tree
       unzip
-      (lib.hiPrio uutils-coreutils-noprefix)
+      # Annoying stty bug, disable
+      # (lib.hiPrio uutils-coreutils-noprefix)
     ];
   };
 }
