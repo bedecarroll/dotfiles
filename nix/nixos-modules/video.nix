@@ -16,7 +16,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      glxinfo
+      mesa-demos
       libva-utils
       vdpauinfo
     ];

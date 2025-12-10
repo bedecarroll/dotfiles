@@ -17,7 +17,7 @@ in
       # Waybar etc fonts
       noto-fonts
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       liberation_ttf
       nerd-fonts.jetbrains-mono
       roboto-mono

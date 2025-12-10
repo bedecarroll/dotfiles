@@ -28,9 +28,11 @@
   video.enable = true;
   vpn.enable = true;
 
-  services.logind = {
-    lidSwitchExternalPower = "ignore";
-    lidSwitchDocked = "ignore";
+  services.logind.settings = {
+    Login = {
+      HandleLidSwitchExternalPower = "ignore";
+      HandleLidSwitchDocked = "ignore";
+    };
   };
 
   # Disable all touchscreens system-wide via libinput

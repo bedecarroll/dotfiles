@@ -26,7 +26,7 @@ in
       moreutils
       neofetch
       pdfgrep
-      poppler_utils
+      poppler-utils
       procs # ps replacement
       sqlite-utils
       tree
