@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable ? pkgs,
   lib,
   config,
   ...
@@ -7,16 +8,18 @@
 with lib;
 let
   cfg = config.hyprland;
+  hyprlauncherPkg = pkgs.hyprlauncher or pkgs-unstable.hyprlauncher;
+  hyprpanelPkg = pkgs.hyprpanel or pkgs-unstable.hyprpanel;
 in
 {
 
   imports = [
-    ./fuzzel.nix
     ./hypridle.nix
     ./hyprlock.nix
     ./hyprpaper.nix
+    ./hyprlauncher.nix
+    ./hyprpanel.nix
     ./mako.nix
-    ./waybar.nix
   ];
 
   options = {
@@ -24,12 +27,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    fuzzel.enable = true;
     hypridle.enable = true;
     hyprlock.enable = true;
     hyprpaper.enable = true;
+    hyprlauncher.enable = true;
     mako.enable = true;
-    waybar.enable = true;
+    hyprpanel.enable = true;
 
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -56,14 +59,14 @@ in
         "$mod" = "SUPER";
         "$terminal" = "${lib.getExe pkgs.wezterm}";
         "$browser" = "${lib.getExe pkgs.brave}";
-        "$launcher" = "${lib.getExe pkgs.fuzzel}";
+        "$launcher" = "${lib.getExe hyprlauncherPkg}";
         "$grimshot" = "${lib.getExe pkgs.grim}";
         "$screenshot-path" = "/home/bc/Pictures/screenshots";
 
         # https://wiki.hyprland.org/Configuring/Keywords/#executing
         exec-once = [
           "${lib.getExe pkgs.mako} &"
-          "${lib.getExe pkgs.waybar} &"
+          "${lib.getExe hyprpanelPkg} &"
           "${lib.getExe pkgs.lxqt.lxqt-policykit} &"
           "${pkgs.networkmanagerapplet}/nm-applet &"
           "[workspace 1 silent] $terminal"

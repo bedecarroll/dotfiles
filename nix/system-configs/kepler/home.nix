@@ -39,5 +39,4 @@
   python.uv.enable = true;
   storage.dropbox.enable = true;
   video.enable = true;
-  waybar.enable = true;
 }
