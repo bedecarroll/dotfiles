@@ -71,13 +71,12 @@ in
 
     virtualisation.oci-containers.backend = "podman";
 
-    systemd.tmpfiles.rules =
-      [
-        "d ${cfg.dataDir} 0755 65532 65532 -"
-      ]
-      ++ optionals cfg.enableBackups [
-        "d ${cfg.backupDir} 0755 root root -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d ${cfg.dataDir} 0755 65532 65532 -"
+    ]
+    ++ optionals cfg.enableBackups [
+      "d ${cfg.backupDir} 0755 root root -"
+    ];
 
     systemd.services.golink-backup = mkIf cfg.enableBackups {
       description = "Backup golink data";

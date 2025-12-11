@@ -163,14 +163,16 @@
 
   # Configure logind for headless server to handle user sessions properly
   services.logind = {
-    killUserProcesses = false;
-    extraConfig = ''
-      HandlePowerKey=ignore
-      HandleLidSwitch=ignore
-      HandleSuspendKey=ignore
-      HandleHibernateKey=ignore
-      RemoveIPC=no
-    '';
+    settings = {
+      Login = {
+        KillUserProcesses = false;
+        HandlePowerKey = "ignore";
+        HandleLidSwitch = "ignore";
+        HandleSuspendKey = "ignore";
+        HandleHibernateKey = "ignore";
+        RemoveIPC = "no";
+      };
+    };
   };
 
   # Automatic system updates
