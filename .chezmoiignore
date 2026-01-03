@@ -42,7 +42,7 @@ nix/
 {{ end }}
 
 {{ if eq .chezmoi.hostname "kepler" }}
-# Yubikey config not needed anywhere else, git silent ignores missing
+.config/git/conf.d/ghcli
 .config/git/conf.d/ssh
 {{ end }}
 
