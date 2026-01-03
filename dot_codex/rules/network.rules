@@ -1,0 +1,100 @@
+# Network tools policy
+prefix_rule(
+  pattern = ["ssh"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["ping"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["ping6"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["traceroute"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["traceroute6"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["mtr"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["mtr6"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["tracepath"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["tracepath6"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["dig"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["nslookup"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["host"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["curl"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["wget"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["ip"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["ss"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["openssl"],
+  decision = "allow",
+)
+
+prefix_rule(
+  pattern = ["nc"],
+  decision = "prompt",
+)
+
+prefix_rule(
+  pattern = ["netcat"],
+  decision = "prompt",
+)
+
+prefix_rule(
+  pattern = ["telnet"],
+  decision = "prompt",
+)

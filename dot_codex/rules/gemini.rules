@@ -1,0 +1,6 @@
+# Allow all gemini CLI commands.
+prefix_rule(
+  pattern = ["gemini"],
+  decision = "allow",
+  match = [["gemini", "--help"]],
+)

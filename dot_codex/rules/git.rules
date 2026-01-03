@@ -1,0 +1,5 @@
+# Git policy
+prefix_rule(
+  pattern = ["git"],
+  decision = "forbidden",
+)

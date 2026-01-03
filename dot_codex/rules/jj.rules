@@ -1,0 +1,129 @@
+# JJ policy: allow read-only + commit/push/bookmark move; prompt for mutating ops; forbid admin/bookmark/remote management.
+# Includes match/not_match tests for key multi-command rules.
+
+# --- Allow read-only / safe ---
+prefix_rule(
+  pattern = ["jj", ["status", "log", "diff", "show"]],
+  decision = "allow",
+  match = [
+    ["jj", "status"],
+    ["jj", "log"],
+    ["jj", "diff"],
+    ["jj", "show", "@-"],
+  ],
+  not_match = [
+    ["jj", "commit"],
+    ["jj", "rebase"],
+  ],
+)
+
+prefix_rule(
+  pattern = ["jj", "op", "log"],
+  decision = "allow",
+  match = [["jj", "op", "log"]],
+  not_match = [["jj", "op", "restore"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "git", "fetch"],
+  decision = "allow",
+  match = [["jj", "git", "fetch"]],
+  not_match = [["jj", "git", "push"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "resolve"],
+  decision = "allow",
+  match = [["jj", "resolve"]],
+  not_match = [["jj", "restore"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "bookmark", "list"],
+  decision = "allow",
+  match = [["jj", "bookmark", "list"]],
+  not_match = [["jj", "bookmark", "move"]],
+)
+
+# --- Allow core commit ---
+prefix_rule(
+  pattern = ["jj", "commit"],
+  decision = "allow",
+  match = [["jj", "commit", "-m", "test"]],
+  not_match = [["jj", "new"]],
+)
+
+# --- Prompt for repo-changing operations ---
+prefix_rule(
+  pattern = ["jj", ["new", "squash", "split", "rebase", "restore", "abandon", "undo", "redo"]],
+  decision = "prompt",
+  match = [
+    ["jj", "new", "trunk()"],
+    ["jj", "squash"],
+    ["jj", "split"],
+    ["jj", "rebase", "-d", "trunk()"],
+    ["jj", "restore", "file.txt"],
+    ["jj", "abandon", "@"],
+    ["jj", "undo"],
+    ["jj", "redo"],
+  ],
+  not_match = [
+    ["jj", "commit"],
+    ["jj", "status"],
+  ],
+)
+
+prefix_rule(
+  pattern = ["jj", "git", "push"],
+  decision = "allow",
+  match = [["jj", "git", "push", "--change", "@-"]],
+  not_match = [["jj", "git", "fetch"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "bookmark", "move"],
+  decision = "allow",
+  match = [["jj", "bookmark", "move", "name", "--to", "@-"]],
+  not_match = [["jj", "bookmark", "list"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "op", ["restore", "revert"]],
+  decision = "prompt",
+  match = [
+    ["jj", "op", "restore", "@"],
+    ["jj", "op", "revert", "@"],
+  ],
+  not_match = [["jj", "op", "log"]],
+)
+
+# --- Forbid admin / destructive ---
+prefix_rule(
+  pattern = ["jj", "describe"],
+  decision = "forbidden",
+  match = [["jj", "describe", "-m", "test"]],
+  not_match = [["jj", "commit"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "bookmark", ["create", "delete", "set", "track", "untrack"]],
+  decision = "forbidden",
+  match = [
+    ["jj", "bookmark", "create", "name"],
+    ["jj", "bookmark", "delete", "name"],
+    ["jj", "bookmark", "set", "name"],
+    ["jj", "bookmark", "track", "main@origin"],
+    ["jj", "bookmark", "untrack", "glob:push-*@*"],
+  ],
+  not_match = [
+    ["jj", "bookmark", "list"],
+    ["jj", "bookmark", "move"],
+  ],
+)
+
+prefix_rule(
+  pattern = ["jj", "git", "remote"],
+  decision = "forbidden",
+  match = [["jj", "git", "remote", "list"]],
+  not_match = [["jj", "git", "fetch"]],
+)

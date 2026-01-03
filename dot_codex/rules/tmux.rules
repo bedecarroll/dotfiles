@@ -1,0 +1,65 @@
+# Tmux policy: prompt on new-session (require -d), forbid windows and attach.
+# Includes match/not_match tests for key multi-command rules.
+
+# --- Prompt for new-session so we can enforce detached usage ---
+prefix_rule(
+  pattern = ["tmux", "new-session"],
+  decision = "prompt",
+  match = [
+    ["tmux", "new-session", "-d", "-s", "test"],
+    ["tmux", "new-session", "-s", "test"],
+  ],
+  not_match = [
+    ["tmux", "new-window", "-t", "test"],
+  ],
+)
+
+# --- Forbid window creation / selection / management ---
+prefix_rule(
+  pattern = ["tmux", [
+    "new-window", "neww",
+    "select-window", "selectw",
+    "kill-window", "killw",
+    "rename-window", "renamew",
+    "next-window", "nextw",
+    "previous-window", "prevw",
+    "swap-window",
+    "move-window", "movew",
+    "link-window", "unlink-window",
+    "choose-window",
+  ]],
+  decision = "forbidden",
+  match = [
+    ["tmux", "new-window", "-t", "test"],
+    ["tmux", "select-window", "-t", "test:0"],
+    ["tmux", "kill-window", "-t", "test:0"],
+    ["tmux", "rename-window", "-t", "test:0", "name"],
+    ["tmux", "next-window"],
+    ["tmux", "prevw"],
+    ["tmux", "swap-window"],
+    ["tmux", "movew", "-t", "test:0"],
+    ["tmux", "link-window", "-t", "test:0"],
+    ["tmux", "choose-window"],
+  ],
+  not_match = [
+    ["tmux", "new-session", "-d", "-s", "test"],
+    ["tmux", "split-window", "-h", "-t", "test:0.0"],
+    ["tmux", "capture-pane", "-pt", "test:0.0"],
+  ],
+)
+
+# --- Forbid attach/switching clients (no live TTY) ---
+prefix_rule(
+  pattern = ["tmux", ["attach", "attach-session", "a", "switch-client"]],
+  decision = "forbidden",
+  match = [
+    ["tmux", "attach", "-t", "test"],
+    ["tmux", "attach-session", "-t", "test"],
+    ["tmux", "a", "-t", "test"],
+    ["tmux", "switch-client", "-t", "test"],
+  ],
+  not_match = [
+    ["tmux", "send-keys", "-t", "test:0.0", "cmd", "C-m"],
+    ["tmux", "capture-pane", "-pt", "test:0.0"],
+  ],
+)

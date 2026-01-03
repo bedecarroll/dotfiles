@@ -31,6 +31,9 @@ nix/
 .config/jj/conf.d/local.toml
 .config/io.datasette.llm/
 .config/claude/
+.codex/
+.claude/
+.gemini/
 .aider.conf.yml
 {{ end }}
 

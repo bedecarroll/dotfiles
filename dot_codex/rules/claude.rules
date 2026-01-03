@@ -1,0 +1,6 @@
+# Allow all claude CLI commands.
+prefix_rule(
+  pattern = ["claude"],
+  decision = "allow",
+  match = [["claude", "--help"]],
+)

@@ -1,0 +1,6 @@
+# Allow all codex CLI commands.
+prefix_rule(
+  pattern = ["codex"],
+  decision = "allow",
+  match = [["codex", "--help"]],
+)

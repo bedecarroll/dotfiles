@@ -1,0 +1,10 @@
+# Search tools policy
+prefix_rule(
+  pattern = ["grep"],
+  decision = "forbidden",
+)
+
+prefix_rule(
+  pattern = ["rg"],
+  decision = "allow",
+)
