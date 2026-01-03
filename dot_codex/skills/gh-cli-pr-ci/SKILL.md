@@ -40,6 +40,7 @@ gh run view <run-id> --repo <owner>/<repo> --job <job-id> --log
 - **Do not run `gh pr view` without `--json`.** The default GraphQL selection can request deprecated `projectCards` and trigger a deprecation error.
 - **Do not use `--json checks`.** The field is not supported; use `statusCheckRollup` instead.
 - **Keep JSON field lists minimal.** If a field causes errors, remove it and retry with a smaller list.
+- **PR body newlines:** `gh pr create/edit --body` does **not** interpret `\n` escapes. Use `--body-file` (including `--body-file -` with a heredoc) or `gh api ... --input -` with JSON to preserve newlines.
 
 ## Useful Variations
 
