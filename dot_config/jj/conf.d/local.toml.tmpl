@@ -9,7 +9,11 @@ auto-track-bookmarks = "glob:bede/*"
 [signing]
 behavior = "drop"
 backend = "ssh"
+{{- if stat (joinPath .chezmoi.homeDir ".ssh/id_ed25519_sk.pub") }}
 key = "~/.ssh/id_ed25519_sk.pub"
+{{ else }}
+key = "~/.ssh/id_ed25519.pub"
+{{ end -}}
 backends.ssh.allowed-signers = "~/.config/git/allowed_signers"
 
 [git]

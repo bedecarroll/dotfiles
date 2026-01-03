@@ -20,7 +20,6 @@ nix/
 .config/git/authorized_keys
 # SSH config is personal only
 .ssh/config
-.ssh/id_ed25519_sk.pub
 # Only add GitHub keys on personal devices
 .ssh/authorized_keys
 # Local scripts
@@ -38,6 +37,13 @@ nix/
 {{ if ne .chezmoi.hostname "kepler" }}
 # Yubikey config not needed anywhere else, git silent ignores missing
 .config/git/conf.d/yubikey
+.ssh/id_ed25519_sk.pub
+.ssh/yubikey
+{{ end }}
+
+{{ if eq .chezmoi.hostname "kepler" }}
+# Yubikey config not needed anywhere else, git silent ignores missing
+.config/git/conf.d/ssh
 {{ end }}
 
 {{ if not .needs_terminal }}

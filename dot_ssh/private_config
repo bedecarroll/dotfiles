@@ -1,7 +1,3 @@
 Include local/config
 Include wsl
-
-Host *
-  IdentityFile ~/.ssh/id_ed25519_sk
-  AddKeysToAgent yes
-  ServerAliveInterval 60
+Include yubikey

@@ -21,3 +21,4 @@
 [include]
   path = yubikey
   path = ghcli
+  path = ssh
