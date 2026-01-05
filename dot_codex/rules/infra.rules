@@ -1,20 +1,10 @@
-# Infra tools policy (allow most; prompt for destructive ops).
+# Infra tools policy
 prefix_rule(
   pattern = ["terraform"],
   decision = "allow",
 )
 
 prefix_rule(
-  pattern = ["terraform", ["apply", "destroy"]],
-  decision = "prompt",
-)
-
-prefix_rule(
   pattern = ["pulumi"],
   decision = "allow",
-)
-
-prefix_rule(
-  pattern = ["pulumi", ["up", "destroy"]],
-  decision = "prompt",
 )

@@ -1,18 +1,5 @@
-# Tmux policy: prompt on new-session (require -d), forbid windows and attach.
+# Tmux policy: allow most tmux usage, but forbid windows and attach.
 # Includes match/not_match tests for key multi-command rules.
-
-# --- Prompt for new-session so we can enforce detached usage ---
-prefix_rule(
-  pattern = ["tmux", "new-session"],
-  decision = "prompt",
-  match = [
-    ["tmux", "new-session", "-d", "-s", "test"],
-    ["tmux", "new-session", "-s", "test"],
-  ],
-  not_match = [
-    ["tmux", "new-window", "-t", "test"],
-  ],
-)
 
 # --- Forbid window creation / selection / management ---
 prefix_rule(
