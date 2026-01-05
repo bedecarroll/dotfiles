@@ -41,6 +41,7 @@ gh run view <run-id> --repo <owner>/<repo> --job <job-id> --log
 - **Do not use `--json checks`.** The field is not supported; use `statusCheckRollup` instead.
 - **Keep JSON field lists minimal.** If a field causes errors, remove it and retry with a smaller list.
 - **PR body newlines:** `gh pr create/edit --body` does **not** interpret `\n` escapes. Use `--body-file` (including `--body-file -` with a heredoc) or `gh api ... --input -` with JSON to preserve newlines.
+- **PR titles must be Conventional Commits.** Format: `type(scope optional)!: subject`. Allowed types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `ci`, `perf`. If the user provides a non-conforming title, propose a compliant one and confirm before creating/updating the PR.
 
 ## Useful Variations
 

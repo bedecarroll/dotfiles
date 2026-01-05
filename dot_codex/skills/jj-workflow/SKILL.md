@@ -12,6 +12,11 @@ description: Jujutsu (jj) workflow guidance used in place of Git for commit/push
 - Do not pre-create bookmarks. Only move an existing bookmark when updating a previously pushed change.
 - Avoid generating multiple new bookmarks for the same PR. If a bookmark already exists, move it and run `jj push`.
 - Only use `jj abandon` after confirming with the user; it is rare and usually indicates recovery from a bad state.
+- Enforce Conventional Commits for commit messages and PR titles. Format: `type(scope optional)!: subject`.
+  - Allowed types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `ci`, `perf`.
+  - Scope is optional; `!` marks breaking changes.
+  - If the user supplies a non-conforming title/message, propose a compliant one and confirm before committing/creating a PR.
+  - If the merge strategy is squash, the PR title becomes the commit message; keep it Conventional.
 
 ## Notes
 
@@ -51,13 +56,13 @@ Show full change details:
 
 New commit (new PR):
 
-- `jj commit -m "type(scope): message"`
+- `jj commit -m "type: message"` (scope optional: `type(scope): message`)
 - `jj push-new`
 - If this PR was already pushed, move the existing bookmark and use `jj push` instead.
 
 Add a commit to an existing PR/stack (reuse existing bookmark):
 
-- `jj commit -m "type(scope): message"`
+- `jj commit -m "type: message"` (scope optional: `type(scope): message`)
 - `jj status` (identify the existing `push-...` bookmark for the current change)
 - If multiple `push-...` bookmarks are shown, ask which PR/bookmark to update.
 - `jj bookmark move <bookmark-name> --to @-`
