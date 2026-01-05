@@ -1,4 +1,4 @@
-# JJ policy: allow read-only + commit/push/bookmark move; prompt for mutating ops; forbid admin/bookmark/remote management.
+# JJ policy: allow safe read-only commands, prompt for mutating ops, forbid admin/bookmark/remote management.
 # Includes match/not_match tests for key multi-command rules.
 
 # --- Allow read-only / safe ---
@@ -73,9 +73,24 @@ prefix_rule(
   ],
 )
 
+# Prefer aliases to avoid accidental new bookmarks.
+prefix_rule(
+  pattern = ["jj", "push"],
+  decision = "allow",
+  match = [["jj", "push"]],
+  not_match = [["jj", "push-new"]],
+)
+
+prefix_rule(
+  pattern = ["jj", "push-new"],
+  decision = "prompt",
+  match = [["jj", "push-new"]],
+  not_match = [["jj", "push"]],
+)
+
 prefix_rule(
   pattern = ["jj", "git", "push"],
-  decision = "allow",
+  decision = "forbidden",
   match = [["jj", "git", "push", "--change", "@-"]],
   not_match = [["jj", "git", "fetch"]],
 )

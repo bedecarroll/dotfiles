@@ -1,22 +1,23 @@
 ---
 name: jj-workflow
-description: Jujutsu (jj) workflow guidance for Git-style tasks (commit/push, stacked work, status/log, diff/show, rebase, split/squash, abandon/restore, conflict resolve, bookmarks). Use when users mention jj/Jujutsu or ask how to do Git workflows in jj. Prefer auto-generated bookmarks via jj git push --change; avoid pre-creating bookmarks.
+description: Jujutsu (jj) workflow guidance used in place of Git for commit/push, stacked work, status/log, diff/show, rebase, split/squash, abandon/restore, conflict resolve, bookmarks. Use when users mention jj/Jujutsu or ask how to do Git workflows in jj. Prefer aliases `jj push` and `jj push-new`; avoid direct `jj git push`.
 ---
 
 # JJ Workflow (Canonical)
 
 ## Policy
 
-- For new PRs, always let jj generate the bookmark on push with `jj git push --change <rev>`.
-- Do not run `jj git push` without `--change` for new PRs.
+- For new PRs, use `jj push-new` (alias for `jj git push --change @-`) to create the bookmark and push it.
+- Do not run `jj git push` directly; use `jj push` for updates and `jj push-new` for new PRs.
 - Do not pre-create bookmarks. Only move an existing bookmark when updating a previously pushed change.
-- Avoid generating multiple new bookmarks for the same PR.
+- Avoid generating multiple new bookmarks for the same PR. If a bookmark already exists, move it and run `jj push`.
 - Only use `jj abandon` after confirming with the user; it is rare and usually indicates recovery from a bad state.
 
 ## Notes
 
 - `@` is the working-copy commit; `@-` is its parent.
-- `jj git push --change` creates a bookmark name (default prefix `push-`) and pushes it.
+- `jj push` (alias for `jj git push @-`) pushes the bookmark(s) pointing at `@-`. If `@-` has no bookmarks, use `jj push-new` instead.
+- `jj push-new` (alias for `jj git push --change @-`) creates a new bookmark and pushes it.
 - `trunk()` resolves to the repository's trunk bookmark and avoids guessing `main` vs `master`; wrap it in single quotes for shell safety.
 - When a revset includes parentheses (like `trunk()`), single-quote it.
 
@@ -51,8 +52,8 @@ Show full change details:
 New commit (new PR):
 
 - `jj commit -m "type(scope): message"`
-- `jj git push --change @-`
-- If this PR was already pushed, do not use `--change`; move the existing bookmark instead.
+- `jj push-new`
+- If this PR was already pushed, move the existing bookmark and use `jj push` instead.
 
 Add a commit to an existing PR/stack (reuse existing bookmark):
 
@@ -60,8 +61,8 @@ Add a commit to an existing PR/stack (reuse existing bookmark):
 - `jj status` (identify the existing `push-...` bookmark for the current change)
 - If multiple `push-...` bookmarks are shown, ask which PR/bookmark to update.
 - `jj bookmark move <bookmark-name> --to @-`
-- `jj git push --bookmark <bookmark-name>`
-- If no bookmark exists yet, do not create one manually; use `jj git push --change @-`.
+- `jj push`
+- If no bookmark exists yet, do not create one manually; use `jj push-new`.
 
 Amend current change content:
 
