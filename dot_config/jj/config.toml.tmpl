@@ -58,7 +58,7 @@ set -euo pipefail
 jj git fetch
 jj rebase -d 'trunk()'
 """, ""]
-push = ["git", "push", "@-"]
+push = ["git", "push", "-r", "@-"]
 push-new = ["git", "push", "--change", "@-"]
 resolvem = ["resolve", "--tool", "mergiraf"]
 r = ["rebase"]
