@@ -9,7 +9,7 @@ description: Jujutsu (jj) workflow guidance used in place of Git for commit/push
 
 - For new PRs, use `jj push-new` (alias for `jj git push --change @-`) to create the bookmark and push it.
 - Do not run `jj git push` directly; use `jj push` for updates and `jj push-new` for new PRs.
-- Do not pre-create bookmarks. Only move an existing bookmark when updating a previously pushed change.
+- Do not pre-create bookmarks for independent PRs. For stacked PRs, create a bookmark per layer so each PR has a stable head.
 - Avoid generating multiple new bookmarks for the same PR. If a bookmark already exists, move it and run `jj push`.
 - Only use `jj abandon` after confirming with the user; it is rare and usually indicates recovery from a bad state.
 - Enforce Conventional Commits for commit messages and PR titles. Format: `type(scope optional)!: subject`.
@@ -37,6 +37,14 @@ Create a new change from trunk:
 
 - `jj new 'trunk()'`
 
+Decide whether the work is independent or stacked:
+
+- Independent work must start from `trunk()` to avoid accidental stacking.
+- Stacked work intentionally builds on a prior change; each stack layer gets its own bookmark and PR.
+- Use an independent PR when the change does not depend on other unmerged work.
+- Use a stack when the overall effort is too large for one PR but can be split into self-contained, mergeable chunks.
+- Stack only when later changes rely on earlier unmerged work and reviewers benefit from smaller, focused slices.
+
 Check where I am:
 
 - `jj status`
@@ -59,6 +67,35 @@ New commit (new PR):
 - `jj commit -m "type: message"` (scope optional: `type(scope): message`)
 - `jj push-new`
 - If this PR was already pushed, move the existing bookmark and use `jj push` instead.
+
+Independent PR (standalone) flow:
+
+- `jj new 'trunk()'`
+- Make changes → `jj commit -m "type: message"`
+- `jj push-new`
+- Create the PR with base `master` (or repo trunk) so GitHub shows only this change.
+
+Stacked PR flow (multiple dependent changes):
+
+- Create each change as a separate revision in a chain.
+- Create a bookmark for each layer (example names: `bede/1`, `bede/2`):
+  - `jj bookmark create <bookmark> -r <rev>`
+- Push each bookmark:
+  - Move bookmark if needed: `jj bookmark move <bookmark> --to <rev>`
+  - `jj push`
+- Create PRs in order, setting the base of each PR to the previous layer’s bookmark/branch.
+
+Unwind an accidental stack (PR shows unrelated commits):
+
+- `jj git fetch`
+- Identify the intended change (bookmark or revision): `jj bookmark list` or `jj log -r <rev>`
+- Rebase just that change onto trunk:
+  - `jj rebase -r <rev> -A 'trunk()' --ignore-immutable`
+- Move the bookmark to the rebased change (use `@-` if it is the parent of the working copy):
+  - `jj bookmark move <bookmark> --to @-`
+- Push the updated bookmark:
+  - `jj push`
+- Ensure the PR base is trunk (update via `gh pr edit --base <trunk-branch>` if needed).
 
 Add a commit to an existing PR/stack (reuse existing bookmark):
 
