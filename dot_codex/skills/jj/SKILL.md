@@ -1,6 +1,6 @@
 ---
-name: jj-workflow
-description: Jujutsu (jj) workflow guidance used in place of Git for commit/push, stacked work, status/log, diff/show, rebase, split/squash, abandon/restore, conflict resolve, bookmarks. Use when users mention jj/Jujutsu or ask how to do Git workflows in jj. Prefer aliases `jj push` and `jj push-new`; avoid direct `jj git push`.
+name: jj
+description: Jujutsu (jj) workflow guidance used in place of Git for commit/push, stacked work, status/log, diff/show, rebase, split/squash, abandon/restore, conflict resolve, bookmarks. Use when users mention jj/Jujutsu or ask how to do Git workflows in jj.
 ---
 
 # JJ Workflow (Canonical)

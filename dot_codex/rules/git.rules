@@ -2,4 +2,5 @@
 prefix_rule(
   pattern = ["git"],
   decision = "forbidden",
+  justification = "Use jj and the jj skill instead",
 )
