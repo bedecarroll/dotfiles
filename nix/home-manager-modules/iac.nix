@@ -19,7 +19,9 @@ in
       ansible
       #ansible-later
       ansible-lint
-      #awscli2
+      awscli2
+      google-cloud-sdk
+      oci-cli
       opentofu
       terraformer
     ];

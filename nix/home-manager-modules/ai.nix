@@ -20,8 +20,8 @@ in
   config = mkMerge [
     (mkIf cfg.enable {
       home.packages = with pkgs; [
-        openai-whisper-cpp
-        pkgs-unstable.codex
+        # openai-whisper-cpp
+        # pkgs-unstable.codex
       ];
     })
     (mkIf cfg.aider.enable { home.packages = [ pkgs-unstable.aider-chat-with-playwright ]; })
