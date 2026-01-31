@@ -78,6 +78,20 @@
             determinate.nixosModules.default
           ];
         };
+        gauss = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+          modules = [
+            ./nix/system-configs/gauss/configuration.nix
+            determinate.nixosModules.default
+          ];
+        };
       };
       homeConfigurations = {
         "bc@kepler" = home-manager.lib.homeManagerConfiguration {
@@ -154,6 +168,14 @@
           profiles.system = {
             user = "root";
             path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.pascal;
+          };
+        };
+        gauss = {
+          hostname = "gauss";
+          sshUser = "bede_carroll_todoku_com";
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.gauss;
           };
         };
       };
