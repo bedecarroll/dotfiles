@@ -44,7 +44,7 @@ e = ["edit"]
 # fp = force push
 fp = ["util", "exec", "--", "bash", "-c", """
 set -euo pipefail
-jj bookmark move -t 'git_head()' -f 'trunk()'
+jj bookmark move -t 'first_parent(@)' -f 'trunk()'
 jj git push
 """, ""]
 i = ["git", "init", "--colocate"]
