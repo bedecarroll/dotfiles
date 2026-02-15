@@ -2,176 +2,176 @@
 
 # --- Allow read-only PR/CI views ---
 prefix_rule(
-  pattern = ["gh", "pr", ["view", "list", "status", "checks", "diff"]],
-  decision = "allow",
-  match = [
-    ["gh", "pr", "view", "123"],
-    ["gh", "pr", "list"],
-    ["gh", "pr", "status"],
-    ["gh", "pr", "checks", "123"],
-    ["gh", "pr", "diff", "123"],
-  ],
-  not_match = [
-    ["gh", "pr", "close", "123"],
-    ["gh", "pr", "create", "-t", "title", "-b", "body"],
-  ],
+    pattern = ["gh", "pr", ["view", "list", "status", "checks", "diff"]],
+    decision = "allow",
+    match = [
+        ["gh", "pr", "view", "123"],
+        ["gh", "pr", "list"],
+        ["gh", "pr", "status"],
+        ["gh", "pr", "checks", "123"],
+        ["gh", "pr", "diff", "123"],
+    ],
+    not_match = [
+        ["gh", "pr", "close", "123"],
+        ["gh", "pr", "create", "-t", "title", "-b", "body"],
+    ],
 )
 
 prefix_rule(
-  pattern = ["gh", "run", ["view", "list"]],
-  decision = "allow",
-  match = [
-    ["gh", "run", "view", "123"],
-    ["gh", "run", "list"],
-  ],
-  not_match = [
-    ["gh", "run", "rerun", "123"],
-    ["gh", "run", "cancel", "123"],
-  ],
+    pattern = ["gh", "run", ["view", "list"]],
+    decision = "allow",
+    match = [
+        ["gh", "run", "view", "123"],
+        ["gh", "run", "list"],
+    ],
+    not_match = [
+        ["gh", "run", "rerun", "123"],
+        ["gh", "run", "cancel", "123"],
+    ],
 )
 
 prefix_rule(
-  pattern = ["gh", "workflow", ["view", "list"]],
-  decision = "allow",
-  match = [
-    ["gh", "workflow", "view", "ci.yml"],
-    ["gh", "workflow", "list"],
-  ],
-  not_match = [
-    ["gh", "workflow", "disable", "ci.yml"],
-    ["gh", "workflow", "run", "ci.yml"],
-  ],
+    pattern = ["gh", "workflow", ["view", "list"]],
+    decision = "allow",
+    match = [
+        ["gh", "workflow", "view", "ci.yml"],
+        ["gh", "workflow", "list"],
+    ],
+    not_match = [
+        ["gh", "workflow", "disable", "ci.yml"],
+        ["gh", "workflow", "run", "ci.yml"],
+    ],
 )
 
 prefix_rule(
-  pattern = ["gh", "repo", "view"],
-  decision = "allow",
-  match = [["gh", "repo", "view", "OWNER/REPO"]],
-  not_match = [["gh", "repo", "delete", "OWNER/REPO"]],
+    pattern = ["gh", "repo", "view"],
+    decision = "allow",
+    match = [["gh", "repo", "view", "OWNER/REPO"]],
+    not_match = [["gh", "repo", "delete", "OWNER/REPO"]],
 )
 
 prefix_rule(
-  pattern = ["gh", "release", "view"],
-  decision = "allow",
-  match = [["gh", "release", "view", "v1.2.3"]],
-  not_match = [["gh", "release", "delete", "v1.2.3"]],
+    pattern = ["gh", "release", "view"],
+    decision = "allow",
+    match = [["gh", "release", "view", "v1.2.3"]],
+    not_match = [["gh", "release", "delete", "v1.2.3"]],
 )
 
 prefix_rule(
-  pattern = ["gh", "issue", ["view", "list"]],
-  decision = "allow",
-  match = [
-    ["gh", "issue", "view", "123"],
-    ["gh", "issue", "list"],
-  ],
-  not_match = [
-    ["gh", "issue", "create", "-t", "title"],
-    ["gh", "issue", "close", "123"],
-  ],
+    pattern = ["gh", "issue", ["view", "list"]],
+    decision = "allow",
+    match = [
+        ["gh", "issue", "view", "123"],
+        ["gh", "issue", "list"],
+    ],
+    not_match = [
+        ["gh", "issue", "create", "-t", "title"],
+        ["gh", "issue", "close", "123"],
+    ],
 )
 
 prefix_rule(
-  pattern = ["gh", "search"],
-  decision = "allow",
-  match = [["gh", "search", "repos", "codex"]],
+    pattern = ["gh", "search"],
+    decision = "allow",
+    match = [["gh", "search", "repos", "codex"]],
 )
 
 # Optional read-only auth status.
 prefix_rule(
-  pattern = ["gh", "auth", "status"],
-  decision = "allow",
-  match = [["gh", "auth", "status"]],
+    pattern = ["gh", "auth", "status"],
+    decision = "allow",
+    match = [["gh", "auth", "status"]],
 )
 
 # --- Allow opening PRs ---
 prefix_rule(
-  pattern = ["gh", "pr", "create"],
-  decision = "allow",
-  match = [["gh", "pr", "create", "--draft", "-t", "title", "-b", "body"]],
-  not_match = [["gh", "pr", "close", "123"]],
+    pattern = ["gh", "pr", "create"],
+    decision = "allow",
+    match = [["gh", "pr", "create", "--draft", "-t", "title", "-b", "body"]],
+    not_match = [["gh", "pr", "close", "123"]],
 )
 
 # --- Prompt for PR mutations ---
 prefix_rule(
-  pattern = ["gh", "pr", ["close", "merge", "reopen", "edit", "review", "ready", "comment", "delete-branch"]],
-  decision = "prompt",
-  match = [
-    ["gh", "pr", "merge", "123"],
-    ["gh", "pr", "review", "123", "--approve"],
-    ["gh", "pr", "close", "123"],
-  ],
-  not_match = [["gh", "pr", "view", "123"]],
+    pattern = ["gh", "pr", ["close", "merge", "reopen", "edit", "review", "ready", "comment", "delete-branch"]],
+    decision = "prompt",
+    match = [
+        ["gh", "pr", "merge", "123"],
+        ["gh", "pr", "review", "123", "--approve"],
+        ["gh", "pr", "close", "123"],
+    ],
+    not_match = [["gh", "pr", "view", "123"]],
 )
 
 # --- Prompt for issue mutations ---
 prefix_rule(
-  pattern = ["gh", "issue", ["create", "edit", "close", "reopen", "delete", "lock", "unlock", "comment", "transfer", "pin", "unpin"]],
-  decision = "prompt",
-  match = [
-    ["gh", "issue", "create", "-t", "title"],
-    ["gh", "issue", "close", "123"],
-  ],
-  not_match = [["gh", "issue", "view", "123"]],
+    pattern = ["gh", "issue", ["create", "edit", "close", "reopen", "delete", "lock", "unlock", "comment", "transfer", "pin", "unpin"]],
+    decision = "prompt",
+    match = [
+        ["gh", "issue", "create", "-t", "title"],
+        ["gh", "issue", "close", "123"],
+    ],
+    not_match = [["gh", "issue", "view", "123"]],
 )
 
 # --- Prompt for release mutations ---
 prefix_rule(
-  pattern = ["gh", "release", ["create", "edit", "delete", "upload"]],
-  decision = "prompt",
-  match = [
-    ["gh", "release", "create", "v1.2.3"],
-    ["gh", "release", "delete", "v1.2.3"],
-  ],
-  not_match = [["gh", "release", "view", "v1.2.3"]],
+    pattern = ["gh", "release", ["create", "edit", "delete", "upload"]],
+    decision = "prompt",
+    match = [
+        ["gh", "release", "create", "v1.2.3"],
+        ["gh", "release", "delete", "v1.2.3"],
+    ],
+    not_match = [["gh", "release", "view", "v1.2.3"]],
 )
 
 # --- Prompt for repo mutations ---
 prefix_rule(
-  pattern = ["gh", "repo", ["create", "delete", "rename", "fork", "archive", "unarchive"]],
-  decision = "prompt",
-  match = [
-    ["gh", "repo", "delete", "OWNER/REPO"],
-    ["gh", "repo", "create", "OWNER/REPO"],
-  ],
-  not_match = [["gh", "repo", "view", "OWNER/REPO"]],
+    pattern = ["gh", "repo", ["create", "delete", "rename", "fork", "archive", "unarchive"]],
+    decision = "prompt",
+    match = [
+        ["gh", "repo", "delete", "OWNER/REPO"],
+        ["gh", "repo", "create", "OWNER/REPO"],
+    ],
+    not_match = [["gh", "repo", "view", "OWNER/REPO"]],
 )
 
 # --- Prompt for run/workflow mutations ---
 prefix_rule(
-  pattern = ["gh", "run", ["rerun", "cancel", "watch"]],
-  decision = "prompt",
-  match = [
-    ["gh", "run", "rerun", "123"],
-    ["gh", "run", "cancel", "123"],
-  ],
-  not_match = [["gh", "run", "view", "123"]],
+    pattern = ["gh", "run", ["rerun", "cancel", "watch"]],
+    decision = "prompt",
+    match = [
+        ["gh", "run", "rerun", "123"],
+        ["gh", "run", "cancel", "123"],
+    ],
+    not_match = [["gh", "run", "view", "123"]],
 )
 
 prefix_rule(
-  pattern = ["gh", "workflow", ["enable", "disable", "run"]],
-  decision = "prompt",
-  match = [
-    ["gh", "workflow", "disable", "ci.yml"],
-    ["gh", "workflow", "run", "ci.yml"],
-  ],
-  not_match = [["gh", "workflow", "view", "ci.yml"]],
+    pattern = ["gh", "workflow", ["enable", "disable", "run"]],
+    decision = "prompt",
+    match = [
+        ["gh", "workflow", "disable", "ci.yml"],
+        ["gh", "workflow", "run", "ci.yml"],
+    ],
+    not_match = [["gh", "workflow", "view", "ci.yml"]],
 )
 
 # --- Prompt for anything that can mutate via API or auth/config changes ---
 prefix_rule(
-  pattern = ["gh", "api"],
-  decision = "prompt",
-  match = [["gh", "api", "repos/OWNER/REPO/git/refs/heads/main"]],
+    pattern = ["gh", "api"],
+    decision = "prompt",
+    match = [["gh", "api", "repos/OWNER/REPO/git/refs/heads/main"]],
 )
 
 prefix_rule(
-  pattern = ["gh", "auth", ["login", "logout", "refresh", "setup-git", "token"]],
-  decision = "prompt",
-  match = [["gh", "auth", "login"]],
+    pattern = ["gh", "auth", ["login", "logout", "refresh", "setup-git", "token"]],
+    decision = "prompt",
+    match = [["gh", "auth", "login"]],
 )
 
 prefix_rule(
-  pattern = ["gh", "config"],
-  decision = "prompt",
-  match = [["gh", "config", "set", "git_protocol", "ssh"]],
+    pattern = ["gh", "config"],
+    decision = "prompt",
+    match = [["gh", "config", "set", "git_protocol", "ssh"]],
 )

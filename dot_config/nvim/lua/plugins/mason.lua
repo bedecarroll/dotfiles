@@ -8,6 +8,8 @@ return {
 				"jinja-lsp",
 				"jq-lsp",
 				"oxlint",
+				"buildifier",
+				"starpls",
 			},
 		},
 	},
