@@ -56,14 +56,20 @@ prefix_rule(
     not_match = [["jj", "new"]],
 )
 
+prefix_rule(
+    pattern = ["jj", "split"],
+    decision = "allow",
+    match = [["jj", "split"]],
+    not_match = [["jj", "squash"]],
+)
+
 # --- Prompt for repo-changing operations ---
 prefix_rule(
-    pattern = ["jj", ["new", "squash", "split", "rebase", "restore", "abandon", "undo", "redo"]],
+    pattern = ["jj", ["new", "squash", "rebase", "restore", "abandon", "undo", "redo"]],
     decision = "prompt",
     match = [
         ["jj", "new", "trunk()"],
         ["jj", "squash"],
-        ["jj", "split"],
         ["jj", "rebase", "-d", "trunk()"],
         ["jj", "restore", "file.txt"],
         ["jj", "abandon", "@"],

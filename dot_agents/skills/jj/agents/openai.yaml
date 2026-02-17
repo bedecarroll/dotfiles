@@ -1,0 +1,4 @@
+interface:
+  display_name: "JJ Workflow"
+  short_description: "Handle repository workflows with Jujutsu"
+  default_prompt: "Use this skill for jj commit, rebase, push, bookmark, and stacked-change workflows."

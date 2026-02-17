@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tmux"
+  short_description: "Run interactive or long-lived commands in panes"
+  default_prompt: "Use this skill to manage long-running or interactive commands through tmux panes and capture-pane output."

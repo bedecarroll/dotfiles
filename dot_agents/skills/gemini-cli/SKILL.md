@@ -14,11 +14,47 @@ Use the Gemini CLI as a fast second-opinion engine for UI critique and code revi
 1. Confirm the CLI binary and input mode:
    - Use `gemini` as the default command name.
    - Run `gemini --help` to identify supported flags and input modes.
-   - Prefer the positional prompt for one-shot runs (the `--prompt` flag is deprecated).
+   - Use `-p` / `--prompt` for one-shot non-interactive runs.
+   - Use a positional prompt only when you want interactive mode.
    - If stdin is supported, prefer piping a structured prompt or a file.
 
 2. Run with full context once the CLI invocation is working; avoid test prompts to save tokens.
    - Prefer `--output-format text` for readability or `--output-format json` for structured parsing.
+
+## Non-interactive long prompt patterns
+
+Use heredoc or file-based prompt construction to avoid shell quoting issues.
+
+```bash
+gemini --output-format text -p "$(cat <<'PROMPT'
+You are a staff engineer.
+Review this diff for correctness and edge cases.
+Return: risks, fixes, quick refactors.
+
+<insert code/diff context here>
+PROMPT
+)"
+```
+
+```bash
+PROMPT_FILE=/tmp/gemini_prompt.txt
+cat > "$PROMPT_FILE" <<'PROMPT'
+You are a pragmatic architect.
+Evaluate option A vs B and recommend one with tradeoffs.
+PROMPT
+gemini --output-format json -p "$(cat "$PROMPT_FILE")"
+```
+
+## Output contract
+
+- `--output-format text`: human-readable plain text.
+- `--output-format json`: machine-readable JSON; prefer this when downstream parsing is required.
+- Non-zero exit code indicates CLI/runtime failure.
+
+## When not to use
+
+- Don't use for primary-source/citation-grade verification.
+- Don't use unless the user requests a Gemini second opinion.
 
 ## Workflow
 

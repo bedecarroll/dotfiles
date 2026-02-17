@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Jujutsu (jj) workflow guidance used in place of Git for commit/push, stacked work, status/log, diff/show, rebase, split/squash, abandon/restore, conflict resolve, bookmarks. Use when users mention jj/Jujutsu or ask how to do Git workflows in jj.
+description: Use for Jujutsu (jj) repository workflows (status/log/diff/commit/rebase/push/bookmarks and stacked changes). Do not use for GitHub API/PR operations; pair with gh when GitHub actions are required. Also triggered by `$jj-workflow` and `$jujutsu`.
 ---
 
 # JJ Workflow (Canonical)

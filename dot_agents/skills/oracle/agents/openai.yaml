@@ -1,0 +1,6 @@
+interface:
+  display_name: "Oracle"
+  short_description: "Run one-shot Responses API evaluations"
+  default_prompt: "Use this skill to run a one-shot oracle_response.py call with model, timeout, and retries tuned for the request."
+policy:
+  allow_implicit_invocation: false

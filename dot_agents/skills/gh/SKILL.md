@@ -1,6 +1,6 @@
 ---
 name: gh
-description: Use the GitHub gh CLI for any GitHub task (PRs, issues, releases, workflows, repo queries).
+description: Use for GitHub tasks that require the gh CLI (PRs, issues, releases, workflows, repo queries). Do not use for local-only version-control tasks unless the task also requires GitHub operations. Also triggered by `$github` and `$gh-cli-pr-ci`.
 ---
 
 # GH CLI Workflow

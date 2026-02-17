@@ -1,0 +1,6 @@
+interface:
+  display_name: "Ask Questions If Underspecified"
+  short_description: "Ask minimal blocking clarifications before implementation"
+  default_prompt: "Use this skill to ask the smallest set of must-have clarification questions before coding."
+policy:
+  allow_implicit_invocation: false

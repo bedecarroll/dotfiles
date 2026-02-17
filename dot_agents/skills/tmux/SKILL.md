@@ -1,6 +1,6 @@
 ---
 name: tmux
-description: Use tmux to run interactive or long-running commands (e.g., SSH) when Codex must read stdout/stderr without a live TTY. Use when users mention tmux or need persistent terminal output. Forbid tmux windows; use a single window with panes only.
+description: Use tmux only for interactive or long-running commands when output must be polled without a live TTY. Do not use tmux for short non-interactive commands that can run directly.
 ---
 
 # Tmux (No Windows)

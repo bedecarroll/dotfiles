@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Execpolicy"
+  short_description: "Create and validate Codex execpolicy rules"
+  default_prompt: "Use this skill to create or update execpolicy .rules files and validate them with codex execpolicy check."

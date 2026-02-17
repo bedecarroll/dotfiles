@@ -1,0 +1,4 @@
+interface:
+  display_name: "GH CLI"
+  short_description: "Run GitHub workflows with gh"
+  default_prompt: "Use this skill for GitHub PR, issue, workflow, and release tasks via gh with explicit JSON fields."

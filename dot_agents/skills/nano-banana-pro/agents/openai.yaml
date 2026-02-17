@@ -1,0 +1,6 @@
+interface:
+  display_name: "Nano Banana Pro"
+  short_description: "Gemini image API workflows and response parsing"
+  default_prompt: "Use this skill for Gemini image generation/editing via API, and account for non-transparent output backgrounds."
+policy:
+  allow_implicit_invocation: false

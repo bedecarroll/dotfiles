@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gemini CLI"
+  short_description: "Get a second opinion with the Gemini CLI"
+  default_prompt: "Use this skill to run a focused Gemini CLI review for UI, architecture, or code risks."

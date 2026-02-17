@@ -1,0 +1,6 @@
+interface:
+  display_name: "Create Plan"
+  short_description: "Produce a concise, actionable implementation plan"
+  default_prompt: "Use this skill to generate a focused plan with scope, ordered action items, and open questions."
+policy:
+  allow_implicit_invocation: false

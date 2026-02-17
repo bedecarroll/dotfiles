@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upskill"
+  short_description: "Analyze session logs for skill backlog recommendations"
+  default_prompt: "Review ~/.codex/sessions and suggest improvements to existing skills and new skills to create."
