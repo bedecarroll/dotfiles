@@ -32,6 +32,8 @@ nix/
 .config/io.datasette.llm/
 .config/claude/
 .codex/
+.agents/skills/gemini-cli/
+.agents/skills/nano-banana-pro/
 .claude/
 .gemini/
 .aider.conf.yml
