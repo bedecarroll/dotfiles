@@ -157,11 +157,18 @@ prefix_rule(
     not_match = [["gh", "workflow", "view", "ci.yml"]],
 )
 
-# --- Prompt for anything that can mutate via API or auth/config changes ---
+# --- Prompt for any gh api usage ---
+# Read-only search/metadata queries are common, but API writes to repository
+# contents or Git objects/refs are high-risk and should never happen silently.
 prefix_rule(
     pattern = ["gh", "api"],
     decision = "prompt",
-    match = [["gh", "api", "repos/OWNER/REPO/git/refs/heads/main"]],
+    match = [
+        ["gh", "api", "search/issues", "-f", "q=is:open"],
+        ["gh", "api", "repos/OWNER/REPO/git/refs/heads/main"],
+        ["gh", "api", "--method", "PUT", "repos/OWNER/REPO/contents/file.txt"],
+        ["gh", "api", "--method", "PATCH", "repos/OWNER/REPO/git/refs/heads/main"],
+    ],
 )
 
 prefix_rule(
