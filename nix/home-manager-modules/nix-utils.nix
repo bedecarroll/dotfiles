@@ -18,7 +18,7 @@ in
     home.packages = with pkgs; [
       cachix
       nh
-      nixfmt-rfc-style
+      nixfmt
       nix-output-monitor
       nixpkgs-fmt
       nvd

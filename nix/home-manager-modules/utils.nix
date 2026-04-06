@@ -24,7 +24,7 @@ in
       lnav
       lshw
       moreutils
-      neofetch
+      fastfetch
       pdfgrep
       poppler-utils
       procs # ps replacement

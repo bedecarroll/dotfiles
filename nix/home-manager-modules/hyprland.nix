@@ -47,11 +47,12 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
+      configType = "hyprlang";
 
       plugins = [
         pkgs.hyprlandPlugins.borders-plus-plus
         pkgs.hyprlandPlugins.hyprbars
-        pkgs.hyprlandPlugins.hyprexpo
+        pkgs.hyprlandPlugins.hyprspace
       ];
 
       settings = {

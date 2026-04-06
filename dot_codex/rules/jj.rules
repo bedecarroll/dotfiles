@@ -92,7 +92,7 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["jj", "push-new"],
-    decision = "prompt",
+    decision = "allow",
     match = [["jj", "push-new"]],
     not_match = [["jj", "push"]],
 )
@@ -109,6 +109,16 @@ prefix_rule(
     decision = "allow",
     match = [["jj", "bookmark", "move", "name", "--to", "@-"]],
     not_match = [["jj", "bookmark", "list"]],
+)
+
+prefix_rule(
+    pattern = ["jj", "bookmark", "track"],
+    decision = "allow",
+    match = [["jj", "bookmark", "track", "name", "--remote", "origin"]],
+    not_match = [
+        ["jj", "bookmark", "create", "name"],
+        ["jj", "bookmark", "move", "name", "--to", "@-"],
+    ],
 )
 
 prefix_rule(
@@ -130,13 +140,12 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["jj", "bookmark", ["create", "delete", "set", "track", "untrack"]],
+    pattern = ["jj", "bookmark", ["create", "delete", "set", "untrack"]],
     decision = "forbidden",
     match = [
         ["jj", "bookmark", "create", "name"],
         ["jj", "bookmark", "delete", "name"],
         ["jj", "bookmark", "set", "name"],
-        ["jj", "bookmark", "track", "main@origin"],
         ["jj", "bookmark", "untrack", "glob:push-*@*"],
     ],
     not_match = [
