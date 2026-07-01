@@ -48,4 +48,5 @@ with lib;
   storage.enable = mkDefault true;
   terminal.enable = mkDefault true;
   utils.enable = mkDefault true;
+  manual.manpages.enable = mkDefault false;
 }

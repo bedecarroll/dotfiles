@@ -16,6 +16,16 @@ in
     environment.systemPackages = with pkgs; [ tpm2-tss ];
     services.udev.packages = [ pkgs.yubikey-personalization ];
     services.pcscd.enable = true;
+    systemd.services.yubikey-ccid-udev-trigger = {
+      description = "Apply CCID udev permissions to inserted YubiKeys";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-udevd.service" ];
+      serviceConfig.Type = "oneshot";
+      path = [ pkgs.systemd ];
+      script = ''
+        udevadm trigger --action=add --subsystem-match=usb --attr-match=idVendor=1050
+      '';
+    };
     security.sudo.wheelNeedsPassword = false;
     # https://nixos.wiki/wiki/TPM
     security.tpm2.enable = true;
