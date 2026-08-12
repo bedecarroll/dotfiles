@@ -9,4 +9,4 @@ if echo "$parent_command_name" | grep -qE 'tmux|etterminal|mosh|init|Relay|wezte
 else
   shellparent="[$parent_command_name]"
 fi
-export PROMPT_COMMAND='PS1="[\$?][\j]$shellparent \u@$(hostname)\$ "'
+PS1="[\$?][\j]$shellparent \u@$(hostname)\$ "
