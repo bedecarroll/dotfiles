@@ -66,3 +66,23 @@ if [[ -d "$HOME/.cargo" ]]; then
     ;;
   esac
 fi
+
+# We have opencode
+if [[ -d "$HOME/.opencode/bin" ]]; then
+  case ":${PATH}:" in
+  *:"$HOME/.opencode/bin":*) ;;
+  *)
+    export PATH="$HOME/.opencode/bin:$PATH"
+    ;;
+  esac
+fi
+
+# We have Pulumi
+if [[ -d "$HOME/.pulumi/bin" ]]; then
+  case ":${PATH}:" in
+  *:"$HOME/.pulumi/bin":*) ;;
+  *)
+    export PATH="$PATH:$HOME/.pulumi/bin"
+    ;;
+  esac
+fi
