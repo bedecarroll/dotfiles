@@ -17,6 +17,9 @@ shopt -s histappend                       # append to history, don't overwrite i
 #export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 # Stop interlacing between sessions so switching to this
 # Ref from HackerNews: https://web.archive.org/web/20090815205011/http://www.cuberick.com/2008/11/update-bash-history-in-realtime.html
-export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+if [[ $(declare -p PROMPT_COMMAND 2>/dev/null) == "declare -x "* ]]; then
+  unset PROMPT_COMMAND
+fi
+PROMPT_COMMAND+=("history -a")
 
 alias cleanhistdups='nl $HISTFILE | sort -k 2  -k 1,1nr | uniq -f 1 | sort -n | cut -f 2 > $HISTFILE && history -r'
